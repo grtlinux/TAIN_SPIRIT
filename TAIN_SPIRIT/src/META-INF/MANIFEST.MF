@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Package: com.darwinsys.util
+Created-By: 1.3.0_02 (Sun Microsystems Inc.)
+Title: Darwin Open Systems' Utility Classes
+Provider: Ian Darwin, ian@darwinsys.com
+Class-Path: ./
+  libs/ant.jar
+Main-Class: tain.kr.jar.v01.JarRsrcLoader
+Rsrc-Class-Path: ./
+     libs/commons-net-3.3.jar
+     libs/ant.jar
+Rsrc-Main-Class: tain.kr.com.test.runJar.v02.RunJarTestMain

@@ -19,7 +19,16 @@
  */
 package tain.kr.com.spirit.v01.controler;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v01.queue.QueueContent;
 
 /**
  * Code Templates > Comments > Types
@@ -43,20 +52,199 @@ public final class ThrControler extends Thread implements ImpControler {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	private static final String THR_NAME = "RECV";
+	private static final String THR_NAME = "CNTL";
+	
+	private final int indexThread;
+	
+	private final ThrRecver thrRecver;
+	private final ThrSender thrSender;
+	
+	private QueueContent recvQueue = null;  // the other controler sendQueue
+	private QueueContent sendQueue = null;
+	
+	private volatile boolean flagStop = false;
+	
+	private Socket socket = null;
+	private DataInputStream dis = null;
+	private DataOutputStream dos = null;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrControler() {
+	public ThrControler(int indexThread) {
+		
+		super(String.format("THR_%04d_%s", indexThread, THR_NAME));
+		
+		this.indexThread = indexThread;
+		
+		this.thrRecver = new ThrRecver(this);
+		this.thrSender = new ThrSender(this);
+		
+		this.recvQueue = null;               // the other controler sendQueue
+		this.sendQueue = new QueueContent();
+
 		if (flag)
-			log.debug(">>>>> in class " + this.getClass().getSimpleName());
+			log.debug(String.format(">>>>> in class [%04d]", this.getClass().getSimpleName(), this.indexThread));
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		
+		if (flag) {
+			/*
+			 * validate
+			 */
+			try {
+				validation();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * start thread
+			 */
+			this.thrRecver.start();
+			this.thrSender.start();
+		}
+		
+		if (flag) {
+			/*
+			 * thread join
+			 */
+			try {
+				this.thrRecver.join();
+				this.thrSender.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (flag) log.debug(String.format("[%s] END.", Thread.currentThread().getName()));
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void validation() throws Exception {
+		
+		if (flag) {
+			/*
+			 * validate thread
+			 */
+			if (this.thrRecver == null) {
+				throw new Exception("null pointer thread : ThrRecver");
+			} else if (this.thrSender == null) {
+				throw new Exception("null pointer thread : ThrSender");
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * validate queue
+			 */
+			if (this.recvQueue == null) {
+				throw new Exception("null pointer queue : recvQueue");
+			} else if (this.sendQueue == null) {
+				throw new Exception("null pointer queue : sendQueue");
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * validate IO stream
+			 */
+			if (this.dis == null) {
+				throw new Exception("null pointer DataInputStream : dis");
+			} else if (this.dos == null) {
+				throw new Exception("null pointer DataOutputStream : dos");
+			}
+		}
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public boolean isFlagStop() {
+		return this.flagStop;
+	}
+	
+	public void stopThread() {
+		
+		try { Thread.sleep(2000); } catch (InterruptedException e) {}
+		
+		if (flag) log.debug(String.format("########## %s stopThread() ##########", Thread.currentThread().getName()));
+		
+		this.flagStop = true;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public boolean setRecvQueue(QueueContent recvQueue) {
+		
+		if (recvQueue != null) {
+			this.recvQueue = recvQueue;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public QueueContent getRecvQueue() {
+		return this.recvQueue;
+	}
+	
+	public QueueContent getSendQueue() {
+		return this.sendQueue;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void setDataInputStream(InputStream is) {
+		this.dis = (DataInputStream) is;
+	}
+	
+	public void setDataOutputStream(OutputStream os) {
+		this.dos = (DataOutputStream) os;
+	}
+	
+	public DataInputStream getDataInputStream() {
+		return this.dis;
+	}
+	
+	public DataOutputStream getDataOutputStream() {
+		return this.dos;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void setSocket(Socket socket) throws IOException {
+		
+		if (socket == null) {
+			throw new IOException("null pointer socket");
+		}
+		
+		this.socket = socket;
+		
+		try {
+			this.dis = new DataInputStream(this.socket.getInputStream());
+			this.dos = new DataOutputStream(this.socket.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+			// throw e;
+		}
+	}
+	
+	public Socket getSocket() {
+		return this.socket;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,9 +259,6 @@ public final class ThrControler extends Thread implements ImpControler {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrControler();
 
 		if (flag) {
 

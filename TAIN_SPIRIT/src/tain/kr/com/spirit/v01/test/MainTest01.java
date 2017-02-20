@@ -136,10 +136,10 @@ public class MainTest01 {
 				 * thrControler2 set IO stream
 				 */
 				String strData = ""
-						+ "ABCDEFGHIJ0000777000"
-						+ "ABCDEFGHIJ0000777001"
-						+ "ABCDEFGHIJ0000777019"
-						+ "ABCDEFGHIJ0000777020";
+						+ "abcdefghij-------000"
+						+ "abcdefghij-------001"
+						+ "abcdefghij-------019"
+						+ "abcdefghij-------020";
 				byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
 				
 				DataInputStream dis2 = new DataInputStream(new ByteArrayInputStream(bytData));

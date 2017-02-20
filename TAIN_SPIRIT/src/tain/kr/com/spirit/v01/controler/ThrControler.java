@@ -115,6 +115,10 @@ public final class ThrControler extends Thread implements ImpControler {
 			this.thrSender.start();
 		}
 		
+		/*
+		 * blocking threads until child threads, thrSender and thrRecver
+		 */
+		
 		if (flag) {
 			/*
 			 * thread join

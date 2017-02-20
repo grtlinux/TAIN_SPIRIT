@@ -51,26 +51,24 @@ public final class ThrRecver extends Thread {
 	
 	private static final String THR_NAME = "RECV";
 	
-	private final ThreadGroup threadGroup;
 	private final ThrControler thrControler;
+	private final LoopSleep loopSleep;
 	
-	private QueueContent recvQueue;  // the other controler recvQueue
+	private QueueContent recvQueue;  // the other controler sendQueue
 	private DataContent content;
 	private DataInputStream dis;
-	
-	private LoopSleep loopSleep;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrRecver(ThreadGroup threadGroup, ThrControler thrControler) {
+	public ThrRecver(ThrControler thrControler) {
 		
-		super(threadGroup, String.format("%s_%s", threadGroup.getName(), THR_NAME));
+		super(String.format("%s_%s", thrControler.getName(), THR_NAME));
 		
-		this.threadGroup = threadGroup;
 		this.thrControler = thrControler;
+		this.loopSleep = new LoopSleep();
 		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
@@ -110,6 +108,53 @@ public final class ThrRecver extends Thread {
 			/*
 			 * job processing
 			 */
+			while (!this.thrControler.isFlagStop()) {
+				
+				if (flag) {
+					/*
+					 * read from DataInputStream
+					 */
+					try {
+						this.content.readFromInputStream(this.dis);
+					} catch (Exception e) {
+						this.loopSleep.sleep();
+						break;
+					}
+				}
+				
+				DataContent content = null;
+				if (flag) {
+					/*
+					 * clone of this.content
+					 */
+					content = this.content.createClone();
+				}
+				
+				if (flag) {
+					/*
+					 * write to recvQueue (the other controler sendQueue)
+					 */
+					try {
+						this.recvQueue.put(content);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if (flag) log.debug(String.format("%s RECV(%4d): %s."
+						, Thread.currentThread().getName(), this.content.getSize(), this.content.getStrData()));
+				
+				this.loopSleep.reset();
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * end job
+			 */
+			if (flag) log.debug(String.format("[%s] END", Thread.currentThread().getName()));
+			
+			if (flag) this.thrControler.stopThread();
 		}
 	}
 	
@@ -117,12 +162,32 @@ public final class ThrRecver extends Thread {
 	
 	private void baseInitialize() throws Exception {
 		
+		if (flag) {
+			/*
+			 * initialize
+			 */
+			this.recvQueue = this.thrControler.getRecvQueue();
+			this.content = new DataContent();
+			this.dis = this.thrControler.getDataInputStream();
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void validation() throws Exception {
 		
+		if (flag) {
+			/*
+			 * validate
+			 */
+			if (this.recvQueue == null) {
+				throw new Exception("null pointer queue : recvQueue");
+			}
+			
+			if (this.dis == null) {
+				throw new Exception("null pointer DataInputStream");
+			}
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

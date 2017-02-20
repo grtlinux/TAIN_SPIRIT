@@ -51,26 +51,24 @@ public final class ThrSender extends Thread {
 	
 	private static final String THR_NAME = "SEND";
 	
-	private final ThreadGroup threadGroup;
 	private final ThrControler thrControler;
+	private final LoopSleep loopSleep;
 	
 	private QueueContent sendQueue;  // this controler sendQueue
 	private DataContent content;
 	private DataOutputStream dos;
-	
-	private LoopSleep loopSleep;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrSender(ThreadGroup threadGroup, ThrControler thrControler) {
+	public ThrSender(ThrControler thrControler) {
 		
-		super(threadGroup, String.format("%s_%s", threadGroup.getName(), THR_NAME));
+		super(String.format("%s_%s", thrControler.getName(), THR_NAME));
 		
-		this.threadGroup = threadGroup;
 		this.thrControler = thrControler;
+		this.loopSleep = new LoopSleep();
 		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
@@ -110,6 +108,46 @@ public final class ThrSender extends Thread {
 			/*
 			 * job processing
 			 */
+			while (!this.thrControler.isFlagStop()) {
+				
+				if (flag) {
+					/*
+					 * read from sendQueue
+					 */
+					try {
+						this.content = (DataContent) this.sendQueue.get(this.loopSleep.getMSec());
+						if (this.content == null)
+							continue;
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+				}
+
+				if (flag) {
+					/*
+					 * write to DataOutputStream
+					 */
+					try {
+						this.content.writeToOutputStream(this.dos);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				if (flag) log.debug(String.format("%s SEND(%4d): %s."
+						, Thread.currentThread().getName(), this.content.getSize(), this.content.getStrData()));
+
+				this.loopSleep.reset();
+			}
+		}
+
+		if (flag) {
+			/*
+			 * end job
+			 */
+			if (flag) log.debug(String.format("[%s] END", Thread.currentThread().getName()));
+			
+			if (flag) this.thrControler.stopThread();
 		}
 	}
 	
@@ -117,12 +155,32 @@ public final class ThrSender extends Thread {
 	
 	private void baseInitialize() throws Exception {
 		
+		if (flag) {
+			/*
+			 * initialize
+			 */
+			this.sendQueue = this.thrControler.getSendQueue();
+			this.content = new DataContent();
+			this.dos = this.thrControler.getDataOutputStream();
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private void validation() throws Exception {
 		
+		if (flag) {
+			/*
+			 * validate
+			 */
+			if (this.sendQueue == null) {
+				throw new Exception("null pointer queue : sendQueue");
+			}
+			
+			if (this.dos == null) {
+				throw new Exception("null pointer DataOutputStream");
+			}
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

@@ -72,6 +72,10 @@ public final class ThrControler extends Thread implements ImpControler {
 
 	/*
 	 * constructor
+	 * 
+	 *   indexThread
+	 *        0011 : controler-1
+	 *        0012 : controler-2
 	 */
 	public ThrControler(int indexThread) {
 		

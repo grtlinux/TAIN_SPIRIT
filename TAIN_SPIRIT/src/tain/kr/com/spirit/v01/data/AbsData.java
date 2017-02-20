@@ -62,7 +62,7 @@ public abstract class AbsData implements Cloneable {
 		
 		this.bytData = new byte[size];
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 

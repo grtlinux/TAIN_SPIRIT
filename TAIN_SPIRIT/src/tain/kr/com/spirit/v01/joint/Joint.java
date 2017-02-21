@@ -97,6 +97,14 @@ public final class Joint implements ImpJoint {
 		this.thrControler2.start();
 	}
 
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#close()
+	 */
+	@Override
+	public void close() {
+		
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* (non-Javadoc)

@@ -87,7 +87,7 @@ public class MainTest01 {
 			
 			joint.start();
 
-			new Thread() {
+			new Thread("SENDER") {
 				@Override
 				public void run() {
 					
@@ -110,7 +110,7 @@ public class MainTest01 {
 				}
 			}.start();
 			
-			new Thread() {
+			new Thread("RECVER") {
 				public void run() {
 					
 					try {

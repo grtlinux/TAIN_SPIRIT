@@ -247,14 +247,6 @@ public final class ThrControler extends Thread implements ImpControler {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-//	public void setDataInputStream(InputStream is) {
-//		this.inDis = (DataInputStream) is;
-//	}
-//	
-//	public void setDataOutputStream(OutputStream os) {
-//		this.inDos = (DataOutputStream) os;
-//	}
-	
 	public DataInputStream getInDataInputStream() {
 		return this.inDis;
 	}

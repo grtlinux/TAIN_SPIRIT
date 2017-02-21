@@ -42,6 +42,7 @@ import java.net.Socket;
 public interface ImpJoint {
 
 	public abstract void start();
+	public abstract void close();
 	
 	public abstract void setSocket1(Socket socket1) throws IOException;
 	public abstract void setSocket2(Socket socket2) throws IOException;

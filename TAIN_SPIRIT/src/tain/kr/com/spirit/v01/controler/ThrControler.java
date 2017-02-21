@@ -28,6 +28,7 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v01.joint.Joint;
 import tain.kr.com.spirit.v01.queue.QueueContent;
 
 /**
@@ -54,6 +55,7 @@ public final class ThrControler extends Thread implements ImpControler {
 
 	private static final String THR_NAME = "CNTL";
 	
+	private final Joint joint;
 	private final String groupName;
 	
 	private final ThrRecver thrRecver;
@@ -61,8 +63,6 @@ public final class ThrControler extends Thread implements ImpControler {
 	
 	private QueueContent recvQueue = null;  // the other controler sendQueue
 	private QueueContent sendQueue = null;
-	
-	private volatile boolean flagStop = false;
 	
 	private Socket socket = null;
 	private DataInputStream inDis = null;
@@ -84,14 +84,15 @@ public final class ThrControler extends Thread implements ImpControler {
 	 *        0011 : controler-1
 	 *        0012 : controler-2
 	 */
-	public ThrControler(String groupName) {
+	public ThrControler(Joint joint, String groupName) {
 		
 		super(String.format("%s_%s", groupName, THR_NAME));
 		
+		this.joint = joint;
 		this.groupName = groupName;
 		
-		this.thrRecver = new ThrRecver(this);
-		this.thrSender = new ThrSender(this);
+		this.thrRecver = new ThrRecver(this.joint, this);
+		this.thrSender = new ThrSender(this.joint, this);
 		
 		this.recvQueue = null;               // the other controler sendQueue
 		this.sendQueue = new QueueContent();
@@ -218,21 +219,6 @@ public final class ThrControler extends Thread implements ImpControler {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public boolean isFlagStop() {
-		return this.flagStop;
-	}
-	
-	public void stopThread() {
-		
-		if (flag) try { Thread.sleep(2000); } catch (InterruptedException e) {}
-		
-		if (flag) log.debug(String.format("########## %s stopThread() ##########", Thread.currentThread().getName()));
-		
-		this.flagStop = true;
-	}
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public String getGroupName() {

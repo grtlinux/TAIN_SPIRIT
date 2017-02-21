@@ -36,4 +36,5 @@ package tain.kr.com.spirit.v01.joint;
  */
 public interface ImpJoint {
 
+	public abstract void start();
 }

@@ -23,6 +23,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
@@ -70,6 +72,32 @@ public class MainTestPiped {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	static class PipedInputOutputStream extends Thread {
+		
+		private InputStream is = null;
+		private OutputStream os = null;
+		
+		public PipedInputOutputStream(InputStream is, OutputStream os) {
+			this.is = is;
+			this.os = os;
+		}
+		
+		@Override
+		public void run() {
+			byte[] bytRead = new byte[1024];
+			int nRead = 0;
+			
+			try {
+				while ((nRead = is.read(bytRead)) != -1) {
+					os.write(bytRead, 0, nRead);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -81,6 +109,20 @@ public class MainTestPiped {
 			new MainTestPiped();
 
 		if (flag) {
+			/*
+			 * use thread PipedInputOutputStream
+			 */
+			PipedInputStream pis = new PipedInputStream();
+			PipedOutputStream pos = new PipedOutputStream(pis);   // pos -> pis
+			
+			PipedInputOutputStream thr1 = new PipedInputOutputStream(System.in, pos);
+			PipedInputOutputStream thr2 = new PipedInputOutputStream(pis, System.out);
+			
+			thr1.start();
+			thr2.start();
+		}
+		
+		if (!flag) {
 			/*
 			 * transfer Piped IO Stream to Data IO Stream
 			 */

@@ -19,6 +19,13 @@
  */
 package tain.kr.com.spirit.v01.test.server;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.Charset;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -63,18 +70,81 @@ public class MainTestServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * static test method
 	 */
+	@SuppressWarnings("resource")
 	private static void test01(String[] args) throws Exception {
 
 		if (flag)
 			new MainTestServer();
 
 		if (flag) {
+			/*
+			 * variable
+			 */
+			ServerSocket serverSocket;
+			Socket socket;
+			DataInputStream dis;
+			DataOutputStream dos;
+			
+			serverSocket = new ServerSocket(Integer.parseInt(PORT));
+			
+			while (true) {
+				
+				socket = null;
+				
+				try {
+					/*
+					 * listen and connection
+					 */
+					socket = serverSocket.accept();
+					dis = new DataInputStream(socket.getInputStream());
+					dos = new DataOutputStream(socket.getOutputStream());
+				} catch (Exception e) {
+					e.printStackTrace();
+					break;
+				}
+				
+				try {
+					/*
+					 * recv data from client
+					 */
+					byte[] bytRecv = new byte[1024];
+					int nRecv = 0;
+					
+					nRecv = dis.read(bytRecv);
+					
+					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					
+					if (flag) System.out.printf("RECV (%3d) [%s].\n", nRecv, strRecv);
+					
+					/*
+					 * send data to client
+					 */
+					String strSend = "server sends data to client....";
+					byte[] bytSend = strSend. getBytes(Charset.forName("euc-kr"));
+					
+					dos.write(bytSend, 0, bytSend.length);
+					
+					if (flag) System.out.printf("SEND (%3d) [%s].\n", bytSend.length, strSend);
 
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					/*
+					 * close
+					 */
+					try { dos.close(); } catch (IOException e) {}
+					try { dis.close(); } catch (IOException e) {}
+					try { socket.close(); } catch (IOException e) {}
+				}
+			}
 		}
 	}
 

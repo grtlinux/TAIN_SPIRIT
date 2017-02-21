@@ -85,8 +85,6 @@ public class MainTest01 {
 			 */
 			final ThrJoint joint = new ThrJoint();
 			
-			joint.start();
-
 			new Thread("SENDER") {
 				@Override
 				public void run() {
@@ -132,7 +130,7 @@ public class MainTest01 {
 				}
 			}.start();
 			
-			joint.close();
+			joint.start();
 		}
 	}
 

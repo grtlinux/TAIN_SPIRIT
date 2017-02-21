@@ -19,6 +19,11 @@
  */
 package tain.kr.com.spirit.v01.joint;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v01.controler.ThrControler;
@@ -81,14 +86,53 @@ public final class Joint implements ImpJoint {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#start()
+	 */
 	@Override
 	public void start() {
-		/*
-		 * start the controler thread
-		 */
+
 		this.thrControler1.start();
 		this.thrControler2.start();
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setSocket1(java.net.Socket)
+	 */
+	@Override
+	public void setSocket1(Socket socket1) throws IOException {
+		
+		this.thrControler1.setSocket(socket1);
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setSocket2(java.net.Socket)
+	 */
+	@Override
+	public void setSocket2(Socket socket2) throws IOException {
+		
+		this.thrControler2.setSocket(socket2);
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setStream1(java.io.InputStream, java.io.OutputStream)
+	 */
+	@Override
+	public void setStream1(InputStream is1, OutputStream os1) {
+		
+		this.thrControler1.setDataInputStream(is1);
+		this.thrControler1.setDataOutputStream(os1);
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setStream2(java.io.InputStream, java.io.OutputStream)
+	 */
+	@Override
+	public void setStream2(InputStream is2, OutputStream os2) {
+
+		this.thrControler2.setDataInputStream(is2);
+		this.thrControler2.setDataOutputStream(os2);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,9 +150,6 @@ public final class Joint implements ImpJoint {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new Joint();
 
 		if (flag) {
 

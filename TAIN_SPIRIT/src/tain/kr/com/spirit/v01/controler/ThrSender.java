@@ -161,7 +161,7 @@ public final class ThrSender extends Thread {
 			 */
 			this.sendQueue = this.thrControler.getSendQueue();
 			this.content = new DataContent();
-			this.dos = this.thrControler.getDataOutputStream();
+			this.dos = this.thrControler.getInDataOutputStream();
 		}
 	}
 	

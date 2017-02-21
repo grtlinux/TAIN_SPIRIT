@@ -54,7 +54,7 @@ public final class ThrControler extends Thread implements ImpControler {
 
 	private static final String THR_NAME = "CNTL";
 	
-	private final int indexThread;
+	private final String groupName;
 	
 	private final ThrRecver thrRecver;
 	private final ThrSender thrSender;
@@ -77,11 +77,11 @@ public final class ThrControler extends Thread implements ImpControler {
 	 *        0011 : controler-1
 	 *        0012 : controler-2
 	 */
-	public ThrControler(int indexThread) {
+	public ThrControler(String groupName) {
 		
-		super(String.format("THR_%04d_%s", indexThread, THR_NAME));
+		super(String.format("%s_%s", groupName, THR_NAME));
 		
-		this.indexThread = indexThread;
+		this.groupName = groupName;
 		
 		this.thrRecver = new ThrRecver(this);
 		this.thrSender = new ThrSender(this);
@@ -90,7 +90,7 @@ public final class ThrControler extends Thread implements ImpControler {
 		this.sendQueue = new QueueContent();
 
 		if (flag)
-			log.debug(String.format(">>>>> in class [%04d]", this.getClass().getSimpleName(), this.indexThread));
+			log.debug(String.format(">>>>> in class [%s] (%s)", this.getClass().getSimpleName(), this.groupName));
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,6 +194,12 @@ public final class ThrControler extends Thread implements ImpControler {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
+	public String getGroupName() {
+		return this.groupName;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
 	public boolean setRecvQueue(QueueContent recvQueue) {
 		
 		if (recvQueue != null) {

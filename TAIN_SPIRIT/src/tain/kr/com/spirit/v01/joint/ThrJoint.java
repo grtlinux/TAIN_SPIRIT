@@ -65,15 +65,15 @@ public final class ThrJoint extends Thread implements ImpJoint {
 	 */
 	public ThrJoint(int jointSeq) {
 		
-		super(String.format("THR_%03d", jointSeq));
+		super(String.format("JOINT_%03d", jointSeq));
 
 		this.jointSeq = jointSeq;
 		
 		/*
 		 * create controlers
 		 */
-		this.thrControler1 = new ThrControler(this, String.format("%s%d", Thread.currentThread().getName(), 1));
-		this.thrControler2 = new ThrControler(this, String.format("%s%d", Thread.currentThread().getName(), 2));
+		this.thrControler1 = new ThrControler(this, String.format("%s%d", this.getName(), 1));
+		this.thrControler2 = new ThrControler(this, String.format("%s%d", this.getName(), 2));
 		
 		/*
 		 * set queue
@@ -131,7 +131,7 @@ public final class ThrJoint extends Thread implements ImpJoint {
 		
 		this.flagStop = true;
 
-		if (flag) try { Thread.sleep(MSEC_WAIT_STOPTHREAD); } catch (InterruptedException e) {}
+		if (!flag) try { Thread.sleep(MSEC_WAIT_STOPTHREAD); } catch (InterruptedException e) {}
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////

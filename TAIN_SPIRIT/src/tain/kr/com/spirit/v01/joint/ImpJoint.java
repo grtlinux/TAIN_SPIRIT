@@ -19,6 +19,7 @@
  */
 package tain.kr.com.spirit.v01.joint;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -42,8 +43,8 @@ public interface ImpJoint {
 
 	public abstract void start();
 	
-	public abstract void setSocket1(Socket socket1);
-	public abstract void setSocket2(Socket socket2);
+	public abstract void setSocket1(Socket socket1) throws IOException;
+	public abstract void setSocket2(Socket socket2) throws IOException;
 	
 	public abstract void setStream1(InputStream is1, OutputStream os1);
 	public abstract void setStream2(InputStream is2, OutputStream os2);

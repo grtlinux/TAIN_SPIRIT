@@ -121,8 +121,8 @@ public final class Joint implements ImpJoint {
 	@Override
 	public void setStream1(InputStream is1, OutputStream os1) {
 		
-		this.thrControler1.setDataInputStream(is1);
-		this.thrControler1.setDataOutputStream(os1);
+		this.thrControler1.setDataInputStream(is1);   // TODO   os1 -> dis
+		this.thrControler1.setDataOutputStream(os1);  // TODO   dos -> is1
 	}
 
 	/* (non-Javadoc)
@@ -131,8 +131,8 @@ public final class Joint implements ImpJoint {
 	@Override
 	public void setStream2(InputStream is2, OutputStream os2) {
 
-		this.thrControler2.setDataInputStream(is2);
-		this.thrControler2.setDataOutputStream(os2);
+		this.thrControler2.setDataInputStream(is2);   // TODO
+		this.thrControler2.setDataOutputStream(os2);  // TODO
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

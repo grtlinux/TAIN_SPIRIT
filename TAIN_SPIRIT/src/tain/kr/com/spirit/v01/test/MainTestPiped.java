@@ -112,8 +112,8 @@ public class MainTestPiped {
 			/*
 			 * use thread PipedInputOutputStream
 			 */
-			PipedInputStream pis = new PipedInputStream();
-			PipedOutputStream pos = new PipedOutputStream(pis);   // pos -> pis
+			final PipedInputStream pis = new PipedInputStream();
+			final PipedOutputStream pos = new PipedOutputStream(pis);   // pos -> pis
 			
 			PipedInputOutputStream thr1 = new PipedInputOutputStream(System.in, pos);
 			PipedInputOutputStream thr2 = new PipedInputOutputStream(pis, System.out);

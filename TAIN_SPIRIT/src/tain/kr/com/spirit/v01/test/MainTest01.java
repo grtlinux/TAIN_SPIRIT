@@ -85,7 +85,7 @@ public class MainTest01 {
 			 */
 			final ThrJoint joint = new ThrJoint();
 			
-			new Thread("SENDER") {
+			new Thread("SENDER_1") {
 				@Override
 				public void run() {
 					
@@ -108,7 +108,7 @@ public class MainTest01 {
 				}
 			}.start();
 			
-			new Thread("RECVER") {
+			new Thread("RECVER_2") {
 				public void run() {
 					
 					try {

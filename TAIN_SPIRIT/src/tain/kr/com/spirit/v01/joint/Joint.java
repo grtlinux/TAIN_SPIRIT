@@ -19,9 +19,9 @@
  */
 package tain.kr.com.spirit.v01.joint;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
@@ -97,6 +97,8 @@ public final class Joint implements ImpJoint {
 		this.thrControler2.start();
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
 	/* (non-Javadoc)
 	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setSocket1(java.net.Socket)
 	 */
@@ -115,24 +117,42 @@ public final class Joint implements ImpJoint {
 		this.thrControler2.setSocket(socket2);
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setStream1(java.io.InputStream, java.io.OutputStream)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getOutDataInputStream1()
 	 */
 	@Override
-	public void setStream1(InputStream is1, OutputStream os1) {
+	public DataInputStream getOutDataInputStream1() {
 		
-		this.thrControler1.setDataInputStream(is1);   // TODO   os1 -> dis
-		this.thrControler1.setDataOutputStream(os1);  // TODO   dos -> is1
+		return this.thrControler1.getOutDataInputStream();
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#setStream2(java.io.InputStream, java.io.OutputStream)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getOutDataOutputStream1()
 	 */
 	@Override
-	public void setStream2(InputStream is2, OutputStream os2) {
+	public DataOutputStream getOutDataOutputStream1() {
 
-		this.thrControler2.setDataInputStream(is2);   // TODO
-		this.thrControler2.setDataOutputStream(os2);  // TODO
+		return this.thrControler1.getOutDataOutputStream();
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getOutDataInputStream2()
+	 */
+	@Override
+	public DataInputStream getOutDataInputStream2() {
+
+		return this.thrControler2.getOutDataInputStream();
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getOutDataOutputStream2()
+	 */
+	@Override
+	public DataOutputStream getOutDataOutputStream2() {
+
+		return this.thrControler2.getOutDataOutputStream();
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

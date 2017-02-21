@@ -173,6 +173,19 @@ public final class ThrControler extends Thread implements ImpControler {
 			}
 		}
 		
+		if (flag) {
+			/*
+			 * close
+			 */
+			if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+			
+			if (this.inDis != null) try { this.inDis.close(); } catch (IOException e) {}
+			if (this.inDos != null) try { this.inDos.close(); } catch (IOException e) {}
+			
+			if (this.outDis != null) try { this.outDis.close(); } catch (IOException e) {}
+			if (this.outDos != null) try { this.outDos.close(); } catch (IOException e) {}
+		}
+		
 		if (flag) log.debug(String.format("[%s] END.", Thread.currentThread().getName()));
 	}
 	

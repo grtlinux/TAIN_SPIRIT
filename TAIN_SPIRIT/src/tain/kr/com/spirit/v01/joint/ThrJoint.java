@@ -50,6 +50,7 @@ public final class ThrJoint extends Thread implements ImpJoint {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
+	@SuppressWarnings("unused")
 	private final int jointSeq;
 	
 	private final ThrControler thrControler1;
@@ -64,15 +65,15 @@ public final class ThrJoint extends Thread implements ImpJoint {
 	 */
 	public ThrJoint(int jointSeq) {
 		
-		super(String.format("%s_%s", groupName, THR_NAME));
+		super(String.format("THR_%03d", jointSeq));
 
 		this.jointSeq = jointSeq;
 		
 		/*
 		 * create controlers
 		 */
-		this.thrControler1 = new ThrControler(this, String.format("THR_%03d%d", this.jointSeq, 1));
-		this.thrControler2 = new ThrControler(this, String.format("THR_%03d%d", this.jointSeq, 2));
+		this.thrControler1 = new ThrControler(this, String.format("%s%d", Thread.currentThread().getName(), 1));
+		this.thrControler2 = new ThrControler(this, String.format("%s%d", Thread.currentThread().getName(), 2));
 		
 		/*
 		 * set queue
@@ -91,28 +92,29 @@ public final class ThrJoint extends Thread implements ImpJoint {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#start()
-	 */
 	@Override
-	public void start() {
+	public void run() {
 
-		this.thrControler1.start();
-		this.thrControler2.start();
-	}
-
-	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#close()
-	 */
-	@Override
-	public void close() {
+		if (flag) {
+			/*
+			 * start controler threads
+			 */
+			this.thrControler1.start();
+			this.thrControler2.start();
+		}
 		
-		try {
-			this.thrControler1.join();
-			this.thrControler2.join();
-		} catch (InterruptedException e) {}
+		if (flag) {
+			/*
+			 * join controler threads for waiting to stop
+			 */
+			try {
+				this.thrControler1.join();
+				this.thrControler2.join();
+			} catch (InterruptedException e) {}
+		}
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	public boolean isFlagStop() {
@@ -122,11 +124,14 @@ public final class ThrJoint extends Thread implements ImpJoint {
 	public void stopThread() {
 		
 		final int MSEC_WAIT_STOPTHREAD = 1000;
-		if (flag) try { Thread.sleep(MSEC_WAIT_STOPTHREAD); } catch (InterruptedException e) {}
-		
+
 		if (flag) log.debug(String.format("########## %s stopThread() ##########", Thread.currentThread().getName()));
 		
+		if (flag) try { Thread.sleep(MSEC_WAIT_STOPTHREAD); } catch (InterruptedException e) {}
+		
 		this.flagStop = true;
+
+		if (flag) try { Thread.sleep(MSEC_WAIT_STOPTHREAD); } catch (InterruptedException e) {}
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////

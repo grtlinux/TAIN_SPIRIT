@@ -168,7 +168,7 @@ public final class ThrRecver extends Thread {
 			 */
 			this.recvQueue = this.thrControler.getRecvQueue();
 			this.content = new DataContent();
-			this.dis = this.thrControler.getDataInputStream();
+			this.dis = this.thrControler.getInDataInputStream();
 		}
 	}
 	

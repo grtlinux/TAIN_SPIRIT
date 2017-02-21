@@ -22,8 +22,8 @@ package tain.kr.com.spirit.v01.controler;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
@@ -65,8 +65,15 @@ public final class ThrControler extends Thread implements ImpControler {
 	private volatile boolean flagStop = false;
 	
 	private Socket socket = null;
-	private DataInputStream dis = null;
-	private DataOutputStream dos = null;
+	private DataInputStream inDis = null;
+	private DataOutputStream inDos = null;
+	
+	/*
+	 * outDis <-> inDos
+	 * outDos <-> inDis
+	 */
+	private DataInputStream outDis = null;
+	private DataOutputStream outDos = null;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,6 +96,36 @@ public final class ThrControler extends Thread implements ImpControler {
 		this.recvQueue = null;               // the other controler sendQueue
 		this.sendQueue = new QueueContent();
 
+		if (flag) {
+			/*
+			 * outDos ---> inDis
+			 */
+			try {
+				PipedInputStream pis = new PipedInputStream();
+				PipedOutputStream pos = new PipedOutputStream(pis);
+				
+				this.outDos = new DataOutputStream(pos);
+				this.inDis = new DataInputStream(pis);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * inDos ---> outDis
+			 */
+			try {
+				PipedInputStream pis = new PipedInputStream();
+				PipedOutputStream pos = new PipedOutputStream(pis);
+				
+				this.inDos = new DataOutputStream(pos);
+				this.outDis = new DataInputStream(pis);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if (flag)
 			log.debug(String.format(">>>>> in class [%s] (%s)", this.getClass().getSimpleName(), this.groupName));
 	}
@@ -168,10 +205,14 @@ public final class ThrControler extends Thread implements ImpControler {
 			/*
 			 * validate IO stream
 			 */
-			if (this.dis == null) {
-				throw new Exception("null pointer DataInputStream : dis");
-			} else if (this.dos == null) {
-				throw new Exception("null pointer DataOutputStream : dos");
+			if (this.inDis == null) {
+				throw new Exception("null pointer DataInputStream : inDis");
+			} else if (this.inDos == null) {
+				throw new Exception("null pointer DataOutputStream : inDos");
+			} else if (this.outDis == null) {
+				throw new Exception("null pointer DataInputStream : outDis");
+			} else if (this.outDos == null) {
+				throw new Exception("null pointer DataOutputStream : outDos");
 			}
 		}
 	}
@@ -220,20 +261,28 @@ public final class ThrControler extends Thread implements ImpControler {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public void setDataInputStream(InputStream is) {
-		this.dis = (DataInputStream) is;
+//	public void setDataInputStream(InputStream is) {
+//		this.inDis = (DataInputStream) is;
+//	}
+//	
+//	public void setDataOutputStream(OutputStream os) {
+//		this.inDos = (DataOutputStream) os;
+//	}
+	
+	public DataInputStream getInDataInputStream() {
+		return this.inDis;
 	}
 	
-	public void setDataOutputStream(OutputStream os) {
-		this.dos = (DataOutputStream) os;
+	public DataOutputStream getInDataOutputStream() {
+		return this.inDos;
 	}
 	
-	public DataInputStream getDataInputStream() {
-		return this.dis;
+	public DataInputStream getOutDataInputStream() {
+		return this.outDis;
 	}
 	
-	public DataOutputStream getDataOutputStream() {
-		return this.dos;
+	public DataOutputStream getOutDataOutputStream() {
+		return this.outDos;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,8 +296,8 @@ public final class ThrControler extends Thread implements ImpControler {
 		this.socket = socket;
 		
 		try {
-			this.dis = new DataInputStream(this.socket.getInputStream());
-			this.dos = new DataOutputStream(this.socket.getOutputStream());
+			this.inDis = new DataInputStream(this.socket.getInputStream());
+			this.inDos = new DataOutputStream(this.socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 			// throw e;

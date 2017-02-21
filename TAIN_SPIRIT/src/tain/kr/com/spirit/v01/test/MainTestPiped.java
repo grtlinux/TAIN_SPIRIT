@@ -86,7 +86,7 @@ public class MainTestPiped {
 			 */
 			
 			final PipedInputStream pis = new PipedInputStream();
-			final PipedOutputStream pos = new PipedOutputStream(pis);
+			final PipedOutputStream pos = new PipedOutputStream(pis);  // pos -> pis
 			
 			System.out.println("START.....");
 			

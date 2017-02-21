@@ -65,7 +65,7 @@ public final class ThrSender extends Thread {
 	 */
 	public ThrSender(ThrControler thrControler) {
 		
-		super(String.format("%s_%s", thrControler.getName(), THR_NAME));
+		super(String.format("%s_%s", thrControler.getGroupName(), THR_NAME));
 		
 		this.thrControler = thrControler;
 		this.loopSleep = new LoopSleep();

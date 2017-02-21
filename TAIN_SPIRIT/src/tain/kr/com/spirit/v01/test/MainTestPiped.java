@@ -19,6 +19,13 @@
  */
 package tain.kr.com.spirit.v01.test;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -74,7 +81,49 @@ public class MainTestPiped {
 			new MainTestPiped();
 
 		if (flag) {
-
+			/*
+			 * transfer Piped IO Stream to Data IO Stream
+			 */
+			
+			final PipedInputStream pis = new PipedInputStream();
+			final PipedOutputStream pos = new PipedOutputStream(pis);
+			
+			System.out.println("START.....");
+			
+			new Thread() {
+				@Override
+				public void run() {
+					DataOutputStream dos = new DataOutputStream(pos);
+					
+					try {
+						for (int i=1; i < 1000; i++) {
+							dos.writeInt(i);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						try { dos.close(); } catch (IOException e) {}
+					}
+				}
+			}.start();
+			
+			DataInputStream dis = new DataInputStream(pis);
+			
+			try {
+				int val = 0;
+				while (true) {
+					val = dis.readInt();
+					System.out.println("> " + val);
+				}
+			} catch (EOFException e) {
+				// not print error message
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try { dis.close(); } catch (IOException e) {}
+			}
+			
+			System.out.println("FINISH......");
 		}
 	}
 

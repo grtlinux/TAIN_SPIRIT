@@ -42,11 +42,11 @@ import tain.kr.com.spirit.v01.controler.ThrControler;
  * @author taincokr
  *
  */
-public final class Joint implements ImpJoint {
+public final class ThrJoint extends Thread implements ImpJoint {
 
 	private static boolean flag = true;
 
-	private static final Logger log = Logger.getLogger(Joint.class);
+	private static final Logger log = Logger.getLogger(ThrJoint.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -62,8 +62,10 @@ public final class Joint implements ImpJoint {
 	/*
 	 * constructor
 	 */
-	public Joint(int jointSeq) {
+	public ThrJoint(int jointSeq) {
 		
+		super(String.format("%s_%s", groupName, THR_NAME));
+
 		this.jointSeq = jointSeq;
 		
 		/*
@@ -82,7 +84,7 @@ public final class Joint implements ImpJoint {
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
-	public Joint() {
+	public ThrJoint() {
 		this(JointSequence.getInstance().getSeq());
 	}
 	

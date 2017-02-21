@@ -28,7 +28,7 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v01.joint.Joint;
+import tain.kr.com.spirit.v01.joint.ThrJoint;
 import tain.kr.com.spirit.v01.queue.QueueContent;
 
 /**
@@ -55,7 +55,7 @@ public final class ThrControler extends Thread implements ImpControler {
 
 	private static final String THR_NAME = "CNTL";
 	
-	private final Joint joint;
+	private final ThrJoint joint;
 	private final String groupName;
 	
 	private final ThrRecver thrRecver;
@@ -84,7 +84,7 @@ public final class ThrControler extends Thread implements ImpControler {
 	 *        0011 : controler-1
 	 *        0012 : controler-2
 	 */
-	public ThrControler(Joint joint, String groupName) {
+	public ThrControler(ThrJoint joint, String groupName) {
 		
 		super(String.format("%s_%s", groupName, THR_NAME));
 		

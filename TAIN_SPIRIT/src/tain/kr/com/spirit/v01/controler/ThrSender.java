@@ -24,7 +24,7 @@ import java.io.DataOutputStream;
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v01.data.DataContent;
-import tain.kr.com.spirit.v01.joint.Joint;
+import tain.kr.com.spirit.v01.joint.ThrJoint;
 import tain.kr.com.spirit.v01.loop.LoopSleep;
 import tain.kr.com.spirit.v01.queue.QueueContent;
 
@@ -52,7 +52,7 @@ public final class ThrSender extends Thread {
 	
 	private static final String THR_NAME = "SEND";
 	
-	private final Joint joint;
+	private final ThrJoint joint;
 	private final ThrControler thrControler;
 	private final LoopSleep loopSleep;
 	
@@ -65,7 +65,7 @@ public final class ThrSender extends Thread {
 	/*
 	 * constructor
 	 */
-	public ThrSender(Joint joint, ThrControler thrControler) {
+	public ThrSender(ThrJoint joint, ThrControler thrControler) {
 		
 		super(String.format("%s_%s", thrControler.getGroupName(), THR_NAME));
 		

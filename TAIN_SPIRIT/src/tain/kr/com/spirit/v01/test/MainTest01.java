@@ -25,7 +25,7 @@ import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v01.joint.Joint;
+import tain.kr.com.spirit.v01.joint.ThrJoint;
 
 /**
  * Code Templates > Comments > Types
@@ -83,7 +83,7 @@ public class MainTest01 {
 			/*
 			 * Joint
 			 */
-			final Joint joint = new Joint();
+			final ThrJoint joint = new ThrJoint();
 			
 			joint.start();
 

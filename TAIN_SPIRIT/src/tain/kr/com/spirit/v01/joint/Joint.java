@@ -55,6 +55,8 @@ public final class Joint implements ImpJoint {
 	private final ThrControler thrControler1;
 	private final ThrControler thrControler2;
 	
+	private volatile boolean flagStop = false;
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -67,8 +69,8 @@ public final class Joint implements ImpJoint {
 		/*
 		 * create controlers
 		 */
-		this.thrControler1 = new ThrControler(String.format("THR_%03d%d", this.jointSeq, 1));
-		this.thrControler2 = new ThrControler(String.format("THR_%03d%d", this.jointSeq, 2));
+		this.thrControler1 = new ThrControler(this, String.format("THR_%03d%d", this.jointSeq, 1));
+		this.thrControler2 = new ThrControler(this, String.format("THR_%03d%d", this.jointSeq, 2));
 		
 		/*
 		 * set queue
@@ -103,8 +105,28 @@ public final class Joint implements ImpJoint {
 	@Override
 	public void close() {
 		
+		try {
+			this.thrControler1.join();
+			this.thrControler2.join();
+		} catch (InterruptedException e) {}
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	public boolean isFlagStop() {
+		return this.flagStop;
+	}
+	
+	public void stopThread() {
+		
+		final int MSEC_WAIT_STOPTHREAD = 1000;
+		if (flag) try { Thread.sleep(MSEC_WAIT_STOPTHREAD); } catch (InterruptedException e) {}
+		
+		if (flag) log.debug(String.format("########## %s stopThread() ##########", Thread.currentThread().getName()));
+		
+		this.flagStop = true;
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* (non-Javadoc)

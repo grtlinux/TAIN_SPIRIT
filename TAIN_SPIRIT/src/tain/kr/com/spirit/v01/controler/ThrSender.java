@@ -24,6 +24,7 @@ import java.io.DataOutputStream;
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v01.data.DataContent;
+import tain.kr.com.spirit.v01.joint.Joint;
 import tain.kr.com.spirit.v01.loop.LoopSleep;
 import tain.kr.com.spirit.v01.queue.QueueContent;
 
@@ -51,6 +52,7 @@ public final class ThrSender extends Thread {
 	
 	private static final String THR_NAME = "SEND";
 	
+	private final Joint joint;
 	private final ThrControler thrControler;
 	private final LoopSleep loopSleep;
 	
@@ -63,10 +65,11 @@ public final class ThrSender extends Thread {
 	/*
 	 * constructor
 	 */
-	public ThrSender(ThrControler thrControler) {
+	public ThrSender(Joint joint, ThrControler thrControler) {
 		
 		super(String.format("%s_%s", thrControler.getGroupName(), THR_NAME));
 		
+		this.joint = joint;
 		this.thrControler = thrControler;
 		this.loopSleep = new LoopSleep();
 		
@@ -108,7 +111,7 @@ public final class ThrSender extends Thread {
 			/*
 			 * job processing
 			 */
-			while (!this.thrControler.isFlagStop()) {
+			while (!this.joint.isFlagStop()) {
 				
 				if (flag) {
 					/*
@@ -116,10 +119,11 @@ public final class ThrSender extends Thread {
 					 */
 					try {
 						this.content = (DataContent) this.sendQueue.get(this.loopSleep.getMSec());
-						if (this.content == null)
-							continue;
+						//if (this.content == null)
+						//	continue;
 					} catch (Exception e) {
-						// e.printStackTrace();
+						if (!flag) e.printStackTrace();
+						continue;
 					}
 				}
 
@@ -147,7 +151,7 @@ public final class ThrSender extends Thread {
 			 */
 			if (flag) log.debug(String.format("[%s] END", Thread.currentThread().getName()));
 			
-			if (flag) this.thrControler.stopThread();
+			if (flag) this.joint.stopThread();
 		}
 	}
 	

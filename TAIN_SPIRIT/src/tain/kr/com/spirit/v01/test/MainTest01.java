@@ -131,6 +131,8 @@ public class MainTest01 {
 					}
 				}
 			}.start();
+			
+			joint.close();
 		}
 	}
 

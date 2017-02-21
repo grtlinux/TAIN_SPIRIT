@@ -85,51 +85,106 @@ public class MainTest01 {
 			 */
 			final ThrJoint joint = new ThrJoint();
 			
-			new Thread("SENDER_1") {
-				@Override
-				public void run() {
-					
-					try {
-						DataOutputStream dos = joint.getOutDataOutputStream1();
+			if (flag) {
+				/*
+				 * 1_R -> 2_S
+				 */
+				new Thread("SENDER_1") {
+					@Override
+					public void run() {
 						
-						for (int i=0; i < 10; i++) {
-							String strData = String.format("ABCDEFGHIJ%010d", i);
-							byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
+						try {
+							DataOutputStream dos = joint.getOutDataOutputStream1();
 							
-							dos.write(bytData);
+							for (int i=0; i < 10; i++) {
+								String strData = String.format("ABCDEFGHIJ%010d", i);
+								byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
+								
+								dos.write(bytData);
+								
+								if (flag) System.out.printf("SEND (%3d) [%s].\n", bytData.length, strData);
+							}
 							
-							if (flag) System.out.printf("SEND (%3d) [%s].\n", bytData.length, strData);
+							dos.close();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-						
-						dos.close();
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
-				}
-			}.start();
-			
-			new Thread("RECVER_2") {
-				public void run() {
-					
-					try {
-						DataInputStream dis = joint.getOutDataInputStream2();
+				}.start();
+				
+				new Thread("RECVER_2") {
+					public void run() {
 						
-						byte[] bytRead = new byte[1024];
-						int nRead = 0;
-						
-						while ((nRead = dis.read(bytRead)) != -1) {
+						try {
+							DataInputStream dis = joint.getOutDataInputStream2();
 							
-							if (flag) System.out.printf("RECV (%3d) [%s].\n"
-									, nRead, new String(bytRead, 0, nRead, Charset.forName("euc-kr")));
+							byte[] bytRead = new byte[1024];
+							int nRead = 0;
+							
+							while ((nRead = dis.read(bytRead)) != -1) {
+								
+								if (flag) System.out.printf("RECV (%3d) [%s].\n"
+										, nRead, new String(bytRead, 0, nRead, Charset.forName("euc-kr")));
+							}
+							
+							dis.close();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-						
-						dis.close();
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
-				}
-			}.start();
+				}.start();
+			}
 			
+			if (!flag) {
+				/*
+				 * 2_R -> 1_S
+				 */
+				new Thread("SENDER_2") {
+					@Override
+					public void run() {
+						
+						try {
+							DataOutputStream dos = joint.getOutDataOutputStream2();
+							
+							for (int i=0; i < 10; i++) {
+								String strData = String.format("abcdefghij%010d", i);
+								byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
+								
+								dos.write(bytData);
+								
+								if (flag) System.out.printf("SEND (%3d) [%s].\n", bytData.length, strData);
+							}
+							
+							dos.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}.start();
+				
+				new Thread("RECVER_1") {
+					public void run() {
+						
+						try {
+							DataInputStream dis = joint.getOutDataInputStream1();
+							
+							byte[] bytRead = new byte[1024];
+							int nRead = 0;
+							
+							while ((nRead = dis.read(bytRead)) != -1) {
+								
+								if (flag) System.out.printf("RECV (%3d) [%s].\n"
+										, nRead, new String(bytRead, 0, nRead, Charset.forName("euc-kr")));
+							}
+							
+							dis.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}.start();
+			}
+
 			joint.start();
 		}
 	}

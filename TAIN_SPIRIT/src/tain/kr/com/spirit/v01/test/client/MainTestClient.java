@@ -19,6 +19,12 @@
  */
 package tain.kr.com.spirit.v01.test.client;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.nio.charset.Charset;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -63,6 +69,10 @@ public class MainTestClient {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String HOST = "127.0.0.1";
+	private static final String PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +84,58 @@ public class MainTestClient {
 			new MainTestClient();
 
 		if (flag) {
-
+			/*
+			 * variable
+			 */
+			Socket socket;
+			DataInputStream dis;
+			DataOutputStream dos;
+			
+			try {
+				/*
+				 * connect
+				 */
+				socket = new Socket(HOST, Integer.parseInt(PORT));
+				dis = new DataInputStream(socket.getInputStream());
+				dos = new DataOutputStream(socket.getOutputStream());
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e;
+			}
+			
+			try {
+				/*
+				 * send data to server
+				 */
+				String strSend = "client sends data to server..";
+				byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+				
+				dos.write(bytSend, 0, bytSend.length);
+				
+				if (flag) System.out.printf("SEND (%3d) [%s].\n", bytSend.length, strSend);
+				
+				/*
+				 * recv data from server
+				 */
+				byte[] bytRecv = new byte[1024];
+				int nRecv = 0;
+				
+				nRecv = dis.read(bytRecv);
+				
+				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+				
+				if (flag) System.out.printf("RECV (%3d) [%s].\n", nRecv, strRecv);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				/*
+				 * close
+				 */
+				try { dos.close(); } catch (IOException e) {}
+				try { dis.close(); } catch (IOException e) {}
+				try { socket.close(); } catch (IOException e) {}
+			}
 		}
 	}
 

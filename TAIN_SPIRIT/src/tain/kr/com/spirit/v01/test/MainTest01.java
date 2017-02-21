@@ -19,15 +19,13 @@
  */
 package tain.kr.com.spirit.v01.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v01.controler.ThrControler;
+import tain.kr.com.spirit.v01.joint.Joint;
 
 /**
  * Code Templates > Comments > Types
@@ -83,79 +81,56 @@ public class MainTest01 {
 
 		if (flag) {
 			/*
-			 * 1st testing
+			 * Joint
 			 */
-			final ThrControler thrControler1 = new ThrControler(String.format("THR_%04d", 1));
-			final ThrControler thrControler2 = new ThrControler(String.format("THR_%04d", 2));
+			final Joint joint = new Joint();
 			
-			if (flag) {
-				/*
-				 * set queue
-				 */
-				thrControler1.setRecvQueue(thrControler2.getSendQueue());  // 1_R (2_S) 
-				thrControler2.setRecvQueue(thrControler1.getSendQueue());  // 2_R (1_S) 
-			}
-			
-			if (flag) {
-				/*
-				 * thrControler1 set IO stream
-				 */
-				String strData = ""
-						+ "ABCDEFGHIJ0000000000"
-						+ "ABCDEFGHIJ0000000001"
-						+ "ABCDEFGHIJ0000000002"
-						+ "ABCDEFGHIJ0000000003"
-						+ "ABCDEFGHIJ0000000004"
-						+ "ABCDEFGHIJ0000000005"
-						+ "ABCDEFGHIJ0000000006"
-						+ "ABCDEFGHIJ0000000007"
-						+ "ABCDEFGHIJ0000000008"
-						+ "ABCDEFGHIJ0000000009"
-						+ "ABCDEFGHIJ0000000010"
-						+ "ABCDEFGHIJ0000000011"
-						+ "ABCDEFGHIJ0000000012"
-						+ "ABCDEFGHIJ0000000013"
-						+ "ABCDEFGHIJ0000000014"
-						+ "ABCDEFGHIJ0000000015"
-						+ "ABCDEFGHIJ0000000016"
-						+ "ABCDEFGHIJ0000000017"
-						+ "ABCDEFGHIJ0000000018"
-						+ "ABCDEFGHIJ0000000019"
-						+ "ABCDEFGHIJ0000000020";
-				byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
-				
-				DataInputStream dis1 = new DataInputStream(new ByteArrayInputStream(bytData));
-				DataOutputStream dos1 = new DataOutputStream(new ByteArrayOutputStream(1024));
-				
-				thrControler1.setDataInputStream(dis1);
-				thrControler1.setDataOutputStream(dos1);
-			}
-			
-			if (flag) {
-				/*
-				 * thrControler2 set IO stream
-				 */
-				String strData = ""
-						+ "abcdefghij-------000"
-						+ "abcdefghij-------001"
-						+ "abcdefghij-------019"
-						+ "abcdefghij-------020";
-				byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
-				
-				DataInputStream dis2 = new DataInputStream(new ByteArrayInputStream(bytData));
-				DataOutputStream dos2 = new DataOutputStream(new ByteArrayOutputStream(1024));
+			joint.start();
 
-				thrControler2.setDataInputStream(dis2);
-				thrControler2.setDataOutputStream(dos2);
-			}
+			new Thread() {
+				@Override
+				public void run() {
+					
+					try {
+						DataOutputStream dos = joint.getOutDataOutputStream1();
+						
+						for (int i=0; i < 10; i++) {
+							String strData = String.format("ABCDEFGHIJ%010d", i);
+							byte[] bytData = strData.getBytes(Charset.forName("euc-kr"));
+							
+							dos.write(bytData);
+							
+							if (flag) System.out.printf("SEND (%3d) [%s].\n", bytData.length, strData);
+						}
+						
+						dos.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}.start();
 			
-			if (flag) {
-				/*
-				 * start thrControler1, thrControler2
-				 */
-				thrControler1.start();
-				thrControler2.start();
-			}
+			new Thread() {
+				public void run() {
+					
+					try {
+						DataInputStream dis = joint.getOutDataInputStream2();
+						
+						byte[] bytRead = new byte[1024];
+						int nRead = 0;
+						
+						while ((nRead = dis.read(bytRead)) != -1) {
+							
+							if (flag) System.out.printf("RECV (%3d) [%s].\n"
+									, nRead, new String(bytRead, 0, nRead, Charset.forName("euc-kr")));
+						}
+						
+						dis.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}.start();
 		}
 	}
 

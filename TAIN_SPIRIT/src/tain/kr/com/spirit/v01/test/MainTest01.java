@@ -85,8 +85,8 @@ public class MainTest01 {
 			/*
 			 * 1st testing
 			 */
-			final ThrControler thrControler1 = new ThrControler(1);
-			final ThrControler thrControler2 = new ThrControler(2);
+			final ThrControler thrControler1 = new ThrControler(String.format("THR_%04d", 1));
+			final ThrControler thrControler2 = new ThrControler(String.format("THR_%04d", 2));
 			
 			if (flag) {
 				/*

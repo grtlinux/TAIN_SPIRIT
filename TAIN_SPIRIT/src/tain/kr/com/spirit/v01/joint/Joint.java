@@ -21,6 +21,8 @@ package tain.kr.com.spirit.v01.joint;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v01.controler.ThrControler;
+
 /**
  * Code Templates > Comments > Types
  *
@@ -42,18 +44,53 @@ public final class Joint implements ImpJoint {
 	private static final Logger log = Logger.getLogger(Joint.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final int jointSeq;
+	
+	private final ThrControler thrControler1;
+	private final ThrControler thrControler2;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public Joint() {
+	public Joint(int jointSeq) {
+		
+		this.jointSeq = jointSeq;
+		
+		/*
+		 * create controlers
+		 */
+		this.thrControler1 = new ThrControler(String.format("THR_%03d%d", this.jointSeq, 1));
+		this.thrControler2 = new ThrControler(String.format("THR_%03d%d", this.jointSeq, 2));
+		
+		/*
+		 * set queue
+		 */
+		this.thrControler1.setRecvQueue(this.thrControler2.getSendQueue());  // 1_R (2_S)
+		this.thrControler2.setRecvQueue(this.thrControler1.getSendQueue());  // 2_R (1_S)
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
+	public Joint() {
+		this(JointSequence.getInstance().getSeq());
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void start() {
+		/*
+		 * start the controler thread
+		 */
+		this.thrControler1.start();
+		this.thrControler2.start();
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////

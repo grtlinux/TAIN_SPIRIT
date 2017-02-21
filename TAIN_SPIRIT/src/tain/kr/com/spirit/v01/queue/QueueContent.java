@@ -114,8 +114,10 @@ public final class QueueContent implements ImpQueue {
 			wait(timeout);
 		} catch (InterruptedException e) {}
 		
-		if (this.size <= 0)
-			return null;
+		if (this.size <= 0) {
+			// return null;
+			throw new Exception("return null pointer : [this.size = 0]");  // TODO : 2017.02.21
+		}
 		
 		Object object = this.queue.elementAt(0);
 		this.queue.remove(0);

@@ -90,29 +90,31 @@ public final class ThrClient extends Thread {
 		
 		if (flag) {
 			try {
-				/*
-				 * send
-				 */
-				String strSend = "client sends data to client....";
-				byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
-				
-				this.dos.write(bytSend, 0, bytSend.length);
-				
-				if (flag) log.debug(String.format("%s SEND (%3d) [%s]"
-						, Thread.currentThread().getName(), bytSend.length, strSend));
+				for (int i=0; i < 10; i++) {
+					/*
+					 * send
+					 */
+					String strSend = String.format("client sends data to client....(%03d)", i);
+					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+					
+					this.dos.write(bytSend, 0, bytSend.length);
+					
+					if (flag) log.debug(String.format("%s SEND (%3d) [%s]"
+							, Thread.currentThread().getName(), bytSend.length, strSend));
 
-				/*
-				 * recv
-				 */
-				byte[] bytRecv = new byte[1024];
-				int nRecv = 0;
-				
-				nRecv = this.dis.read(bytRecv);
-				
-				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
-				
-				if (flag) log.debug(String.format("%s RECV (%3d) [%s]"
-						, Thread.currentThread().getName(), nRecv, strRecv));
+					/*
+					 * recv
+					 */
+					byte[] bytRecv = new byte[1024];
+					int nRecv = 0;
+					
+					nRecv = this.dis.read(bytRecv);
+					
+					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					
+					if (flag) log.debug(String.format("%s RECV (%3d) [%s]"
+							, Thread.currentThread().getName(), nRecv, strRecv));
+				}
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -123,6 +125,8 @@ public final class ThrClient extends Thread {
 				if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
 				if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
 				if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+				
+				if (this.joint != null) try { this.joint.join(); } catch (InterruptedException e) {}
 			}
 		}
 	}

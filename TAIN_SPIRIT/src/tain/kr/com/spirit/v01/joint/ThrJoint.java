@@ -193,6 +193,43 @@ public final class ThrJoint extends Thread implements ImpJoint {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getInDataInputStream1()
+	 */
+	@Override
+	public DataInputStream getInDataInputStream1() {
+
+		return this.thrControler1.getInDataInputStream();
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getInDataOutputStream1()
+	 */
+	@Override
+	public DataOutputStream getInDataOutputStream1() {
+
+		return this.thrControler1.getInDataOutputStream();
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getInDataInputStream2()
+	 */
+	@Override
+	public DataInputStream getInDataInputStream2() {
+
+		return this.thrControler2.getInDataInputStream();
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v01.joint.ImpJoint#getInDataOutputStream2()
+	 */
+	@Override
+	public DataOutputStream getInDataOutputStream2() {
+
+		return this.thrControler2.getInDataOutputStream();
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////

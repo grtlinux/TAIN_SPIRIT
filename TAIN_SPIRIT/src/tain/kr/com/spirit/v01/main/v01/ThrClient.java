@@ -98,7 +98,8 @@ public final class ThrClient extends Thread {
 				
 				this.dos.write(bytSend, 0, bytSend.length);
 				
-				if (flag) System.out.printf("CLIENT SEND (%3d) [%s]\n", bytSend.length, strSend);
+				if (flag) log.debug(String.format("%s SEND (%3d) [%s]"
+						, Thread.currentThread().getName(), bytSend.length, strSend));
 
 				/*
 				 * recv
@@ -110,7 +111,8 @@ public final class ThrClient extends Thread {
 				
 				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
 				
-				if (flag) System.out.printf("CLIENT RECV (%3d) [%s]\n", nRecv, strRecv);
+				if (flag) log.debug(String.format("%s RECV (%3d) [%s]"
+						, Thread.currentThread().getName(), nRecv, strRecv));
 				
 			} catch (Exception e) {
 				e.printStackTrace();

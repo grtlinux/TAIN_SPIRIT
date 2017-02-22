@@ -61,7 +61,7 @@ public final class DataContent extends AbsData {
 		
 		super(size);
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 

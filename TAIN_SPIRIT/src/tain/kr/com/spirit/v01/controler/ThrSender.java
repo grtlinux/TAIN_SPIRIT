@@ -73,7 +73,7 @@ public final class ThrSender extends Thread {
 		this.thrControler = thrControler;
 		this.loopSleep = new LoopSleep();
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 

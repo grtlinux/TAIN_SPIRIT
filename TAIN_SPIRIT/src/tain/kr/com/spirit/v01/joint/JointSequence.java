@@ -54,7 +54,7 @@ public final class JointSequence {
 	
 		this.seq = 1;
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 

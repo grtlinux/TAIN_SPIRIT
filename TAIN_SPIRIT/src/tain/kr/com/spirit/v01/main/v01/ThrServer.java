@@ -73,6 +73,8 @@ public final class ThrServer extends Thread {
 		
 		this.dis = this.joint.getOutDataInputStream1();
 		this.dos = this.joint.getOutDataOutputStream1();
+		
+		this.joint.start();
 
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
@@ -96,7 +98,7 @@ public final class ThrServer extends Thread {
 				
 				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
 				
-				if (flag) System.out.printf("RECV (%3d) [%s]\n", nRecv, strRecv);
+				if (flag) System.out.printf("SERVER RECV (%3d) [%s]\n", nRecv, strRecv);
 				
 				/*
 				 * send
@@ -106,7 +108,7 @@ public final class ThrServer extends Thread {
 				
 				this.dos.write(bytSend, 0, bytSend.length);
 				
-				if (flag) System.out.printf("SEND (%3d) [%s]\n", bytSend.length, strSend);
+				if (flag) System.out.printf("SERVER SEND (%3d) [%s]\n", bytSend.length, strSend);
 
 			} catch (Exception e) {
 				e.printStackTrace();

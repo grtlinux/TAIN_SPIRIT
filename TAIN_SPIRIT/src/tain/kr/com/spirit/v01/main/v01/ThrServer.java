@@ -110,6 +110,8 @@ public final class ThrServer extends Thread {
 				
 				if (flag) System.out.printf("SERVER SEND (%3d) [%s]\n", bytSend.length, strSend);
 
+				if (flag) try { Thread.sleep(1000); } catch (InterruptedException e) {}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

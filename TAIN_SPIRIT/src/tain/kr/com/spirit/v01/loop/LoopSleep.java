@@ -57,7 +57,7 @@ public final class LoopSleep implements ImpLoop {
 		
 		this.indexLimit = indexLimit;
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 	

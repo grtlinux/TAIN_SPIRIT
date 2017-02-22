@@ -93,6 +93,8 @@ public class MainServer {
 				
 				Thread thread = new ThrServer(socket);
 				thread.start();
+				
+				thread.join();
 			}
 		}
 	}

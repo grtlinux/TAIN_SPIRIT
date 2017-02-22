@@ -108,7 +108,8 @@ public final class ThrServer extends Thread {
 					
 					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
 					
-					if (flag) System.out.printf("SERVER RECV (%3d) [%s]\n", nRecv, strRecv);
+					if (flag) log.debug(String.format("%s RECV (%3d) [%s]"
+							, Thread.currentThread().getName(), nRecv, strRecv));
 					
 					/*
 					 * send
@@ -118,18 +119,17 @@ public final class ThrServer extends Thread {
 					
 					this.dos.write(bytSend, 0, bytSend.length);
 					
-					if (flag) System.out.printf("SERVER SEND (%3d) [%s]\n", bytSend.length, strSend);
+					if (flag) log.debug(String.format("%s SEND (%3d) [%s]"
+							, Thread.currentThread().getName(), bytSend.length, strSend));
 
 					/*
 					 * loopSleep
 					 */
 					if (flag) this.loopSleep.sleep();
 				}
-
-				//if (flag) try { Thread.sleep(1000); } catch (InterruptedException e) {}
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				if (flag) e.printStackTrace();
 			} finally {
 				/*
 				 * close

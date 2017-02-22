@@ -24,6 +24,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Date;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -61,6 +63,8 @@ public final class ThrServer extends Thread {
 	
 	private final LoopSleep loopSleep;
 	
+	private final Random random;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -80,6 +84,7 @@ public final class ThrServer extends Thread {
 		this.dos = this.joint.getOutDataOutputStream1();
 		
 		this.loopSleep = new LoopSleep();
+		this.random = new Random(new Date().getTime());
 		
 		this.joint.start();
 
@@ -114,7 +119,7 @@ public final class ThrServer extends Thread {
 					/*
 					 * send
 					 */
-					String strSend = "server sends data to client....";
+					String strSend = String.format("server sends data to client....(%06d)", random.nextInt(500000));
 					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
 					
 					this.dos.write(bytSend, 0, bytSend.length);
@@ -137,6 +142,8 @@ public final class ThrServer extends Thread {
 				if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
 				if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
 				if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+				
+				if (this.joint != null) try { this.joint.join(); } catch (InterruptedException e) {}
 			}
 		}
 	}

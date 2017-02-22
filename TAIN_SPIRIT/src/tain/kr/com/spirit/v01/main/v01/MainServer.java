@@ -89,6 +89,8 @@ public class MainServer {
 			serverSocket = new ServerSocket(Integer.parseInt(PORT));
 			
 			while (true) {
+				if (flag) log.debug(String.format("SERVER : listening by port %s.", PORT));
+				
 				Socket socket = serverSocket.accept();
 				
 				Thread thread = new ThrServer(socket);

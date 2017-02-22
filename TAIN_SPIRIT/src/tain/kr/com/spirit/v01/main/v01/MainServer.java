@@ -19,6 +19,9 @@
  */
 package tain.kr.com.spirit.v01.main.v01;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -63,18 +66,34 @@ public class MainServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * static test method
 	 */
+	@SuppressWarnings("resource")
 	private static void test01(String[] args) throws Exception {
 
 		if (flag)
 			new MainServer();
 
 		if (flag) {
-
+			/*
+			 * variable
+			 */
+			ServerSocket serverSocket;
+			
+			serverSocket = new ServerSocket(Integer.parseInt(PORT));
+			
+			while (true) {
+				Socket socket = serverSocket.accept();
+				
+				Thread thread = new ThrServer(socket);
+				thread.start();
+			}
 		}
 	}
 

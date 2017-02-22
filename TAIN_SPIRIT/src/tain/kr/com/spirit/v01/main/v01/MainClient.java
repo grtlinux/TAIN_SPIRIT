@@ -103,5 +103,7 @@ public class MainClient {
 
 		if (flag)
 			test01(args);
+		
+		System.exit(0);
 	}
 }

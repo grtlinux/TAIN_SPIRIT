@@ -19,9 +19,13 @@
  */
 package tain.kr.com.spirit.v01.main.v01;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v01.joint.ThrJoint;
 
 /**
  * Code Templates > Comments > Types
@@ -47,15 +51,27 @@ public final class ThrServer extends Thread {
 	
 	private final Socket socket;
 	
+	private final ThrJoint joint;
+	
+	private final DataInputStream dis;
+	private final DataOutputStream dos;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrServer(Socket socket) {
+	public ThrServer(Socket socket) throws Exception {
 		
 		this.socket = socket;
 		
+		this.joint = new ThrJoint();
+		
+		this.joint.setSocket2(this.socket);
+		
+		this.dis = this.joint.getOutDataInputStream1();
+		this.dos = this.joint.getOutDataOutputStream1();
+
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}

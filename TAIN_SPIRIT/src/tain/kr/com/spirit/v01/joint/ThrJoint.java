@@ -81,7 +81,7 @@ public final class ThrJoint extends Thread implements ImpJoint {
 		this.thrControler1.setRecvQueue(this.thrControler2.getSendQueue());  // 1_R (2_S)
 		this.thrControler2.setRecvQueue(this.thrControler1.getSendQueue());  // 2_R (1_S)
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 

@@ -74,6 +74,8 @@ public final class ThrClient extends Thread {
 		this.dis = this.joint.getOutDataInputStream1();
 		this.dos = this.joint.getOutDataOutputStream1();
 		
+		this.joint.start();
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
@@ -89,12 +91,12 @@ public final class ThrClient extends Thread {
 				/*
 				 * send
 				 */
-				String strSend = "server sends data to client....";
+				String strSend = "client sends data to client....";
 				byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
 				
 				this.dos.write(bytSend, 0, bytSend.length);
 				
-				if (flag) System.out.printf("SEND (%3d) [%s]\n", bytSend.length, strSend);
+				if (flag) System.out.printf("CLIENT SEND (%3d) [%s]\n", bytSend.length, strSend);
 
 				/*
 				 * recv
@@ -106,7 +108,7 @@ public final class ThrClient extends Thread {
 				
 				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
 				
-				if (flag) System.out.printf("RECV (%3d) [%s]\n", nRecv, strRecv);
+				if (flag) System.out.printf("CLIENT RECV (%3d) [%s]\n", nRecv, strRecv);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

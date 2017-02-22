@@ -44,9 +44,21 @@ public interface ImpJoint {
 	public abstract void setSocket1(Socket socket1) throws IOException;
 	public abstract void setSocket2(Socket socket2) throws IOException;
 	
+	/*
+	 * outer IO data stream
+	 */
 	public abstract DataInputStream getOutDataInputStream1();
 	public abstract DataOutputStream getOutDataOutputStream1();
 
 	public abstract DataInputStream getOutDataInputStream2();
 	public abstract DataOutputStream getOutDataOutputStream2();
+
+	/*
+	 * inner IO data stream
+	 */
+	public abstract DataInputStream getInDataInputStream1();
+	public abstract DataOutputStream getInDataOutputStream1();
+
+	public abstract DataInputStream getInDataInputStream2();
+	public abstract DataOutputStream getInDataOutputStream2();
 }

@@ -155,7 +155,7 @@ public final class ThrRecver extends Thread {
 			/*
 			 * end job
 			 */
-			if (flag) log.debug(String.format("[%s] END", Thread.currentThread().getName()));
+			if (!flag) log.debug(String.format("[%s] END", Thread.currentThread().getName()));
 			
 			if (flag) this.joint.stopThread();
 		}

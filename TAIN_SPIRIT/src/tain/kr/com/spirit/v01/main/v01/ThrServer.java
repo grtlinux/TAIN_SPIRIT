@@ -28,6 +28,7 @@ import java.nio.charset.Charset;
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v01.joint.ThrJoint;
+import tain.kr.com.spirit.v01.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -58,6 +59,8 @@ public final class ThrServer extends Thread {
 	private final DataInputStream dis;
 	private final DataOutputStream dos;
 	
+	private final LoopSleep loopSleep;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,6 +77,8 @@ public final class ThrServer extends Thread {
 		this.dis = this.joint.getOutDataInputStream1();
 		this.dos = this.joint.getOutDataOutputStream1();
 		
+		this.loopSleep = new LoopSleep();
+		
 		this.joint.start();
 
 		if (flag)
@@ -88,29 +93,38 @@ public final class ThrServer extends Thread {
 		
 		if (flag) {
 			try {
-				/*
-				 * recv
-				 */
-				byte[] bytRecv = new byte[1024];
-				int nRecv = 0;
 				
-				nRecv = this.dis.read(bytRecv);
-				
-				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
-				
-				if (flag) System.out.printf("SERVER RECV (%3d) [%s]\n", nRecv, strRecv);
-				
-				/*
-				 * send
-				 */
-				String strSend = "server sends data to client....";
-				byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
-				
-				this.dos.write(bytSend, 0, bytSend.length);
-				
-				if (flag) System.out.printf("SERVER SEND (%3d) [%s]\n", bytSend.length, strSend);
+				while (!this.joint.isFlagStop()) {
+					
+					/*
+					 * recv
+					 */
+					byte[] bytRecv = new byte[1024];
+					int nRecv = 0;
+					
+					nRecv = this.dis.read(bytRecv);
+					
+					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					
+					if (flag) System.out.printf("SERVER RECV (%3d) [%s]\n", nRecv, strRecv);
+					
+					/*
+					 * send
+					 */
+					String strSend = "server sends data to client....";
+					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+					
+					this.dos.write(bytSend, 0, bytSend.length);
+					
+					if (flag) System.out.printf("SERVER SEND (%3d) [%s]\n", bytSend.length, strSend);
 
-				if (flag) try { Thread.sleep(1000); } catch (InterruptedException e) {}
+					/*
+					 * loopSleep
+					 */
+					if (flag) this.loopSleep.sleep();
+				}
+
+				//if (flag) try { Thread.sleep(1000); } catch (InterruptedException e) {}
 				
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -129,7 +129,7 @@ public final class ThrServer extends Thread {
 				}
 				
 			} catch (Exception e) {
-				if (flag) e.printStackTrace();
+				if (!flag) e.printStackTrace();
 			} finally {
 				/*
 				 * close

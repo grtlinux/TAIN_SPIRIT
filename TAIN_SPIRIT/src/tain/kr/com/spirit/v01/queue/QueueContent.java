@@ -58,7 +58,7 @@ public final class QueueContent implements ImpQueue {
 		this.queue = new Vector<Object>(5,5);
 		this.size = 0;
 		
-		if (flag)
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 

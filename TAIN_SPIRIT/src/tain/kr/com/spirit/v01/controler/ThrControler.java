@@ -127,7 +127,7 @@ public final class ThrControler extends Thread implements ImpControler {
 			}
 		}
 		
-		if (flag)
+		if (!flag)
 			log.debug(String.format(">>>>> in class [%s] (%s)", this.getClass().getSimpleName(), this.groupName));
 	}
 

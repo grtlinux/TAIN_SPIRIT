@@ -21,7 +21,9 @@ package tain.kr.com.spirit.v01.main.v01;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 
@@ -82,6 +84,41 @@ public final class ThrClient extends Thread {
 	@Override
 	public void run() {
 		
+		if (flag) {
+			try {
+				/*
+				 * send
+				 */
+				String strSend = "server sends data to client....";
+				byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+				
+				this.dos.write(bytSend, 0, bytSend.length);
+				
+				if (flag) System.out.printf("SEND (%3d) [%s]\n", bytSend.length, strSend);
+
+				/*
+				 * recv
+				 */
+				byte[] bytRecv = new byte[1024];
+				int nRecv = 0;
+				
+				nRecv = this.dis.read(bytRecv);
+				
+				String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+				
+				if (flag) System.out.printf("RECV (%3d) [%s]\n", nRecv, strRecv);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				/*
+				 * close
+				 */
+				if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+				if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+				if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+			}
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

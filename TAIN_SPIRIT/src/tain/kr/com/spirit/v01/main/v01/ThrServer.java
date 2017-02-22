@@ -68,6 +68,8 @@ public final class ThrServer extends Thread {
 	 */
 	public ThrServer(Socket socket) throws Exception {
 		
+		super("THREAD_SERVER");
+		
 		this.socket = socket;
 		
 		this.joint = new ThrJoint();

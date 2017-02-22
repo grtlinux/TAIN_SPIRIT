@@ -138,7 +138,7 @@ public final class ThrSender extends Thread {
 					}
 				}
 				
-				if (flag) log.debug(String.format("%s SEND(%4d): %s."
+				if (!flag) log.debug(String.format("%s SEND(%4d): %s."
 						, Thread.currentThread().getName(), this.content.getSize(), this.content.getStrData()));
 
 				this.loopSleep.reset();

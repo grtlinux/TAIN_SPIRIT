@@ -47,8 +47,8 @@ public abstract class AbsData implements Cloneable {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
-	//protected static final int SIZ_DEF_BYTDATA = 4096;
-	protected static final int SIZ_DEF_BYTDATA = 20;   // for test
+	protected static final int SIZ_DEF_BYTDATA = 4096;
+	//protected static final int SIZ_DEF_BYTDATA = 20;   // for test
 	
 	protected final byte[] bytData;
 	protected int size = 0;

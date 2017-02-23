@@ -109,7 +109,40 @@ public final class ThrServer extends Thread {
 					byte[] bytRecv = new byte[1024];
 					int nRecv = 0;
 					
-					nRecv = this.dis.read(bytRecv);
+					try {
+						nRecv = this.dis.read(bytRecv);
+						if (nRecv == 0) {
+							if (flag && this.socket.isClosed())
+								throw new Exception("isClosed()");
+							if (flag && !this.socket.isConnected())
+								throw new Exception("not isConnected()");
+							if (flag && this.socket.isInputShutdown())
+								throw new Exception("isInputShutdown()");
+							if (flag && this.socket.isOutputShutdown())
+								throw new Exception("isOutputShutdown()");
+							
+							loopSleep.sleep();
+							continue;
+						} else if (nRecv < 0) {
+							/*
+							 * the end of the input stream
+							 */
+							break;
+						}
+					} catch (Exception e) {
+						if (flag && this.socket.isClosed())
+							throw e;
+						if (flag && !this.socket.isConnected())
+							throw e;
+						if (flag && this.socket.isInputShutdown())
+							throw e;
+						if (flag && this.socket.isOutputShutdown())
+							throw e;
+						
+						loopSleep.sleep();
+						continue;
+					}
+
 					
 					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
 					

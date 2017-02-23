@@ -19,6 +19,9 @@
  */
 package tain.kr.com.spirit.v01.main.v03;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +38,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainServer {
+public final class MainServer {
 
 	private static boolean flag = true;
 
@@ -63,6 +66,9 @@ public class MainServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String PORT = "20026";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +80,25 @@ public class MainServer {
 			new MainServer();
 
 		if (flag) {
+			/*
+			 * begin
+			 */
+			@SuppressWarnings("resource")
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(PORT));
+			
+			while (true) {
+				if (flag) log.debug(String.format("SERVER: listening by port %s", PORT));
+				
+				Socket socket = serverSocket.accept();
+				if (flag) log.debug(String.format("SERVER: connection by [%s]", socket.toString()));
 
+				/*
+				 * thread
+				 */
+				Thread thread = new ThrServer(socket);
+				thread.start();
+				thread.join();
+			}
 		}
 	}
 

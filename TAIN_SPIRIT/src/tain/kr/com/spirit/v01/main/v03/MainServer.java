@@ -90,7 +90,7 @@ public final class MainServer {
 				if (flag) log.debug(String.format("SERVER: listening by port %s", PORT));
 				
 				Socket socket = serverSocket.accept();
-				if (flag) log.debug(String.format("SERVER: connection by [%s]", socket.toString()));
+				if (flag) log.debug(String.format("SERVER: connected by [%s]", socket.toString()));
 
 				/*
 				 * thread

@@ -19,6 +19,12 @@
  */
 package tain.kr.com.spirit.v01.main.v02;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.nio.charset.Charset;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -63,6 +69,10 @@ public class MainClient1 {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String HOST = "127.0.0.1";
+	private static final String PORT = "20025";
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +84,52 @@ public class MainClient1 {
 			new MainClient1();
 
 		if (flag) {
-
+			/*
+			 * connection and open
+			 */
+			Socket socket = new Socket(HOST, Integer.parseInt(PORT));
+			DataInputStream dis = new DataInputStream(socket.getInputStream());
+			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+			
+			try {
+				/*
+				 * processing
+				 */
+				for (int i=0; i < 10; i++) {
+					/*
+					 * send
+					 */
+					String strSend = String.format("client1 sends data to client2....(%3d)", i);
+					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+					
+					dos.write(bytSend, 0, bytSend.length);
+					
+					if (flag) log.debug(String.format("CLIENT-1 SEND (%3d) [%s]", bytSend.length, strSend));
+					
+					/*
+					 * recv
+					 */
+					byte[] bytRecv = new byte[1024];
+					int nRecv = 0;
+					
+					nRecv = dis.read(bytRecv);
+					
+					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					
+					if (flag) log.debug(String.format("CLIENT-1 RECV (%3d) [%s]", nRecv, strRecv));
+				}
+				
+				if (flag) log.debug(String.format("CLIENT1 : END"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				/*
+				 * close
+				 */
+				if (dos != null) try { dos.close(); } catch (IOException e) {}
+				if (dis != null) try { dis.close(); } catch (IOException e) {}
+				if (socket != null) try { socket.close(); } catch (IOException e) {}
+			}
 		}
 	}
 

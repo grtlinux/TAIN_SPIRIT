@@ -86,7 +86,7 @@ public final class ThrServerCommand extends Thread {
 	@Override
 	public void run() {
 		/*
-		 * thread start
+		 * command thread start
 		 */
 		if (flag) {
 			try {
@@ -105,7 +105,7 @@ public final class ThrServerCommand extends Thread {
 
 					if (flag) {
 						/*
-						 * send
+						 * send to clientCommand
 						 */
 						byte[] bytSend = strCommand.getBytes(Charset.forName("euc-kr"));
 						
@@ -114,48 +114,12 @@ public final class ThrServerCommand extends Thread {
 						if (flag) log.debug(String.format("%s SEND [%d:%s]"
 								, Thread.currentThread().getName(), bytSend.length, strCommand));
 					}
-					
-					if (!flag) {
-						/*
-						 * recv
-						 */
-						byte[] bytRecv = new byte[1024];
-						int nRecv = 0;
-						
-						try {
-							nRecv = this.dis.read(bytRecv);
-							if (nRecv == 0) {
-								loopSleep.sleep();
-								continue;
-							} else if (nRecv < 0) {
-								/*
-								 * the end of the input stream
-								 */
-								break;
-							}
-						} catch (Exception e) {
-							loopSleep.sleep();
-							continue;
-						}
-						
-						String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
-						
-						if (flag) log.debug(String.format("%s RECV [%d:%s]"
-								, Thread.currentThread().getName(), nRecv, strRecv));
-					}
-					
+
 					if (flag) {
 						/*
 						 * sleep
 						 */
-						LoopSleep.sleep(10 * 1000);
-					}
-					
-					if (!flag) {
-						/*
-						 * reset loopSleep
-						 */
-						loopSleep.reset();
+						LoopSleep.sleep(5 * 1000);
 					}
 				}
 			} catch (Exception e) {

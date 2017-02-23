@@ -91,6 +91,8 @@ public final class MainClient {
 			Thread thread = new ThrClient(socket);
 			thread.start();
 			thread.join();
+			
+			System.exit(0);
 		}
 	}
 

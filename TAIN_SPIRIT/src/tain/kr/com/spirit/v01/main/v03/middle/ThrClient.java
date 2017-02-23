@@ -19,7 +19,15 @@
  */
 package tain.kr.com.spirit.v01.main.v03.middle;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.nio.charset.Charset;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v01.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -35,25 +43,130 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrClient {
+public final class ThrClient extends Thread {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(ThrClient.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final Socket socket;
+	private final DataInputStream dis;
+	private final DataOutputStream dos;
+	
+	private final LoopSleep loopSleep;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrClient() {
+	public ThrClient(Socket socket) throws IOException {
+		
+		super("THREAD_MIDDLE_CLIENT");
+		
+		this.socket = socket;
+		//this.socket.setSoTimeout(10 * 1000);     // socket timeout
+		this.dis = new DataInputStream(this.socket.getInputStream());
+		this.dos = new DataOutputStream(this.socket.getOutputStream());
+		
+		this.loopSleep = new LoopSleep();
+
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		/*
+		 * thread start
+		 */
+		if (flag) {
+			try {
+				loopSleep.reset();
+				
+				for (int i=0; i < 1; i++) {
+					/*
+					 * send
+					 */
+					String strSend = String.format("client sends data to server....(seq-%03d)", i);
+					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+					
+					this.dos.write(bytSend, 0, bytSend.length);
+					
+					if (flag) log.debug(String.format("%s SEND [%d:%s]"
+							, Thread.currentThread().getName(), bytSend.length, strSend));
+					
+					/*
+					 * recv
+					 */
+					byte[] bytRecv = new byte[1024];
+					int nRecv = 0;
+					
+					try {
+						nRecv = this.dis.read(bytRecv);
+						if (nRecv == 0) {
+							if (flag && this.socket.isClosed())
+								throw new Exception("isClosed()");
+							if (flag && !this.socket.isConnected())
+								throw new Exception("not isConnected()");
+							if (flag && this.socket.isInputShutdown())
+								throw new Exception("isInputShutdown()");
+							if (flag && this.socket.isOutputShutdown())
+								throw new Exception("isOutputShutdown()");
+							
+							loopSleep.sleep();
+							continue;
+						} else if (nRecv < 0) {
+							/*
+							 * the end of the input stream
+							 */
+							break;
+						}
+					} catch (Exception e) {
+						if (flag && this.socket.isClosed())
+							throw e;
+						if (flag && !this.socket.isConnected())
+							throw e;
+						if (flag && this.socket.isInputShutdown())
+							throw e;
+						if (flag && this.socket.isOutputShutdown())
+							throw e;
+						
+						loopSleep.sleep();
+						continue;
+					}
+					
+					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					
+					if (flag) log.debug(String.format("%s RECV [%d:%s]"
+							, Thread.currentThread().getName(), nRecv, strRecv));
+					
+					/*
+					 * reset loopSleep
+					 */
+					loopSleep.reset();
+				}
+				
+				/*
+				 * sleep
+				 */
+				LoopSleep.sleep(5 * 1000);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+				if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+				if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+			}
+		}
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +182,6 @@ public class ThrClient {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrClient();
 
 		if (flag) {
 

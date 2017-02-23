@@ -104,6 +104,8 @@ public final class MainServerCommand {
 				thread.start();
 			}
 
+			//////////////////////////////////////////////////////////////////
+			
 			while (true) {
 				/*
 				 * job processing
@@ -115,6 +117,7 @@ public final class MainServerCommand {
 				if (flag) {
 					/*
 					 * 1st connection
+					 * serverCommand <- mainClient
 					 */
 					socket1 = serverSocket.accept();
 				}
@@ -123,12 +126,13 @@ public final class MainServerCommand {
 					/*
 					 * send signal
 					 */
-					queue.put(String.format("CONNECT"));
+					queue.put(String.format("SIGNAL"));
 				}
 				
 				if (flag) {
 					/*
 					 * 2nd connection
+					 * serverCommand <- clientCommand
 					 */
 					socket2 = serverSocket.accept();
 				}

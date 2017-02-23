@@ -19,6 +19,9 @@
  */
 package tain.kr.com.spirit.v01.main.v02;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +38,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainServer {
+public final class MainServer {
 
 	private static boolean flag = true;
 
@@ -63,6 +66,9 @@ public class MainServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +80,25 @@ public class MainServer {
 			new MainServer();
 
 		if (flag) {
-
+			/*
+			 * variables
+			 */
+			@SuppressWarnings("resource")
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(PORT));
+			
+			while (true) {
+				if (flag) log.debug(String.format("SERVER : listening by port %s", PORT));
+				
+				Socket socket1 = serverSocket.accept();
+				if (flag) log.debug(String.format("SERVER : 1st connection by port %s", PORT));
+				
+				Socket socket2 = serverSocket.accept();
+				if (flag) log.debug(String.format("SERVER : 2nd connection by port %s", PORT));
+				
+				Thread thread = new ThrServer(socket1, socket2);
+				thread.start();
+				thread.join();
+			}
 		}
 	}
 

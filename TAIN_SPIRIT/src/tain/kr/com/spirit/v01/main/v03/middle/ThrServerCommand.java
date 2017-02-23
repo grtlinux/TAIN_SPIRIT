@@ -24,16 +24,19 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Date;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v01.loop.LoopSleep;
+import tain.kr.com.spirit.v01.queue.QueueContent;
 
 /**
  * Code Templates > Comments > Types
  *
  * <PRE>
- *   -. FileName   : ThrClient.java
+ *   -. FileName   : ThrServer.java
  *   -. Package    : tain.kr.com.spirit.v01.main.v03.middle
  *   -. Comment    :
  *   -. Author     : taincokr
@@ -43,35 +46,39 @@ import tain.kr.com.spirit.v01.loop.LoopSleep;
  * @author taincokr
  *
  */
-public final class ThrClient extends Thread {
+public final class ThrServerCommand extends Thread {
 
 	private static boolean flag = true;
 
-	private static final Logger log = Logger.getLogger(ThrClient.class);
+	private static final Logger log = Logger.getLogger(ThrServerCommand.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private final Socket socket;
+	private final QueueContent queue;
 	private final DataInputStream dis;
 	private final DataOutputStream dos;
 	
 	private final LoopSleep loopSleep;
+	private final Random random;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrClient(Socket socket) throws IOException {
+	public ThrServerCommand(Socket socket, QueueContent queue) throws IOException {
 		
-		super("THREAD_MIDDLE_CLIENT");
+		super("THREAD_REAL_SERVER");
 		
 		this.socket = socket;
-		//this.socket.setSoTimeout(10 * 1000);     // socket timeout
+		this.queue = queue;
+		this.socket.setSoTimeout(10 * 1000);   // socket timeout
 		this.dis = new DataInputStream(this.socket.getInputStream());
 		this.dos = new DataOutputStream(this.socket.getOutputStream());
 		
 		this.loopSleep = new LoopSleep();
+		this.random = new Random(new Date().getTime());
 
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
@@ -89,74 +96,70 @@ public final class ThrClient extends Thread {
 			try {
 				loopSleep.reset();
 				
-				for (int i=0; i < 1; i++) {
-					/*
-					 * send
-					 */
-					String strSend = String.format("client sends data to server....(seq-%03d)", i);
-					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+				while (true) {
 					
-					this.dos.write(bytSend, 0, bytSend.length);
-					
-					if (flag) log.debug(String.format("%s SEND [%d:%s]"
-							, Thread.currentThread().getName(), bytSend.length, strSend));
-					
-					/*
-					 * recv
-					 */
-					byte[] bytRecv = new byte[1024];
-					int nRecv = 0;
-					
-					try {
-						nRecv = this.dis.read(bytRecv);
-						if (nRecv == 0) {
-							if (flag && this.socket.isClosed())
-								throw new Exception("isClosed()");
-							if (flag && !this.socket.isConnected())
-								throw new Exception("not isConnected()");
-							if (flag && this.socket.isInputShutdown())
-								throw new Exception("isInputShutdown()");
-							if (flag && this.socket.isOutputShutdown())
-								throw new Exception("isOutputShutdown()");
-							
-							loopSleep.sleep();
-							continue;
-						} else if (nRecv < 0) {
-							/*
-							 * the end of the input stream
-							 */
-							break;
-						}
-					} catch (Exception e) {
-						if (flag && this.socket.isClosed())
-							throw e;
-						if (flag && !this.socket.isConnected())
-							throw e;
-						if (flag && this.socket.isInputShutdown())
-							throw e;
-						if (flag && this.socket.isOutputShutdown())
-							throw e;
+					if (flag) {
+						/*
+						 * get queue
+						 */
+					}
+
+					if (flag) {
+						/*
+						 * send
+						 */
+						String strSend = String.format("server sends data to client....(rand-%03d)", random.nextInt(1000));
+						byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
 						
-						loopSleep.sleep();
-						continue;
+						this.dos.write(bytSend, 0, bytSend.length);
+						
+						if (flag) log.debug(String.format("%s SEND [%d:%s]"
+								, Thread.currentThread().getName(), bytSend.length, strSend));
 					}
 					
-					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					if (!flag) {
+						/*
+						 * recv
+						 */
+						byte[] bytRecv = new byte[1024];
+						int nRecv = 0;
+						
+						try {
+							nRecv = this.dis.read(bytRecv);
+							if (nRecv == 0) {
+								loopSleep.sleep();
+								continue;
+							} else if (nRecv < 0) {
+								/*
+								 * the end of the input stream
+								 */
+								break;
+							}
+						} catch (Exception e) {
+							loopSleep.sleep();
+							continue;
+						}
+						
+						String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+						
+						if (flag) log.debug(String.format("%s RECV [%d:%s]"
+								, Thread.currentThread().getName(), nRecv, strRecv));
+					}
 					
-					if (flag) log.debug(String.format("%s RECV [%d:%s]"
-							, Thread.currentThread().getName(), nRecv, strRecv));
+					if (!flag) {
+						/*
+						 * sleep
+						 */
+						LoopSleep.sleep(10 * 1000);
+					}
 					
-					/*
-					 * reset loopSleep
-					 */
-					loopSleep.reset();
+					if (!flag) {
+						/*
+						 * reset loopSleep
+						 */
+						loopSleep.reset();
+					}
 				}
-				
-				/*
-				 * sleep
-				 */
-				LoopSleep.sleep(5 * 1000);
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

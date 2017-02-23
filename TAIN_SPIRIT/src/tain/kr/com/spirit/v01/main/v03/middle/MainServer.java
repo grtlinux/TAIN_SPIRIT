@@ -24,6 +24,9 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v01.joint.ThrJoint;
+import tain.kr.com.spirit.v01.queue.QueueContent;
+
 /**
  * Code Templates > Comments > Types
  *
@@ -85,19 +88,58 @@ public final class MainServer {
 			 */
 			@SuppressWarnings("resource")
 			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(PORT));
-			
-			while (true) {
-				if (flag) log.debug(String.format("SERVER: listening by port %s", PORT));
-				
-				Socket socket = serverSocket.accept();
-				if (flag) log.debug(String.format("SERVER: connected by [%s]", socket.toString()));
 
+			QueueContent queue = new QueueContent();
+			
+			if (flag) {
 				/*
-				 * thread
+				 * command thread
 				 */
-				Thread thread = new ThrServer(socket);
+				Socket socket = serverSocket.accept();
+
+				Thread thread = new ThrServerCommand(socket, queue);
 				thread.start();
-				thread.join();
+			}
+
+			while (true) {
+				
+				Socket socket1 = null;
+				Socket socket2 = null;
+				
+				if (flag) {
+					/*
+					 * 1st connection
+					 */
+					socket1 = serverSocket.accept();
+				}
+				
+				if (flag) {
+					/*
+					 * send signal
+					 */
+					queue.put(String.format("CONNECT"));
+				}
+				
+				if (flag) {
+					/*
+					 * 2nd connection
+					 */
+					socket2 = serverSocket.accept();
+				}
+
+				if (flag) {
+					/*
+					 * joint thread
+					 */
+					ThrJoint joint = new ThrJoint();
+					
+					joint.setSocket1(socket1);
+					joint.setSocket2(socket2);
+					
+					joint.start();
+					
+					joint.join();
+				}
 			}
 		}
 	}

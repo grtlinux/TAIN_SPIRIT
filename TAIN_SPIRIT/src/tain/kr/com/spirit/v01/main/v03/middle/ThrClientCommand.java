@@ -24,8 +24,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.util.Date;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +33,7 @@ import tain.kr.com.spirit.v01.loop.LoopSleep;
  * Code Templates > Comments > Types
  *
  * <PRE>
- *   -. FileName   : ThrServer.java
+ *   -. FileName   : ThrClient.java
  *   -. Package    : tain.kr.com.spirit.v01.main.v03.middle
  *   -. Comment    :
  *   -. Author     : taincokr
@@ -45,11 +43,11 @@ import tain.kr.com.spirit.v01.loop.LoopSleep;
  * @author taincokr
  *
  */
-public final class ThrServer extends Thread {
+public final class ThrClientCommand extends Thread {
 
 	private static boolean flag = true;
 
-	private static final Logger log = Logger.getLogger(ThrServer.class);
+	private static final Logger log = Logger.getLogger(ThrClientCommand.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -58,24 +56,22 @@ public final class ThrServer extends Thread {
 	private final DataOutputStream dos;
 	
 	private final LoopSleep loopSleep;
-	private final Random random;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrServer(Socket socket) throws IOException {
+	public ThrClientCommand(Socket socket) throws IOException {
 		
-		super("THREAD_REAL_SERVER");
+		super("THREAD_MIDDLE_CLIENT");
 		
 		this.socket = socket;
-		this.socket.setSoTimeout(10 * 1000);   // socket timeout
+		//this.socket.setSoTimeout(10 * 1000);     // socket timeout
 		this.dis = new DataInputStream(this.socket.getInputStream());
 		this.dos = new DataOutputStream(this.socket.getOutputStream());
 		
 		this.loopSleep = new LoopSleep();
-		this.random = new Random(new Date().getTime());
 
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
@@ -93,7 +89,18 @@ public final class ThrServer extends Thread {
 			try {
 				loopSleep.reset();
 				
-				while (true) {
+				for (int i=0; i < 1; i++) {
+					/*
+					 * send
+					 */
+					String strSend = String.format("client sends data to server....(seq-%03d)", i);
+					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+					
+					this.dos.write(bytSend, 0, bytSend.length);
+					
+					if (flag) log.debug(String.format("%s SEND [%d:%s]"
+							, Thread.currentThread().getName(), bytSend.length, strSend));
+					
 					/*
 					 * recv
 					 */
@@ -103,15 +110,6 @@ public final class ThrServer extends Thread {
 					try {
 						nRecv = this.dis.read(bytRecv);
 						if (nRecv == 0) {
-							if (flag && this.socket.isClosed())
-								throw new Exception("isClosed()");
-							if (flag && !this.socket.isConnected())
-								throw new Exception("not isConnected()");
-							if (flag && this.socket.isInputShutdown())
-								throw new Exception("isInputShutdown()");
-							if (flag && this.socket.isOutputShutdown())
-								throw new Exception("isOutputShutdown()");
-							
 							loopSleep.sleep();
 							continue;
 						} else if (nRecv < 0) {
@@ -121,15 +119,6 @@ public final class ThrServer extends Thread {
 							break;
 						}
 					} catch (Exception e) {
-						if (flag && this.socket.isClosed())
-							throw e;
-						if (flag && !this.socket.isConnected())
-							throw e;
-						if (flag && this.socket.isInputShutdown())
-							throw e;
-						if (flag && this.socket.isOutputShutdown())
-							throw e;
-						
 						loopSleep.sleep();
 						continue;
 					}
@@ -138,27 +127,18 @@ public final class ThrServer extends Thread {
 					
 					if (flag) log.debug(String.format("%s RECV [%d:%s]"
 							, Thread.currentThread().getName(), nRecv, strRecv));
-					/*
-					 * sleep
-					 */
-					LoopSleep.sleep(10 * 1000);
-					
-					/*
-					 * send
-					 */
-					String strSend = String.format("server sends data to client....(rand-%03d)", random.nextInt(1000));
-					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
-					
-					this.dos.write(bytSend, 0, bytSend.length);
-					
-					if (flag) log.debug(String.format("%s SEND [%d:%s]"
-							, Thread.currentThread().getName(), bytSend.length, strSend));
 					
 					/*
 					 * reset loopSleep
 					 */
 					loopSleep.reset();
 				}
+				
+				/*
+				 * sleep
+				 */
+				LoopSleep.sleep(5 * 1000);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

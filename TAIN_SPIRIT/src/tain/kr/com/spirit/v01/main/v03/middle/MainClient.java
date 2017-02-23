@@ -88,7 +88,7 @@ public final class MainClient {
 			/*
 			 * thread
 			 */
-			Thread thread = new ThrClient(socket);
+			Thread thread = new ThrClientCommand(socket);
 			thread.start();
 			thread.join();
 		}

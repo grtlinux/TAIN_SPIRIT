@@ -66,7 +66,7 @@ public final class ThrServerCommand extends Thread {
 	 */
 	public ThrServerCommand(Socket socket, QueueContent queue) throws IOException {
 		
-		super("THREAD_REAL_SERVER");
+		super("THREAD_COMMAND_SERVER");
 		
 		this.socket = socket;
 		this.queue = queue;

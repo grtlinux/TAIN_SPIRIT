@@ -88,6 +88,7 @@ public class MainClient2 {
 			 * connection and open
 			 */
 			Socket socket = new Socket(HOST, Integer.parseInt(PORT));
+			socket.setSoTimeout(10000);
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			
@@ -95,7 +96,7 @@ public class MainClient2 {
 				/*
 				 * processing
 				 */
-				for (int i=0; i < 10; i++) {
+				for (int i=0; ; i++) {
 					/*
 					 * recv
 					 */
@@ -118,8 +119,6 @@ public class MainClient2 {
 					
 					if (flag) log.debug(String.format("CLIENT-2 SEND (%3d) [%s]", bytSend.length, strSend));
 				}
-				
-				if (flag) log.debug(String.format("CLIENT2 : END"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

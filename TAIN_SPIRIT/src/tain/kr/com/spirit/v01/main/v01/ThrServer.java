@@ -72,7 +72,7 @@ public final class ThrServer extends Thread {
 	 */
 	public ThrServer(Socket socket) throws Exception {
 		
-		super("THREAD_SERVER");
+		super("THREAD_SERVER_v01");
 		
 		this.socket = socket;
 		

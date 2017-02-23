@@ -65,7 +65,7 @@ public final class ThrClient extends Thread {
 	 */
 	public ThrClient(Socket socket) throws Exception {
 		
-		super("THREAD_CLIENT");
+		super("THREAD_CLIENT_v01");
 		
 		this.socket = socket;
 		

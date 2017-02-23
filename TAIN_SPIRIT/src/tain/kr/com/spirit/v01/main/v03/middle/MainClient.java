@@ -19,6 +19,8 @@
  */
 package tain.kr.com.spirit.v01.main.v03.middle;
 
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +37,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainClient {
+public final class MainClient {
 
 	private static boolean flag = true;
 
@@ -63,6 +65,10 @@ public class MainClient {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String HOST = "127.0.0.1";
+	private static final String PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +80,17 @@ public class MainClient {
 			new MainClient();
 
 		if (flag) {
-
+			/*
+			 * begin
+			 */
+			Socket socket = new Socket(HOST, Integer.parseInt(PORT));
+			
+			/*
+			 * thread
+			 */
+			Thread thread = new ThrClient(socket);
+			thread.start();
+			thread.join();
 		}
 	}
 

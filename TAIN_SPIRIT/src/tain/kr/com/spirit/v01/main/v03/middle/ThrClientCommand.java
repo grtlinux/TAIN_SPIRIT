@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v01.joint.ThrJoint;
 import tain.kr.com.spirit.v01.loop.LoopSleep;
 
 /**
@@ -78,6 +79,13 @@ public final class ThrClientCommand extends Thread {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String HOST1 = "127.0.0.1";
+	private static final String PORT1 = "20026";
+	
+	private static final String HOST2 = "127.0.0.1";
+	private static final String PORT2 = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
@@ -90,6 +98,10 @@ public final class ThrClientCommand extends Thread {
 				loopSleep.reset();
 				
 				for (int i=0; ; i++) {
+					Socket socket1 = null;
+					Socket socket2 = null;
+					ThrJoint joint = null;
+					
 					if (flag) {
 						/*
 						 * recv
@@ -117,6 +129,34 @@ public final class ThrClientCommand extends Thread {
 						
 						if (flag) log.debug(String.format("%s RECV [%d:%s]"
 								, Thread.currentThread().getName(), nRecv, strRecv));
+					}
+					
+					if (flag) {
+						/*
+						 * 1st connect
+						 */
+						socket1 = new Socket(HOST1, Integer.parseInt(PORT1));
+					}
+					
+					if (flag) {
+						/*
+						 * 2nd connect
+						 */
+						socket2 = new Socket(HOST2, Integer.parseInt(PORT2));
+					}
+					
+					if (flag) {
+						/*
+						 * joint
+						 */
+						joint = new ThrJoint();
+						
+						joint.setSocket1(socket1);
+						joint.setSocket2(socket2);
+						
+						joint.start();
+						
+						joint.join();
 					}
 					
 					if (!flag) {

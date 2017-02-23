@@ -104,6 +104,8 @@ public class MainClient2 {
 					int nRecv = 0;
 					
 					nRecv = dis.read(bytRecv);
+					if (nRecv < 0)
+						break;
 					
 					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
 					
@@ -119,6 +121,8 @@ public class MainClient2 {
 					
 					if (flag) log.debug(String.format("CLIENT-2 SEND (%3d) [%s]", bytSend.length, strSend));
 				}
+				
+				if (flag) log.debug(String.format("CLIENT2 : END"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

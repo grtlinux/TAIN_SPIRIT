@@ -115,7 +115,7 @@ public final class DataContent extends AbsData {
 			throw new IOException(String.format("[STATUS] read EOF from InputStream."));
 		}
 		
-		setStrData();
+		if (!flag) setStrData();
 		
 		return this.size;
 	}

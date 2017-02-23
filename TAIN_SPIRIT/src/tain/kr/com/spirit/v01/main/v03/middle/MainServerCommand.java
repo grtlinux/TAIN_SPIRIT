@@ -19,15 +19,19 @@
  */
 package tain.kr.com.spirit.v01.main.v03.middle;
 
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v01.joint.ThrJoint;
+import tain.kr.com.spirit.v01.queue.QueueContent;
 
 /**
  * Code Templates > Comments > Types
  *
  * <PRE>
- *   -. FileName   : MainClient.java
+ *   -. FileName   : MainServer.java
  *   -. Package    : tain.kr.com.spirit.v01.main.v03.middle
  *   -. Comment    :
  *   -. Author     : taincokr
@@ -37,11 +41,11 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public final class MainClient {
+public final class MainServerCommand {
 
 	private static boolean flag = true;
 
-	private static final Logger log = Logger.getLogger(MainClient.class);
+	private static final Logger log = Logger.getLogger(MainServerCommand.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +53,7 @@ public final class MainClient {
 	/*
 	 * constructor
 	 */
-	public MainClient() {
+	public MainServerCommand() {
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
@@ -66,7 +70,6 @@ public final class MainClient {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final String HOST = "127.0.0.1";
 	private static final String PORT = "20025";
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,20 +80,67 @@ public final class MainClient {
 	private static void test01(String[] args) throws Exception {
 
 		if (flag)
-			new MainClient();
+			new MainServerCommand();
 
 		if (flag) {
 			/*
 			 * begin
 			 */
-			Socket socket = new Socket(HOST, Integer.parseInt(PORT));
+			@SuppressWarnings("resource")
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(PORT));
+
+			QueueContent queue = new QueueContent();
 			
-			/*
-			 * thread
-			 */
-			Thread thread = new ThrClientCommand(socket);
-			thread.start();
-			thread.join();
+			if (flag) {
+				/*
+				 * command thread
+				 */
+				Socket socket = serverSocket.accept();
+
+				Thread thread = new ThrServerCommand(socket, queue);
+				thread.start();
+			}
+
+			while (true) {
+				
+				Socket socket1 = null;
+				Socket socket2 = null;
+				
+				if (flag) {
+					/*
+					 * 1st connection
+					 */
+					socket1 = serverSocket.accept();
+				}
+				
+				if (flag) {
+					/*
+					 * send signal
+					 */
+					queue.put(String.format("CONNECT"));
+				}
+				
+				if (flag) {
+					/*
+					 * 2nd connection
+					 */
+					socket2 = serverSocket.accept();
+				}
+
+				if (flag) {
+					/*
+					 * joint thread
+					 */
+					ThrJoint joint = new ThrJoint();
+					
+					joint.setSocket1(socket1);
+					joint.setSocket2(socket2);
+					
+					joint.start();
+					
+					joint.join();
+				}
+			}
 		}
 	}
 

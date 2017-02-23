@@ -88,7 +88,7 @@ public class MainClient2 {
 			 * connection and open
 			 */
 			Socket socket = new Socket(HOST, Integer.parseInt(PORT));
-			socket.setSoTimeout(10000);
+			//socket.setSoTimeout(10000);
 			DataInputStream dis = new DataInputStream(socket.getInputStream());
 			DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 			

@@ -65,7 +65,7 @@ public final class ThrClientCommand extends Thread {
 	 */
 	public ThrClientCommand(Socket socket) throws IOException {
 		
-		super("THREAD_MIDDLE_CLIENT");
+		super("THREAD_COMMAND_CLIENT");
 		
 		this.socket = socket;
 		//this.socket.setSoTimeout(10 * 1000);     // socket timeout

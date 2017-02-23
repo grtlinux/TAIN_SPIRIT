@@ -97,14 +97,14 @@ public final class ThrClientCommand extends Thread {
 			try {
 				loopSleep.reset();
 				
-				for (int i=0; ; i++) {
+				while (true) {
 					Socket socket1 = null;
 					Socket socket2 = null;
 					ThrJoint joint = null;
 					
 					if (flag) {
 						/*
-						 * recv
+						 * recv signal from serverCommand
 						 */
 						byte[] bytRecv = new byte[1024];
 						int nRecv = 0;
@@ -130,6 +130,8 @@ public final class ThrClientCommand extends Thread {
 						if (flag) log.debug(String.format("%s RECV [%d:%s]"
 								, Thread.currentThread().getName(), nRecv, strRecv));
 					}
+					
+					/////////////////////////////////////////////////////////////////////////
 					
 					if (flag) {
 						/*
@@ -159,31 +161,11 @@ public final class ThrClientCommand extends Thread {
 						joint.join();
 					}
 					
-					if (!flag) {
-						/*
-						 * send
-						 */
-						String strSend = String.format("client sends data to server....(seq-%03d)", i);
-						byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
-						
-						this.dos.write(bytSend, 0, bytSend.length);
-						
-						if (flag) log.debug(String.format("%s SEND [%d:%s]"
-								, Thread.currentThread().getName(), bytSend.length, strSend));
-					}
-					
 					if (flag) {
 						/*
 						 * sleep
 						 */
 						LoopSleep.sleep(5 * 1000);
-					}
-					
-					if (!flag) {
-						/*
-						 * reset loopSleep
-						 */
-						loopSleep.reset();
 					}
 				} // for
 

@@ -89,56 +89,64 @@ public final class ThrClientCommand extends Thread {
 			try {
 				loopSleep.reset();
 				
-				for (int i=0; i < 1; i++) {
-					/*
-					 * send
-					 */
-					String strSend = String.format("client sends data to server....(seq-%03d)", i);
-					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
-					
-					this.dos.write(bytSend, 0, bytSend.length);
-					
-					if (flag) log.debug(String.format("%s SEND [%d:%s]"
-							, Thread.currentThread().getName(), bytSend.length, strSend));
-					
-					/*
-					 * recv
-					 */
-					byte[] bytRecv = new byte[1024];
-					int nRecv = 0;
-					
-					try {
-						nRecv = this.dis.read(bytRecv);
-						if (nRecv == 0) {
+				for (int i=0; ; i++) {
+					if (flag) {
+						/*
+						 * recv
+						 */
+						byte[] bytRecv = new byte[1024];
+						int nRecv = 0;
+						
+						try {
+							nRecv = this.dis.read(bytRecv);
+							if (nRecv == 0) {
+								loopSleep.sleep();
+								continue;
+							} else if (nRecv < 0) {
+								/*
+								 * the end of the input stream
+								 */
+								break;
+							}
+						} catch (Exception e) {
 							loopSleep.sleep();
 							continue;
-						} else if (nRecv < 0) {
-							/*
-							 * the end of the input stream
-							 */
-							break;
 						}
-					} catch (Exception e) {
-						loopSleep.sleep();
-						continue;
+						
+						String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+						
+						if (flag) log.debug(String.format("%s RECV [%d:%s]"
+								, Thread.currentThread().getName(), nRecv, strRecv));
 					}
 					
-					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					if (!flag) {
+						/*
+						 * send
+						 */
+						String strSend = String.format("client sends data to server....(seq-%03d)", i);
+						byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+						
+						this.dos.write(bytSend, 0, bytSend.length);
+						
+						if (flag) log.debug(String.format("%s SEND [%d:%s]"
+								, Thread.currentThread().getName(), bytSend.length, strSend));
+					}
 					
-					if (flag) log.debug(String.format("%s RECV [%d:%s]"
-							, Thread.currentThread().getName(), nRecv, strRecv));
+					if (flag) {
+						/*
+						 * sleep
+						 */
+						LoopSleep.sleep(5 * 1000);
+					}
 					
-					/*
-					 * reset loopSleep
-					 */
-					loopSleep.reset();
-				}
-				
-				/*
-				 * sleep
-				 */
-				LoopSleep.sleep(5 * 1000);
-				
+					if (!flag) {
+						/*
+						 * reset loopSleep
+						 */
+						loopSleep.reset();
+					}
+				} // for
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

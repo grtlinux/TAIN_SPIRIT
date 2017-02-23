@@ -94,70 +94,55 @@ public final class ThrServer extends Thread {
 				loopSleep.reset();
 				
 				while (true) {
-					/*
-					 * recv
-					 */
-					byte[] bytRecv = new byte[1024];
-					int nRecv = 0;
 					
-					try {
-						nRecv = this.dis.read(bytRecv);
-						if (nRecv == 0) {
-							if (flag && this.socket.isClosed())
-								throw new Exception("isClosed()");
-							if (flag && !this.socket.isConnected())
-								throw new Exception("not isConnected()");
-							if (flag && this.socket.isInputShutdown())
-								throw new Exception("isInputShutdown()");
-							if (flag && this.socket.isOutputShutdown())
-								throw new Exception("isOutputShutdown()");
-							
+					if (flag) {
+						/*
+						 * recv
+						 */
+						byte[] bytRecv = new byte[1024];
+						int nRecv = 0;
+						
+						try {
+							nRecv = this.dis.read(bytRecv);
+							if (nRecv == 0) {
+								loopSleep.sleep();
+								continue;
+							} else if (nRecv < 0) {
+								/*
+								 * the end of the input stream
+								 */
+								break;
+							}
+						} catch (Exception e) {
 							loopSleep.sleep();
 							continue;
-						} else if (nRecv < 0) {
-							/*
-							 * the end of the input stream
-							 */
-							break;
 						}
-					} catch (Exception e) {
-						if (flag && this.socket.isClosed())
-							throw e;
-						if (flag && !this.socket.isConnected())
-							throw e;
-						if (flag && this.socket.isInputShutdown())
-							throw e;
-						if (flag && this.socket.isOutputShutdown())
-							throw e;
 						
-						loopSleep.sleep();
-						continue;
+						String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+						
+						if (flag) log.debug(String.format("%s RECV [%d:%s]"
+								, Thread.currentThread().getName(), nRecv, strRecv));
 					}
 					
-					String strRecv = new String(bytRecv, 0, nRecv, Charset.forName("euc-kr"));
+					if (flag) {
+						/*
+						 * sleep : suppose job processing
+						 */
+						LoopSleep.sleep(1 * 1000);
+					}
 					
-					if (flag) log.debug(String.format("%s RECV [%d:%s]"
-							, Thread.currentThread().getName(), nRecv, strRecv));
-					/*
-					 * sleep
-					 */
-					LoopSleep.sleep(10 * 1000);
-					
-					/*
-					 * send
-					 */
-					String strSend = String.format("server sends data to client....(rand-%03d)", random.nextInt(1000));
-					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
-					
-					this.dos.write(bytSend, 0, bytSend.length);
-					
-					if (flag) log.debug(String.format("%s SEND [%d:%s]"
-							, Thread.currentThread().getName(), bytSend.length, strSend));
-					
-					/*
-					 * reset loopSleep
-					 */
-					loopSleep.reset();
+					if (flag) {
+						/*
+						 * send
+						 */
+						String strSend = String.format("server sends data to client....(rand-%03d)", random.nextInt(1000));
+						byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+						
+						this.dos.write(bytSend, 0, bytSend.length);
+						
+						if (flag) log.debug(String.format("%s SEND [%d:%s]"
+								, Thread.currentThread().getName(), bytSend.length, strSend));
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

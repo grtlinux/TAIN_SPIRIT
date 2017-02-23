@@ -24,8 +24,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.util.Date;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -60,7 +58,6 @@ public final class ThrServerCommand extends Thread {
 	private final DataOutputStream dos;
 	
 	private final LoopSleep loopSleep;
-	private final Random random;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,7 +75,6 @@ public final class ThrServerCommand extends Thread {
 		this.dos = new DataOutputStream(this.socket.getOutputStream());
 		
 		this.loopSleep = new LoopSleep();
-		this.random = new Random(new Date().getTime());
 
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
@@ -96,25 +92,27 @@ public final class ThrServerCommand extends Thread {
 			try {
 				loopSleep.reset();
 				
+				String strCommand = null;
+				
 				while (true) {
 					
 					if (flag) {
 						/*
 						 * get queue
 						 */
+						strCommand = (String) this.queue.get();
 					}
 
 					if (flag) {
 						/*
 						 * send
 						 */
-						String strSend = String.format("server sends data to client....(rand-%03d)", random.nextInt(1000));
-						byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
+						byte[] bytSend = strCommand.getBytes(Charset.forName("euc-kr"));
 						
 						this.dos.write(bytSend, 0, bytSend.length);
 						
 						if (flag) log.debug(String.format("%s SEND [%d:%s]"
-								, Thread.currentThread().getName(), bytSend.length, strSend));
+								, Thread.currentThread().getName(), bytSend.length, strCommand));
 					}
 					
 					if (!flag) {
@@ -146,7 +144,7 @@ public final class ThrServerCommand extends Thread {
 								, Thread.currentThread().getName(), nRecv, strRecv));
 					}
 					
-					if (!flag) {
+					if (flag) {
 						/*
 						 * sleep
 						 */

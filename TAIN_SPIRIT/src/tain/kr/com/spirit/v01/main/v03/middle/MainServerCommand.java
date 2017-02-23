@@ -89,6 +89,9 @@ public final class MainServerCommand {
 			@SuppressWarnings("resource")
 			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(PORT));
 
+			/*
+			 * command queue
+			 */
 			QueueContent queue = new QueueContent();
 			
 			if (flag) {
@@ -102,6 +105,9 @@ public final class MainServerCommand {
 			}
 
 			while (true) {
+				/*
+				 * job processing
+				 */
 				
 				Socket socket1 = null;
 				Socket socket2 = null;

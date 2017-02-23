@@ -19,7 +19,12 @@
  */
 package tain.kr.com.spirit.v01.main.v02;
 
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v01.joint.ThrJoint;
+import tain.kr.com.spirit.v01.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -35,25 +40,67 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrServer {
+public final class ThrServer extends Thread {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(ThrServer.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final Socket socket1;
+	private final Socket socket2;
+	
+	private final ThrJoint joint;
+	
+	private final LoopSleep loopSleep;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrServer() {
+	public ThrServer(Socket socket1, Socket socket2) throws Exception {
+		
+		super("THREAD_SERVER_v02");
+		
+		this.socket1 = socket1;
+		this.socket2 = socket2;
+		
+		this.joint = new ThrJoint();
+		
+		this.loopSleep = new LoopSleep();
+		
+		this.joint.setSocket1(this.socket1);
+		this.joint.setSocket2(this.socket2);
+		
+		this.joint.start();
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		
+		if (flag) {
+			for (int i=0; !this.joint.isFlagStop(); i = ++i % 20) {
+				/*
+				 * print status
+				 */
+				if (i == 0) System.out.println("#");
+				
+				/*
+				 * loopSleep
+				 */
+				if (flag) this.loopSleep.sleep();
+			}
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +116,6 @@ public class ThrServer {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrServer();
 
 		if (flag) {
 

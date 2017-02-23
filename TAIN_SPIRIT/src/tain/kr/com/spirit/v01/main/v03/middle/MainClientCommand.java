@@ -87,6 +87,7 @@ public final class MainClientCommand {
 			
 			/*
 			 * thread
+			 * clientCommand -> serverCommand
 			 */
 			Thread thread = new ThrClientCommand(socket);
 			thread.start();

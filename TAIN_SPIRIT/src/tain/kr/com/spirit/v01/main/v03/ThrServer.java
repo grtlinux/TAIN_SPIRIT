@@ -102,7 +102,25 @@ public final class ThrServer extends Thread {
 					
 					try {
 						nRecv = this.dis.read(bytRecv);
-					} catch (IOException e) {
+						if (nRecv == 0) {
+							if (flag && this.socket.isClosed())
+								throw new Exception("isClosed()");
+							if (flag && !this.socket.isConnected())
+								throw new Exception("not isConnected()");
+							if (flag && this.socket.isInputShutdown())
+								throw new Exception("isInputShutdown()");
+							if (flag && this.socket.isOutputShutdown())
+								throw new Exception("isOutputShutdown()");
+							
+							loopSleep.sleep();
+							continue;
+						} else if (nRecv < 0) {
+							/*
+							 * the end of the input stream
+							 */
+							break;
+						}
+					} catch (Exception e) {
 						if (flag && this.socket.isClosed())
 							throw e;
 						if (flag && !this.socket.isConnected())
@@ -120,11 +138,15 @@ public final class ThrServer extends Thread {
 					
 					if (flag) log.debug(String.format("%s RECV [%d:%s]"
 							, Thread.currentThread().getName(), nRecv, strRecv));
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(10 * 1000);
 					
 					/*
 					 * send
 					 */
-					String strSend = String.format("server sends data to client....(%03d)", random.nextInt(1000));
+					String strSend = String.format("server sends data to client....(rand-%03d)", random.nextInt(1000));
 					byte[] bytSend = strSend.getBytes(Charset.forName("euc-kr"));
 					
 					this.dos.write(bytSend, 0, bytSend.length);
@@ -133,7 +155,7 @@ public final class ThrServer extends Thread {
 							, Thread.currentThread().getName(), bytSend.length, strSend));
 					
 					/*
-					 * sleep
+					 * reset loopSleep
 					 */
 					loopSleep.reset();
 				}

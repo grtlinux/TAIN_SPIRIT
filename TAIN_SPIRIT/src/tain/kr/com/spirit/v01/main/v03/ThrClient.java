@@ -67,7 +67,7 @@ public final class ThrClient extends Thread {
 		super("THREAD_REAL_CLIENT");
 		
 		this.socket = socket;
-		this.socket.setSoTimeout(10 * 1000);     // socket timeout
+		//this.socket.setSoTimeout(10 * 1000);     // socket timeout
 		this.dis = new DataInputStream(this.socket.getInputStream());
 		this.dos = new DataOutputStream(this.socket.getOutputStream());
 		
@@ -89,7 +89,7 @@ public final class ThrClient extends Thread {
 			try {
 				loopSleep.reset();
 				
-				for (int i=0; i < 10; i++) {
+				for (int i=0; i < 1; i++) {
 					/*
 					 * send
 					 */
@@ -109,7 +109,25 @@ public final class ThrClient extends Thread {
 					
 					try {
 						nRecv = this.dis.read(bytRecv);
-					} catch (IOException e) {
+						if (nRecv == 0) {
+							if (flag && this.socket.isClosed())
+								throw new Exception("isClosed()");
+							if (flag && !this.socket.isConnected())
+								throw new Exception("not isConnected()");
+							if (flag && this.socket.isInputShutdown())
+								throw new Exception("isInputShutdown()");
+							if (flag && this.socket.isOutputShutdown())
+								throw new Exception("isOutputShutdown()");
+							
+							loopSleep.sleep();
+							continue;
+						} else if (nRecv < 0) {
+							/*
+							 * the end of the input stream
+							 */
+							break;
+						}
+					} catch (Exception e) {
 						if (flag && this.socket.isClosed())
 							throw e;
 						if (flag && !this.socket.isConnected())
@@ -129,10 +147,15 @@ public final class ThrClient extends Thread {
 							, Thread.currentThread().getName(), nRecv, strRecv));
 					
 					/*
-					 * sleep
+					 * reset loopSleep
 					 */
 					loopSleep.reset();
 				}
+				
+				/*
+				 * sleep
+				 */
+				LoopSleep.sleep(5 * 1000);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

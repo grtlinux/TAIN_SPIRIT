@@ -19,6 +19,10 @@
  */
 package tain.kr.com.spirit.v02.test.control.v01;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,29 +39,132 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public final class ThrJointServer extends Thread {
+public final class ThrJointServer extends AbsJoint {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(ThrJointServer.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private static final String STR_MSG = "SIGN";
+	
+	private final MainControlServer controlServer;
+	private final ServerSocket serverSocket;
+	
+	private Socket socket1;
+	private Socket socket2;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrJointServer() {
+	public ThrJointServer(MainControlServer controlServer, ServerSocket serverSocket) throws Exception {
+		
+		super("JOINT_SERVER");
+
+		this.controlServer = controlServer;
+		this.serverSocket = serverSocket;
+		
+		makeSocket();
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
+	private void makeSocket() throws Exception {
+		
+		if (flag) {
+			/*
+			 * make socket to connect
+			 */
+			this.socket1 = this.serverSocket.accept();  // client -> server
+			
+			/*
+			 * send signal
+			 */
+			this.controlServer.getQueue().put(STR_MSG);  // send signal
+			
+			this.socket2 = this.serverSocket.accept();  // jointClient -> server
+		}
+		
+		if (flag) {
+			/*
+			 * validate
+			 */
+			if (this.socket1 == null) {
+				throw new Exception("the value of socket1 is null pointer...");
+			}
+			
+			if (this.socket2 == null) {
+				throw new Exception("the value of socket2 is null pointer...");
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * set options
+			 */
+			this.socket1.setSoTimeout(10 * 1000);
+			this.socket2.setSoTimeout(10 * 1000);
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private ThrRecvSend thread1;
+	private ThrRecvSend thread2;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void run() {
 		
+		this.thread1 = null;
+		this.thread2 = null;
+		
+		if (flag) {
+			/*
+			 * create thread
+			 */
+			try {
+				this.thread1 = new ThrRecvSend(String.format("CONTROL_SERVER_RECVSEND_01"), this
+						, this.socket1.getInputStream(), this.socket2.getOutputStream());
+
+				this.thread2 = new ThrRecvSend(String.format("CONTROL_SERVER_RECVSEND_02"), this
+						, this.socket2.getInputStream(), this.socket1.getOutputStream());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * start thread
+			 */
+			this.thread1.start();
+			this.thread2.start();
+		}
+		
+		if (flag) {
+			/*
+			 * join thread
+			 */
+			try {
+				this.thread1.join();
+				this.thread2.join();
+			} catch (InterruptedException e) {}
+		}
+		
+		if (flag) {
+			/*
+			 * close
+			 */
+			if (this.socket1 != null) try { this.socket1.close(); } catch (IOException e) {}
+			if (this.socket2 != null) try { this.socket2.close(); } catch (IOException e) {}
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

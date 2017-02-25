@@ -19,7 +19,11 @@
  */
 package tain.kr.com.spirit.v02.test.control.v01;
 
+import java.net.ServerSocket;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v02.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -35,7 +39,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainControlServer {
+public final class MainControlServer {
 
 	private static boolean flag = true;
 
@@ -63,6 +67,9 @@ public class MainControlServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String LISTEN_PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +81,28 @@ public class MainControlServer {
 			new MainControlServer();
 
 		if (flag) {
-
+			/*
+			 * begin
+			 */
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(LISTEN_PORT));
+			
+			while (true) {
+				if (flag) {
+					/*
+					 * server thread
+					 */
+					Thread thread = new ThrControlServer(serverSocket);
+					thread.start();
+					thread.join();
+				}
+				
+				if (flag) {
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(1 * 500);
+				}
+			}
 		}
 	}
 

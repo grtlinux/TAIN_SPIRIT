@@ -71,6 +71,41 @@ public final class ThrControlServer extends Thread {
 		if (this.socket == null) {
 			throw new IOException("ERROR: socket is null pointer..");
 		}
+		
+		if (flag) {
+			/*
+			 * socket option
+			 */
+			if (flag && this.socket.getTcpNoDelay() == false) {        // TCP_NODELAY
+				this.socket.setTcpNoDelay(true);
+			}
+			
+			if (flag && this.socket.getSoTimeout() == 0) {              // SO_TIMEOUT
+				// this.socket.setSoTimeout(0);  // 0 -> timeout of infinity
+				this.socket.setSoTimeout(2 * 1000);
+			}
+			
+			if (flag && this.socket.getSoLinger() == -1) {              // SO_LINGER
+				this.socket.setSoLinger(true, 0);
+			}
+			
+			if (flag && this.socket.getReceiveBufferSize() < 10240) {   // SO_RCVBUF
+				this.socket.setReceiveBufferSize(10240);
+			}
+			
+			if (flag && this.socket.getSendBufferSize() < 10240) {      // SO_SNDBUF
+				this.socket.setSendBufferSize(10240);
+			}
+			
+			if (flag && this.socket.getKeepAlive() == false) {         // SO_KEEPALIVE
+				this.socket.setKeepAlive(true);
+			}
+			
+			if (flag && this.socket.getReuseAddress() == false) {      // SO_REUSEADDR
+				this.socket.setReuseAddress(true);
+			}
+		}
+		
 		this.dis = new DataInputStream(this.socket.getInputStream());
 		this.dos = new DataOutputStream(this.socket.getOutputStream());
 
@@ -119,7 +154,7 @@ public final class ThrControlServer extends Thread {
 							if (flag) System.out.printf("%s [STATUS] read data of EOF...\n", Thread.currentThread().getName());
 							break;
 						}
-					} catch (IOException e) {
+					} catch (Exception e) {
 						/*
 						 * Exception
 						 */

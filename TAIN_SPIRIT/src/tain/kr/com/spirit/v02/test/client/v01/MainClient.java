@@ -79,7 +79,7 @@ public final class MainClient {
 			/*
 			 * begin
 			 */
-			for (int i=0; i < 1; i++) {
+			for (int i=0; i < 3; i++) {
 				
 				if (flag) {
 					/*
@@ -94,7 +94,7 @@ public final class MainClient {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(10 * 1000);
+					LoopSleep.sleep(2 * 1000);
 				}
 			}
 		}
@@ -111,5 +111,7 @@ public final class MainClient {
 
 		if (flag)
 			test01(args);
+		
+		System.exit(0);
 	}
 }

@@ -19,7 +19,11 @@
  */
 package tain.kr.com.spirit.v02.test.server.v01;
 
+import java.net.ServerSocket;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v02.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -63,6 +67,9 @@ public final class MainServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String LISTEN_PORT = "20025";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +81,28 @@ public final class MainServer {
 			new MainServer();
 
 		if (flag) {
-
+			/*
+			 * begin
+			 */
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(LISTEN_PORT));
+			
+			while (true) {
+				if (flag) {
+					/*
+					 * server thread
+					 */
+					Thread thread = new ThrServer(serverSocket);
+					thread.start();
+					thread.join();
+				}
+				
+				if (flag) {
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(10 * 1000);
+				}
+			}
 		}
 	}
 

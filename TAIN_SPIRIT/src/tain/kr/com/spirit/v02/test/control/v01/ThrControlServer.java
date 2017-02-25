@@ -119,6 +119,8 @@ public final class ThrControlServer extends Thread {
 	private String strSend;
 	private byte[] bytSend;
 	private int nSend;
+
+	private static final int SIZ_RECV = 1024;
 	
 	private String strRecv;
 	private byte[] bytRecv;
@@ -133,17 +135,15 @@ public final class ThrControlServer extends Thread {
 			/*
 			 * start thread process
 			 */
-			this.bytRecv = new byte[this.nRecv];
+			this.bytRecv = new byte[SIZ_RECV];
 
 			while (true) {
 				if (flag) {
 					/*
 					 * recv
 					 */
-					this.nRecv = 1024;
-
 					try {
-						this.nRecv = this.dis.read(this.bytRecv, 0, this.nRecv);
+						this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
 						if (this.nRecv == 0) {
 							/*
 							 * read data of 0 size

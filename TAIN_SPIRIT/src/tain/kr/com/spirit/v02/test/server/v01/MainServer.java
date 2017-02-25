@@ -85,6 +85,7 @@ public final class MainServer {
 			 * begin
 			 */
 			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(LISTEN_PORT));
+			if (flag) log.debug(String.format(">> listening port = %s..", LISTEN_PORT));
 			
 			while (true) {
 				if (flag) {
@@ -93,7 +94,7 @@ public final class MainServer {
 					 */
 					Thread thread = new ThrServer(serverSocket);
 					thread.start();
-					thread.join();
+					if (flag) thread.join();
 				}
 				
 				if (flag) {

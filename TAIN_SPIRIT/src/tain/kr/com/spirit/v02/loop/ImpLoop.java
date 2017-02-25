@@ -19,7 +19,6 @@
  */
 package tain.kr.com.spirit.v02.loop;
 
-import org.apache.log4j.Logger;
 
 /**
  * Code Templates > Comments > Types
@@ -37,4 +36,7 @@ import org.apache.log4j.Logger;
  */
 public interface ImpLoop {
 
+	public abstract void reset();
+	public abstract void sleep();
+	public abstract long getMSec();
 }

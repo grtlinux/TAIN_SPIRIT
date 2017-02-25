@@ -19,6 +19,8 @@
  */
 package tain.kr.com.spirit.v02.queue;
 
+import java.util.Vector;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,25 +37,113 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class QueueContent {
+public final class QueueContent implements ImpQueue {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(QueueContent.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final Vector<Object> queue;
+	private int size;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
 	public QueueContent() {
-		if (flag)
+		
+		this.queue = new Vector<Object>(5, 5);
+		this.size = 0;
+		
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#put(java.lang.Object)
+	 */
+	@Override
+	public int put(Object object) throws Exception {
+		
+		if (object == null) {
+			throw new Exception(String.format("[WARN] object parameter is null pointer"));
+		}
+		
+		this.queue.addElement(object);
+		this.size ++;
+		
+		this.notifyAll();
+		
+		return this.size;
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#get()
+	 */
+	@Override
+	public Object get() throws Exception {
+		
+		try {
+			wait();
+		} catch (InterruptedException e) {}
+		
+		if (this.size <= 0) {
+			return null;
+		}
+		
+		Object object = this.queue.elementAt(0);
+		this.queue.remove(0);
+		this.size --;
+		
+		return object;
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#get(long)
+	 */
+	@Override
+	public Object get(long timeout) throws Exception {
+		
+		try {
+			wait(timeout);
+		} catch (InterruptedException e) {}
+		
+		if (this.size <= 0) {
+			// return null;
+			throw new Exception("return null pointer : [this.size = 0]");  // TODO : 2017.02.21
+		}
+		
+		Object object = this.queue.elementAt(0);
+		this.queue.remove(0);
+		this.size --;
+		
+		return object;
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#clear()
+	 */
+	@Override
+	public void clear() {
+		
+		this.queue.removeAllElements();
+		this.size = 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#getSize()
+	 */
+	@Override
+	public int getSize() {
+		return this.size;
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +159,6 @@ public class QueueContent {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new QueueContent();
 
 		if (flag) {
 

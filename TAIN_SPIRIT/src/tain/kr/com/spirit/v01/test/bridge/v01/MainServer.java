@@ -86,7 +86,11 @@ public class MainServer {
 			for (int idx=1; ; idx++) {
 				Socket socket1 = serverSocket.accept();
 				
-				new ThrServer(idx, socket1).start();
+				try {
+					new ThrServer(idx, socket1).start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

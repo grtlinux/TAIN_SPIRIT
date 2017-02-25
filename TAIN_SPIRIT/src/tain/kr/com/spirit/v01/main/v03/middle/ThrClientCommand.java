@@ -80,11 +80,18 @@ public final class ThrClientCommand extends Thread {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
+	/*
+	 * connect to the object server
+	 */
+	//private static final String HOST1 = "192.168.0.15";
 	private static final String HOST1 = "127.0.0.1";
-	private static final String PORT1 = "20026";
+	private static final String PORT1 = "3389";
 	
+	/*
+	 * connect to the command server
+	 */
 	private static final String HOST2 = "127.0.0.1";
-	private static final String PORT2 = "20025";
+	private static final String PORT2 = "13389";
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	

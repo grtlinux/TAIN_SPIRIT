@@ -49,11 +49,9 @@ public final class ThrServer extends Thread {
 	private static final String CONNECT_HOST = "192.168.0.15";
 	private static final String CONNECT_PORT = "3389";
 	
-	private int idx;
-	private Socket socket1;
-	private Socket socket2;
-	
-	public boolean flagStopThread = false;
+	private final int idx;
+	private final Socket socket1;
+	private final Socket socket2;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -77,6 +75,9 @@ public final class ThrServer extends Thread {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	public boolean flagStopThread = false;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override

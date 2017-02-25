@@ -23,7 +23,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
@@ -138,12 +137,6 @@ public final class ThrClient extends Thread {
 								if (flag) System.out.printf("%s [STATUS] read data of EOF...\n", Thread.currentThread().getName());
 								throw new Exception("read data of EOF, end of stream");
 							}
-						} catch (SocketTimeoutException e) {
-							/*
-							 * SocketTimeoutException, don't reach
-							 */
-							if (flag) System.out.printf("%s [STATUS] SocketTimeoutException...\n", Thread.currentThread().getName());
-							continue;
 						} catch (Exception e) {
 							/*
 							 * Exception

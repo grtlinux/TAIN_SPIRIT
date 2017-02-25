@@ -216,7 +216,7 @@ public final class ThrClient extends Thread {
 						/*
 						 * send
 						 */
-						this.strSend = "OK!! How are you doing these days?~~";
+						this.strSend = "Hello, world!!!";
 						this.bytSend = this.strSend.getBytes(Charset.forName(TYP_CHARSET));
 						this.nSend = this.bytSend.length;
 						

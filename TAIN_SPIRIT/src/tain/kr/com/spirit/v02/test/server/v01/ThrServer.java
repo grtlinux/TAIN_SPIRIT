@@ -19,7 +19,16 @@
  */
 package tain.kr.com.spirit.v02.test.server.v01;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.Charset;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v02.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -42,18 +51,128 @@ public final class ThrServer extends Thread {
 	private static final Logger log = Logger.getLogger(ThrServer.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private static final String TYP_CHARSET = "euc-kr";
+
+	private final Socket socket;
+	private final DataInputStream dis;
+	private final DataOutputStream dos;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrServer() {
+	public ThrServer(ServerSocket serverSocket) throws Exception {
+		
+		super("MAIN_SERVER");
+		
+		this.socket = serverSocket.accept();
+		if (this.socket == null) {
+			throw new IOException("ERROR: socket is null pointer..");
+		}
+		this.dis = new DataInputStream(this.socket.getInputStream());
+		this.dos = new DataOutputStream(this.socket.getOutputStream());
+		
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private String strSend;
+	private byte[] bytSend;
+	private int nSend;
+	
+	private String strRecv;
+	private byte[] bytRecv;
+	private int nRecv;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		
+		if (flag) {
+			/*
+			 * start thread process
+			 */
+			while (true) {
+				if (flag) {
+					/*
+					 * recv
+					 */
+					this.nRecv = 1024;
+					this.bytRecv = new byte[this.nRecv];
+					
+					try {
+						this.nRecv = this.dis.read(this.bytRecv, 0, this.nRecv);
+						if (this.nRecv == 0) {
+							/*
+							 * read data of 0 size
+							 */
+							if (flag) System.out.printf("%s [STATUS] read data of 0 size..\n", Thread.currentThread().getName());
+						} else if (this.nRecv < 0) {
+							/*
+							 * EOF
+							 */
+							if (flag) System.out.printf("%s [STATUS] read data of EOF...\n", Thread.currentThread().getName());
+							break;
+						}
+					} catch (IOException e) {
+						/*
+						 * Exception
+						 */
+						if (flag) System.out.printf("%s [STATUS] exception during reading...\n", Thread.currentThread().getName());
+						if (flag) e.printStackTrace();
+						break;
+					}
+					
+					this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
+					
+					if (flag) System.out.printf("%s [STATUS] RECV [%d:%s]\n"
+							, Thread.currentThread().getName(), this.nRecv, this.strRecv);
+				}
+				
+				if (flag) {
+					/*
+					 * send
+					 */
+					this.strSend = "OK!! How are you doing these days?~~";
+					this.bytSend = this.strSend.getBytes(Charset.forName(TYP_CHARSET));
+					this.nSend = this.bytSend.length;
+					
+					try {
+						this.dos.write(this.bytSend, 0, this.nSend);
+					} catch (IOException e) {
+						e.printStackTrace();
+						break;
+					}
+					
+					if (flag) System.out.printf("%s [STATUS] SEND [%d:%s]\n"
+							, Thread.currentThread().getName(), this.nSend, this.strSend);
+				}
+				
+				if (flag) {
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(1 * 1000);
+				}
+			}
+			
+			if (flag) {
+				/*
+				 * close
+				 */
+				if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+				if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+				if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+			}
+		}
+	}
+		
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +188,6 @@ public final class ThrServer extends Thread {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrServer();
 
 		if (flag) {
 

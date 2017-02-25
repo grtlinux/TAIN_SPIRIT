@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrServer {
+public final class ThrServer extends Thread {
 
 	private static boolean flag = true;
 

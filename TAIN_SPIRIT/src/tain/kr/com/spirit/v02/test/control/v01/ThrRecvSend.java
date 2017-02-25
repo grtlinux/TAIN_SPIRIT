@@ -96,61 +96,66 @@ public final class ThrRecvSend extends Thread {
 		}
 		
 		if (flag) {
-			/*
-			 * loop
-			 */
-			while (!this.joint.flagStopThread) {
-				
-				if (flag) {
-					/*
-					 * recv
-					 */
-					try {
-						this.nRecv = this.dis.read(this.bytRecv);
-						if (nRecv < 0) {
-							/*
-							 * the end of the input stream
-							 */
-							break;
+			
+			try {
+				/*
+				 * loop
+				 */
+				while (!this.joint.flagStopThread) {
+					
+					if (flag) {
+						/*
+						 * recv
+						 */
+						try {
+							this.nRecv = this.dis.read(this.bytRecv);
+							if (nRecv < 0) {
+								/*
+								 * the end of the input stream
+								 */
+								break;
+							}
+						} catch (SocketTimeoutException e) {
+							if (flag) System.out.printf("[%s] SocketTimeoutException ...\n", Thread.currentThread().getName());
+							continue;
+						} catch (Exception e) {
+							throw e;
 						}
-					} catch (SocketTimeoutException e) {
-						if (flag) System.out.printf("[%s] SocketTimeoutException ...\n", Thread.currentThread().getName());
-						continue;
-					} catch (Exception e) {
-						e.printStackTrace();
-						break;
+					}
+					
+					if (flag) {
+						/*
+						 * send
+						 */
+						try {
+							this.dos.write(bytRecv, 0, nRecv);
+						} catch (IOException e) {
+							throw e;
+						}
+					}
+					
+					if (flag) {
+						/*
+						 * reset loop sleep time
+						 */
+						loopSleep.reset();
 					}
 				}
-				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
 				if (flag) {
 					/*
-					 * send
+					 * close and stop thread
 					 */
-					try {
-						this.dos.write(bytRecv, 0, nRecv);
-					} catch (IOException e) {
-						e.printStackTrace();
-						break;
-					}
-				}
-				
-				if (flag) {
-					/*
-					 * reset loop sleep time
-					 */
-					loopSleep.reset();
+					if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+					if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+					
+					this.joint.flagStopThread = true;
+					
+					if (flag) System.out.printf("[%s] END ...\n", Thread.currentThread().getName());
 				}
 			}
-		}
-		
-		if (flag) {
-			/*
-			 * close and stop thread
-			 */
-			if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
-			if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
-			
-			this.joint.flagStopThread = true;
 		}
 	}
 	

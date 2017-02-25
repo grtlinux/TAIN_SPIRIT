@@ -77,7 +77,7 @@ public final class MainControlClient {
 
 		if (flag) {
 			/*
-			 * single thread job
+			 * 1. single thread job
 			 */
 			Thread thread = new ThrControlClient();
 			thread.start();
@@ -86,9 +86,10 @@ public final class MainControlClient {
 
 		if (!flag) {
 			/*
-			 * begin and retry connection
+			 * TODO 2017.02.25 : not used
+			 * 2. begin and retry connection
 			 */
-			for (int i=0; i < 100; i++) {
+			for (int i=0; i < 1000; i++) {
 				
 				if (flag) {
 					/*

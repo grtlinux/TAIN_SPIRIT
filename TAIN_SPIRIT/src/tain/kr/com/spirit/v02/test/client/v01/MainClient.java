@@ -77,9 +77,18 @@ public final class MainClient {
 
 		if (flag) {
 			/*
-			 * begin
+			 * single thread job
 			 */
-			for (int i=0; i < 3; i++) {
+			Thread thread = new ThrClient();
+			thread.start();
+			thread.join();
+		}
+		
+		if (flag) {
+			/*
+			 * sequence thread job
+			 */
+			for (int i=0; i < 10; i++) {
 				
 				if (flag) {
 					/*

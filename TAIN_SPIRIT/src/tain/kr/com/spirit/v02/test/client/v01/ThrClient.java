@@ -96,6 +96,9 @@ public final class ThrClient extends Thread {
 	public void run() {
 		
 		if (flag) {
+			/*
+			 * start thread process
+			 */
 			for (int i=0; i < 1; i++) {
 				if (flag) {
 					/*

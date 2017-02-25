@@ -54,7 +54,7 @@ public final class ThrClient extends Thread {
 	private static final String TYP_CHARSET = "euc-kr";
 
 	private static final String CONNECT_HOST = "127.0.0.1";
-	private static final String CONNECT_PORT = "20025";
+	private static final String CONNECT_PORT = "13389";
 	
 	private final Socket socket;
 	private final DataInputStream dis;

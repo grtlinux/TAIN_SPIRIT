@@ -54,6 +54,7 @@ public final class ThrControlServer extends Thread {
 
 	private static final String TYP_CHARSET = "euc-kr";
 
+	private final MainControlServer controlServer;
 	private final Socket socket;
 	private final DataInputStream dis;
 	private final DataOutputStream dos;
@@ -63,10 +64,11 @@ public final class ThrControlServer extends Thread {
 	/*
 	 * constructor
 	 */
-	public ThrControlServer(ServerSocket serverSocket) throws Exception {
+	public ThrControlServer(MainControlServer controlServer, ServerSocket serverSocket) throws Exception {
 		
 		super("CONTROL_SERVER");
 		
+		this.controlServer = controlServer;
 		this.socket = serverSocket.accept();
 		if (this.socket == null) {
 			throw new IOException("ERROR: socket is null pointer..");
@@ -95,7 +97,7 @@ public final class ThrControlServer extends Thread {
 	@Override
 	public void run() {
 		
-		if (!flag) {
+		if (flag) {
 			/*
 			 * start thread process : server
 			 * send
@@ -107,13 +109,13 @@ public final class ThrControlServer extends Thread {
 						/*
 						 * get from queue
 						 */
+						this.strSend = (String) this.controlServer.getQueue().get();
 					}
 					
 					if (flag) {
 						/*
 						 * send
 						 */
-						this.strSend = "OK!! How are you doing these days?~~";
 						this.bytSend = this.strSend.getBytes(Charset.forName(TYP_CHARSET));
 						this.nSend = this.bytSend.length;
 						
@@ -131,7 +133,7 @@ public final class ThrControlServer extends Thread {
 						/*
 						 * sleep
 						 */
-						LoopSleep.sleep(1 * 500);
+						LoopSleep.sleep(10 * 500);
 					}
 				}
 			} catch (Exception e) {
@@ -146,6 +148,8 @@ public final class ThrControlServer extends Thread {
 					if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
 				}
 			}
+			
+			if (flag) System.out.printf("%s >>>>> END OF THREAD\n", Thread.currentThread().getName());
 		}
 		
 		if (!flag) {

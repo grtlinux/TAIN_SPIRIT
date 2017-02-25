@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrRecvSend {
+public final class ThrRecvSend extends Thread {
 
 	private static boolean flag = true;
 

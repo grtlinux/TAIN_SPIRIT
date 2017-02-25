@@ -19,6 +19,9 @@
  */
 package tain.kr.com.spirit.v01.test.bridge.v01;
 
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -74,7 +77,17 @@ public class MainServer {
 	private static void test01(String[] args) throws Exception {
 
 		if (flag) {
-
+			/*
+			 * begin
+			 */
+			@SuppressWarnings("resource")
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(PORT));
+			
+			for (int idx=1; ; idx++) {
+				Socket socket1 = serverSocket.accept();
+				
+				new ThrServer(idx, socket1).start();
+			}
 		}
 	}
 

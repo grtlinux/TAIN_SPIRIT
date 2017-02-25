@@ -116,15 +116,15 @@ public final class MainControlServer {
 			/*
 			 * begin
 			 */
-			while (true) {
-				if (flag) {
-					/*
-					 * control server thread
-					 */
-					Thread thread = new ThrControlServer(this, this.serverSocketControl);
-					thread.start();
-				}
+			if (flag) {
+				/*
+				 * control server thread
+				 */
+				Thread thread = new ThrControlServer(this, this.serverSocketControl);
+				thread.start();
+			}
 
+			while (true) {
 				if (flag) {
 					/*
 					 * joint server thread

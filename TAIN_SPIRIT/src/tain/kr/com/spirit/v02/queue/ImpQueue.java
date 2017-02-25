@@ -19,7 +19,6 @@
  */
 package tain.kr.com.spirit.v02.queue;
 
-import org.apache.log4j.Logger;
 
 /**
  * Code Templates > Comments > Types
@@ -37,4 +36,9 @@ import org.apache.log4j.Logger;
  */
 public interface ImpQueue {
 
+	public abstract int put(Object object) throws Exception;
+	public abstract Object get() throws Exception;
+	public abstract Object get(long timeout) throws Exception;
+	public abstract void clear();
+	public abstract int getSize();
 }

@@ -121,10 +121,10 @@ public final class ThrClient extends Thread {
 					 * recv
 					 */
 					this.nRecv = 1024;
-					this.bytRecv = new byte[nRecv];
+					this.bytRecv = new byte[this.nRecv];
 					
 					try {
-						this.nRecv = this.dis.read(bytRecv, 0, nRecv);
+						this.nRecv = this.dis.read(this.bytRecv, 0, this.nRecv);
 						if (this.nRecv == 0) {
 							/*
 							 * read data of 0 size
@@ -142,7 +142,7 @@ public final class ThrClient extends Thread {
 						 * Exception
 						 */
 						if (flag) System.out.printf("%s [STATUS] exception during reading...\n", Thread.currentThread().getName());
-						e.printStackTrace();
+						if (flag) e.printStackTrace();
 						break;
 					}
 					

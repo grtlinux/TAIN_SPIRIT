@@ -21,6 +21,8 @@ package tain.kr.com.spirit.v02.test.client.v01;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v02.loop.LoopSleep;
+
 /**
  * Code Templates > Comments > Types
  *
@@ -74,7 +76,27 @@ public final class MainClient {
 			new MainClient();
 
 		if (flag) {
-
+			/*
+			 * begin
+			 */
+			for (int i=0; i < 1; i++) {
+				
+				if (flag) {
+					/*
+					 * client thread
+					 */
+					Thread thread = new ThrClient();
+					thread.start();
+					thread.join();
+				}
+				
+				if (flag) {
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(10 * 1000);
+				}
+			}
 		}
 	}
 

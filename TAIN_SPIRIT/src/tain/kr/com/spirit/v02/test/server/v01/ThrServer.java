@@ -74,7 +74,6 @@ public final class ThrServer extends Thread {
 		this.dis = new DataInputStream(this.socket.getInputStream());
 		this.dos = new DataOutputStream(this.socket.getOutputStream());
 		
-		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}

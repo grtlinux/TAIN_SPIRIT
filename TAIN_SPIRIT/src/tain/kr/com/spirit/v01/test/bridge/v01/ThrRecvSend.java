@@ -19,7 +19,15 @@
  */
 package tain.kr.com.spirit.v01.test.bridge.v01;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v01.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -42,18 +50,109 @@ public final class ThrRecvSend extends Thread {
 	private static final Logger log = Logger.getLogger(ThrRecvSend.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private ThrServer thrServer;
+	private DataInputStream dis;
+	private DataOutputStream dos;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrRecvSend() {
+	public ThrRecvSend(String thrName, ThrServer thrServer, InputStream is, OutputStream os) {
+		
+		super(thrName);
+		
+		this.thrServer = thrServer;
+		this.dis = new DataInputStream(is);
+		this.dos = new DataOutputStream(os);
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private LoopSleep loopSleep;
+	
+	private byte[] bytRecv;
+	private int nRecv;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		
+		if (flag) {
+			/*
+			 * initialize
+			 */
+			this.loopSleep = new LoopSleep();
+			
+			this.bytRecv = new byte[4096];
+			this.nRecv = 0;
+		}
+		
+		if (flag) {
+			/*
+			 * loop
+			 */
+			while (!this.thrServer.flagStopThread) {
+				
+				if (flag) {
+					/*
+					 * recv
+					 */
+					try {
+						this.nRecv = this.dis.read(this.bytRecv);
+						if (this.nRecv == 0) {
+							this.loopSleep.sleep();
+							continue;
+						} else if (nRecv < 0) {
+							/*
+							 * the end of the input stream
+							 */
+							break;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						break;
+					}
+				}
+				
+				if (flag) {
+					/*
+					 * send
+					 */
+					try {
+						this.dos.write(bytRecv, 0, nRecv);
+					} catch (IOException e) {
+						e.printStackTrace();
+						break;
+					}
+				}
+				
+				if (flag) {
+					/*
+					 * reset loop sleep time
+					 */
+					loopSleep.reset();
+				}
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * close and stop thread
+			 */
+			if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+			if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+			
+			this.thrServer.flagStopThread = true;
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +168,6 @@ public final class ThrRecvSend extends Thread {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrRecvSend();
 
 		if (flag) {
 

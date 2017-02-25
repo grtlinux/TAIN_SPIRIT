@@ -78,23 +78,26 @@ public final class ThrServer extends Thread {
 
 	public boolean flagStopThread = false;
 	
+	private ThrRecvSend thread1;
+	private ThrRecvSend thread2;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void run() {
 		
-		ThrRecvSend thread1 = null;
-		ThrRecvSend thread2 = null;
+		this.thread1 = null;
+		this.thread2 = null;
 		
 		if (flag) {
 			/*
 			 * create thread
 			 */
 			try {
-				thread1 = new ThrRecvSend(String.format("JOINT_%03d_1", this.idx), this
+				this.thread1 = new ThrRecvSend(String.format("JOINT_%03d_1", this.idx), this
 						, this.socket1.getInputStream(), this.socket2.getOutputStream());
 				
-				thread2 = new ThrRecvSend(String.format("JOINT_%03d_2", this.idx), this
+				this.thread2 = new ThrRecvSend(String.format("JOINT_%03d_2", this.idx), this
 						, this.socket2.getInputStream(), this.socket1.getOutputStream());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -106,8 +109,8 @@ public final class ThrServer extends Thread {
 			/*
 			 * start thread
 			 */
-			thread1.start();
-			thread2.start();
+			this.thread1.start();
+			this.thread2.start();
 		}
 		
 		if (flag) {
@@ -115,8 +118,8 @@ public final class ThrServer extends Thread {
 			 * join thread
 			 */
 			try {
-				thread1.join();
-				thread2.join();
+				this.thread1.join();
+				this.thread2.join();
 			} catch (InterruptedException e) {}
 		}
 		

@@ -24,6 +24,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
@@ -84,6 +85,8 @@ public final class ThrServer extends Thread {
 	private byte[] bytSend;
 	private int nSend;
 	
+	private static final int SIZ_RECV = 1024;
+	
 	private String strRecv;
 	private byte[] bytRecv;
 	private int nRecv;
@@ -97,77 +100,79 @@ public final class ThrServer extends Thread {
 			/*
 			 * start thread process
 			 */
-			while (true) {
-				if (flag) {
-					/*
-					 * recv
-					 */
-					this.nRecv = 1024;
-					this.bytRecv = new byte[this.nRecv];
-					
-					try {
-						this.nRecv = this.dis.read(this.bytRecv, 0, this.nRecv);
-						if (this.nRecv == 0) {
-							/*
-							 * read data of 0 size
-							 */
-							if (flag) System.out.printf("%s [STATUS] read data of 0 size..\n", Thread.currentThread().getName());
-						} else if (this.nRecv < 0) {
-							/*
-							 * EOF
-							 */
-							if (flag) System.out.printf("%s [STATUS] read data of EOF...\n", Thread.currentThread().getName());
-							break;
-						}
-					} catch (IOException e) {
+			try {
+				while (true) {
+					if (flag) {
 						/*
-						 * Exception
+						 * recv
 						 */
-						if (flag) System.out.printf("%s [STATUS] exception during reading...\n", Thread.currentThread().getName());
-						if (flag) e.printStackTrace();
-						break;
+						this.bytRecv = new byte[SIZ_RECV];
+						
+						try {
+							this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
+
+							if (this.nRecv < 0) {
+								/*
+								 * EOF
+								 */
+								if (flag) System.out.printf("%s [STATUS] read data of EOF...\n", Thread.currentThread().getName());
+								throw new Exception("read data of EOF, end of stream");
+							}
+						} catch (SocketTimeoutException e) {
+							/*
+							 * SocketTimeoutException, don't reach
+							 */
+							if (flag) System.out.printf("%s [STATUS] SocketTimeoutException...\n", Thread.currentThread().getName());
+							continue;
+						} catch (Exception e) {
+							/*
+							 * Exception
+							 */
+							throw e;
+						}
+						
+						this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
+						
+						if (flag) System.out.printf("%s [STATUS] RECV [%d:%s]\n"
+								, Thread.currentThread().getName(), this.nRecv, this.strRecv);
+					} // end of recv
+					
+					if (flag) {
+						/*
+						 * send
+						 */
+						this.strSend = "OK!! How are you doing these days?~~";
+						this.bytSend = this.strSend.getBytes(Charset.forName(TYP_CHARSET));
+						this.nSend = this.bytSend.length;
+						
+						try {
+							this.dos.write(this.bytSend, 0, this.nSend);
+						} catch (IOException e) {
+							throw e;
+						}
+						
+						if (flag) System.out.printf("%s [STATUS] SEND [%d:%s]\n"
+								, Thread.currentThread().getName(), this.nSend, this.strSend);
+					} // end of send
+					
+					if (flag) {
+						/*
+						 * sleep
+						 */
+						LoopSleep.sleep(1 * 500);
 					}
-					
-					this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
-					
-					if (flag) System.out.printf("%s [STATUS] RECV [%d:%s]\n"
-							, Thread.currentThread().getName(), this.nRecv, this.strRecv);
 				}
-				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
 				if (flag) {
 					/*
-					 * send
+					 * close
 					 */
-					this.strSend = "OK!! How are you doing these days?~~";
-					this.bytSend = this.strSend.getBytes(Charset.forName(TYP_CHARSET));
-					this.nSend = this.bytSend.length;
-					
-					try {
-						this.dos.write(this.bytSend, 0, this.nSend);
-					} catch (IOException e) {
-						e.printStackTrace();
-						break;
-					}
-					
-					if (flag) System.out.printf("%s [STATUS] SEND [%d:%s]\n"
-							, Thread.currentThread().getName(), this.nSend, this.strSend);
+					if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+					if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+					if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
 				}
-				
-				if (flag) {
-					/*
-					 * sleep
-					 */
-					LoopSleep.sleep(1 * 1000);
-				}
-			}
-			
-			if (flag) {
-				/*
-				 * close
-				 */
-				if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
-				if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
-				if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
 			}
 		}
 	}

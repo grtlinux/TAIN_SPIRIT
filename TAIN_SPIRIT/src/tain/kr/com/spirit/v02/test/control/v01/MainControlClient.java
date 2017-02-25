@@ -77,6 +77,15 @@ public final class MainControlClient {
 
 		if (flag) {
 			/*
+			 * single thread job
+			 */
+			Thread thread = new ThrControlClient();
+			thread.start();
+			thread.join();
+		}
+
+		if (!flag) {
+			/*
 			 * begin and retry connection
 			 */
 			for (int i=0; i < 100; i++) {
@@ -94,7 +103,7 @@ public final class MainControlClient {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(10 * 1000);
+					LoopSleep.sleep(5 * 1000);
 				}
 			}
 		}

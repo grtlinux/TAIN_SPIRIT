@@ -100,7 +100,7 @@ public final class MainServer {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(10 * 1000);
+					LoopSleep.sleep(1 * 500);
 				}
 			}
 		}

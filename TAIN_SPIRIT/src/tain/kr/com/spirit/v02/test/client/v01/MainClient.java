@@ -84,7 +84,7 @@ public final class MainClient {
 			thread.join();
 		}
 		
-		if (flag) {
+		if (!flag) {
 			/*
 			 * sequence thread job
 			 */

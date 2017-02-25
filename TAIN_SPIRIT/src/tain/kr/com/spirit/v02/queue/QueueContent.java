@@ -69,7 +69,7 @@ public final class QueueContent implements ImpQueue {
 	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#put(java.lang.Object)
 	 */
 	@Override
-	public int put(Object object) throws Exception {
+	public synchronized int put(Object object) throws Exception {
 		
 		if (object == null) {
 			throw new Exception(String.format("[WARN] object parameter is null pointer"));
@@ -87,7 +87,7 @@ public final class QueueContent implements ImpQueue {
 	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#get()
 	 */
 	@Override
-	public Object get() throws Exception {
+	public synchronized Object get() throws Exception {
 		
 		try {
 			wait();
@@ -108,7 +108,7 @@ public final class QueueContent implements ImpQueue {
 	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#get(long)
 	 */
 	@Override
-	public Object get(long timeout) throws Exception {
+	public synchronized Object get(long timeout) throws Exception {
 		
 		try {
 			wait(timeout);
@@ -130,7 +130,7 @@ public final class QueueContent implements ImpQueue {
 	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#clear()
 	 */
 	@Override
-	public void clear() {
+	public synchronized void clear() {
 		
 		this.queue.removeAllElements();
 		this.size = 0;

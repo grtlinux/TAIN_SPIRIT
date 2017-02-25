@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainHubClient {
+public final class MainHubClient {
 
 	private static boolean flag = true;
 

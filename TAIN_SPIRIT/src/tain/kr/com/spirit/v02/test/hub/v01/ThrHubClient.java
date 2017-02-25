@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrHubClient {
+public final class ThrHubClient extends Thread {
 
 	private static boolean flag = true;
 

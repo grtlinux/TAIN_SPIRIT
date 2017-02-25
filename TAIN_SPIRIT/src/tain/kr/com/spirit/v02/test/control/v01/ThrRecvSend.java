@@ -114,7 +114,7 @@ public final class ThrRecvSend extends Thread {
 							break;
 						}
 					} catch (SocketTimeoutException e) {
-						if (flag) System.out.printf("[%s] SocketTimeoutException ...", Thread.currentThread().getName());
+						if (flag) System.out.printf("[%s] SocketTimeoutException ...\n", Thread.currentThread().getName());
 						continue;
 					} catch (Exception e) {
 						e.printStackTrace();

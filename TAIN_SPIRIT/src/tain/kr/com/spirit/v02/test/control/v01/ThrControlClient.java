@@ -138,6 +138,7 @@ public final class ThrControlClient extends Thread {
 						/*
 						 * run thread process
 						 */
+						new ThrJointClient().start();
 					}
 					
 					if (flag) {

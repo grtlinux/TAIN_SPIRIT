@@ -19,7 +19,16 @@
  */
 package tain.kr.com.spirit.v02.test.control.v01;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.SocketTimeoutException;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v02.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types
@@ -42,22 +51,107 @@ public final class ThrRecvSend extends Thread {
 	private static final Logger log = Logger.getLogger(ThrRecvSend.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private final AbsJoint joint;
+	private final DataInputStream dis;
+	private final DataOutputStream dos;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrRecvSend() {
+	public ThrRecvSend(String thrName, AbsJoint joint, InputStream is, OutputStream os) {
+		
+		super(thrName);
+		
+		this.joint = joint;
+		this.dis = new DataInputStream(is);
+		this.dos = new DataOutputStream(os);
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private LoopSleep loopSleep;
+	
+	private byte[] bytRecv;
+	private int nRecv;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void run() {
 		
+		if (flag) {
+			/*
+			 * initialize
+			 */
+			this.loopSleep = new LoopSleep();
+			
+			this.bytRecv = new byte[4096];
+			this.nRecv = 0;
+		}
+		
+		if (flag) {
+			/*
+			 * loop
+			 */
+			while (!this.joint.flagStopThread) {
+				
+				if (flag) {
+					/*
+					 * recv
+					 */
+					try {
+						this.nRecv = this.dis.read(this.bytRecv);
+						if (nRecv < 0) {
+							/*
+							 * the end of the input stream
+							 */
+							break;
+						}
+					} catch (SocketTimeoutException e) {
+						if (flag) System.out.printf("[%s] SocketTimeoutException ...", Thread.currentThread().getName());
+						continue;
+					} catch (Exception e) {
+						e.printStackTrace();
+						break;
+					}
+				}
+				
+				if (flag) {
+					/*
+					 * send
+					 */
+					try {
+						this.dos.write(bytRecv, 0, nRecv);
+					} catch (IOException e) {
+						e.printStackTrace();
+						break;
+					}
+				}
+				
+				if (flag) {
+					/*
+					 * reset loop sleep time
+					 */
+					loopSleep.reset();
+				}
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * close and stop thread
+			 */
+			if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+			if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+			
+			this.joint.flagStopThread = true;
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

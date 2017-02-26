@@ -19,6 +19,11 @@
  */
 package tain.kr.runjar.v03;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +40,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class RsrcURLStreamHandler {
+public class RsrcURLStreamHandler extends URLStreamHandler {
 
 	private static boolean flag = true;
 
@@ -43,18 +48,55 @@ public class RsrcURLStreamHandler {
 			.getLogger(RsrcURLStreamHandler.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private ClassLoader classLoader = null;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public RsrcURLStreamHandler() {
+	public RsrcURLStreamHandler(ClassLoader classLoader) {
+		
+		this.classLoader = classLoader;
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected void parseURL(URL url, String spec, int start, int limit) {
+		
+		if (flag) log.debug(String.format(">>>>> [%s, %s, %d, %d]\n", url, spec, start, limit));
+		
+		String file;
+		
+		if (spec.startsWith(JIJConstants.INTERNAL_URL_PROTOCOL_WITH_COLON))   // rsrc:
+			file = spec.substring(5);
+		else if (url.getFile().equals(JIJConstants.CURRENT_DIR))             // ./
+			file = spec;
+		else if (url.getFile().endsWith(JIJConstants.PATH_SEPARATOR))        //  /
+			file = url.getFile() + spec;
+		else
+			file = spec;
+		
+		if (flag) log.debug(String.format(">>>>> file = [%s]\n", file));
+		
+		setURL(url, JIJConstants.INTERNAL_URL_PROTOCOL, "", -1, null, null, file, null, null);
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	/* (non-Javadoc)
+	 * @see java.net.URLStreamHandler#openConnection(java.net.URL)
+	 */
+	@Override
+	protected URLConnection openConnection(URL url) throws IOException {
+		
+		return new RsrcURLConnection(url, this.classLoader);
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,9 +112,6 @@ public class RsrcURLStreamHandler {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new RsrcURLStreamHandler();
 
 		if (flag) {
 

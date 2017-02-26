@@ -24,8 +24,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
-import org.apache.log4j.Logger;
-
 /**
  * Code Templates > Comments > Types
  *
@@ -44,9 +42,6 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 
 	private static boolean flag = true;
 
-	private static final Logger log = Logger
-			.getLogger(RsrcURLStreamHandler.class);
-
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private ClassLoader classLoader = null;
@@ -59,16 +54,13 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 	public RsrcURLStreamHandler(ClassLoader classLoader) {
 		
 		this.classLoader = classLoader;
-		
-		if (flag)
-			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	protected void parseURL(URL url, String spec, int start, int limit) {
 		
-		if (flag) log.debug(String.format(">>>>> [%s, %s, %d, %d]", url, spec, start, limit));
+		if (flag) System.out.printf(">>>>> [%s, %s, %d, %d]\n", url, spec, start, limit);
 		
 		String file;
 		
@@ -81,7 +73,7 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 		else
 			file = spec;
 		
-		if (flag) log.debug(String.format(">>>>> file = [%s]", file));
+		if (flag) System.out.printf(">>>>> file = [%s]\n", file);
 		
 		setURL(url, JIJConstants.INTERNAL_URL_PROTOCOL, "", -1, null, null, file, null, null); // "rsrc"
 	}
@@ -98,36 +90,4 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////
-
-	/*
-	 * static test method
-	 */
-	private static void test01(String[] args) throws Exception {
-
-		if (flag) {
-
-		}
-	}
-
-	/*
-	 * main method
-	 */
-	public static void main(String[] args) throws Exception {
-
-		if (flag)
-			log.debug(">>>>> " + new Object() {
-			}.getClass().getEnclosingClass().getName());
-
-		if (flag)
-			test01(args);
-	}
 }

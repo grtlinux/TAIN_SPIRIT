@@ -1,5 +1,5 @@
 /**
- * Copyright 2014, 2015, 2016 TAIN, Inc. all rights reserved.
+ * Copyright 2014, 2015, 2016, 2017 TAIN, Inc. all rights reserved.
  *
  * Licensed under the GNU GENERAL PUBLIC LICENSE, Version 3, 29 June 2007 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  * -----------------------------------------------------------------
- * Copyright 2014, 2015, 2016 TAIN, Inc.
+ * Copyright 2014, 2015, 2016, 2017 TAIN, Inc.
  *
  */
 package tain.kr.runjar.v04;
@@ -26,15 +26,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 
+import org.apache.log4j.Logger;
+
 /**
  * Code Templates > Comments > Types
  *
  * <PRE>
  *   -. FileName   : RsrcURLConnection.java
- *   -. Package    : tain.kr.com.test.runJar.v02
+ *   -. Package    : tain.kr.runjar.v03
  *   -. Comment    :
  *   -. Author     : taincokr
- *   -. First Date : 2016. 4. 15. {time}
+ *   -. First Date : 2017. 2. 26. {time}
  * </PRE>
  *
  * @author taincokr
@@ -44,32 +46,82 @@ public class RsrcURLConnection extends URLConnection {
 
 	private static boolean flag = true;
 
+	private static final Logger log = Logger.getLogger(RsrcURLConnection.class);
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private ClassLoader classLoader = null;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
-	
+
+	/*
+	 * constructor
+	 */
 	public RsrcURLConnection(URL url, ClassLoader classLoader) {
-		super(url);
-		this.classLoader = classLoader;
-	}
-	
-	public void connect() throws IOException {
 		
+		super(url);
+		
+		this.classLoader = classLoader;
+		
+		if (flag)
+			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public InputStream getInputStream() throws IOException {
-		String file = URLDecoder.decode(url.getFile(), JIJConstants.UTF8_ENCODING);
-		if (!flag) System.out.println("URL : " + file);
+	
+		String file = URLDecoder.decode(url.getFile(), JIJConstants.UTF8_ENCODING);   // "UTF-8"
+		if (flag) log.debug(String.format("URL: %s", file));
 		
 		InputStream is = classLoader.getResourceAsStream(file);
 		if (is == null) {
-			throw new MalformedURLException("Could not open InputStreasm for URL '" + url + "'");
+			throw new MalformedURLException("Could not open InputStream for URL '" + url + "'");
 		}
 		
 		return is;
 	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
+	/* (non-Javadoc)
+	 * @see java.net.URLConnection#connect()
+	 */
+	@Override
+	public void connect() throws IOException {
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	/*
+	 * static test method
+	 */
+	private static void test01(String[] args) throws Exception {
+
+		if (flag) {
+
+		}
+	}
+
+	/*
+	 * main method
+	 */
+	public static void main(String[] args) throws Exception {
+
+		if (flag)
+			log.debug(">>>>> " + new Object() {
+			}.getClass().getEnclosingClass().getName());
+
+		if (flag)
+			test01(args);
+	}
 }

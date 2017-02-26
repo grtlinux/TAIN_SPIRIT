@@ -105,7 +105,7 @@ public class TestMainRunJar {
 				/*
 				 * System.getProperties
 				 */
-				if (flag) System.out.printf("\nSystem.getProperties()\n");
+				if (flag) System.out.printf("\n########## System.getProperties()\n");
 				
 				Properties prop = System.getProperties();
 				
@@ -123,7 +123,7 @@ public class TestMainRunJar {
 				/*
 				 * some elements of System.getProperties()
 				 */
-				if (flag) System.out.printf("\nsome elements of System.getProperties()\n");
+				if (flag) System.out.printf("\n########## some elements of System.getProperties()\n");
 				
 				Properties prop = System.getProperties();
 				
@@ -136,14 +136,14 @@ public class TestMainRunJar {
 				/*
 				 * ResourceBundle resources/resources
 				 */
-				if (flag) System.out.printf("\nResourceBundle.getBundle('resources/resources')\n");
+				if (flag) System.out.printf("\n########## ResourceBundle.getBundle('resources/resources')\n");
 
 				ResourceBundle rb = ResourceBundle.getBundle("resources/resources");
 				
 				String strKey = "tain.kr.com.spirit.version";
 				String strVal = rb.getString(strKey);
 				
-				if (flag) log.debug(String.format(".getBundle('resources/resources') => [%s] = [%s]", strKey, strVal));
+				if (flag) log.debug(String.format("ResourceBundle.getBundle('resources/resources') => [%s] = [%s]", strKey, strVal));
 			}
 		}
 
@@ -151,7 +151,7 @@ public class TestMainRunJar {
 			/*
 			 * Running arguments
 			 */
-			if (flag) System.out.printf("\nRunning arguments\n");
+			if (flag) System.out.printf("\n########## Running arguments\n");
 
 			for (int i=0; i < args.length; i++) {
 				if (flag) System.out.println(String.format("(%d) [%s]", i, args[i]));

@@ -69,7 +69,7 @@ public class RsrcURLStreamHandlerFactory implements URLStreamHandlerFactory {
 	@Override
 	public URLStreamHandler createURLStreamHandler(String protocol) {
 		
-		if (flag) System.out.printf(">>>>> protocol = %s\n", protocol);
+		if (!flag) System.out.printf(">>>>> protocol = %s\n", protocol);
 		
 		if (JIJConstants.INTERNAL_URL_PROTOCOL.equals(protocol))    // "rsrc"
 			return new RsrcURLStreamHandler(classLoader);

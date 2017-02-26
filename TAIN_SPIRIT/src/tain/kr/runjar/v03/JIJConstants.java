@@ -57,6 +57,7 @@ final class JIJConstants {
 	
 	static final String JAR_INTERNAL_URL_PROTOCOL_WITH_COLON = "jar:rsrc:";
 	static final String JAR_INTERNAL_SEPARATOR               = "!/";
+	
 	static final String MAIN_METHOD_NAME                     = "main";
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

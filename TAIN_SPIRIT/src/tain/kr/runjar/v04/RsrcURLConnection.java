@@ -65,7 +65,7 @@ public class RsrcURLConnection extends URLConnection {
 	public InputStream getInputStream() throws IOException {
 	
 		String file = URLDecoder.decode(url.getFile(), JIJConstants.UTF8_ENCODING);   // "UTF-8"
-		if (flag) System.out.printf("URL: %s\n", file);
+		if (!flag) System.out.printf("URL: %s\n", file);
 		
 		InputStream is = classLoader.getResourceAsStream(file);
 		if (is == null) {
@@ -81,8 +81,7 @@ public class RsrcURLConnection extends URLConnection {
 	 * @see java.net.URLConnection#connect()
 	 */
 	@Override
-	public void connect() throws IOException {
-	}
+	public void connect() throws IOException {}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 }

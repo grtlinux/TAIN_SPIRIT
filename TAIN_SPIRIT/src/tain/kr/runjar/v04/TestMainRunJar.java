@@ -101,7 +101,7 @@ public class TestMainRunJar {
 		
 		if (flag) {
 			
-			if (!flag) {
+			if (flag) {
 				/*
 				 * System.getProperties
 				 */
@@ -131,11 +131,25 @@ public class TestMainRunJar {
 				
 				if (flag) System.out.printf("IP = [%s]\n", strVal);
 			}
+			
+			if (flag) {
+				/*
+				 * ResourceBundle resources/resources
+				 */
+				if (flag) System.out.printf("\nResourceBundle.getBundle('resources/resources')\n");
+
+				ResourceBundle rb = ResourceBundle.getBundle("resources/resources");
+				
+				String strKey = "tain.kr.com.spirit.version";
+				String strVal = rb.getString(strKey);
+				
+				if (flag) log.debug(String.format(".getBundle('resources/resources') => [%s] = [%s]", strKey, strVal));
+			}
 		}
 
 		if (flag) {
 			/*
-			 * 
+			 * Running arguments
 			 */
 			if (flag) System.out.printf("\nRunning arguments\n");
 

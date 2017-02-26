@@ -19,6 +19,8 @@
  */
 package tain.kr.runjar.v03;
 
+import java.util.ResourceBundle;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -42,12 +44,27 @@ public class TestMainRunJar {
 	private static final Logger log = Logger.getLogger(TestMainRunJar.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String KEY_SPIRIT_VERSION = "tain.kr.com.spirit.version";
+	private static final String KEY_SPIRIT_DESC = "tain.kr.com.spirit.desc";
+
+	private final String version;
+	private final String desc;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
 	public TestMainRunJar() {
+		
+		ResourceBundle rb = ResourceBundle.getBundle(this.getClass().getName().replace('.', '/'));
+		
+		this.version = rb.getString(KEY_SPIRIT_VERSION);
+		this.desc = rb.getString(KEY_SPIRIT_DESC);
+		
+		if (flag) log.debug(String.format("[version=%s] [desc=%s]", this.version, this.desc));
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
@@ -74,7 +91,9 @@ public class TestMainRunJar {
 			new TestMainRunJar();
 
 		if (flag) {
-
+			for (int i=0; i < args.length; i++) {
+				if (flag) System.out.println(String.format("(%d) [%s]", i, args[i]));
+			}
 		}
 	}
 

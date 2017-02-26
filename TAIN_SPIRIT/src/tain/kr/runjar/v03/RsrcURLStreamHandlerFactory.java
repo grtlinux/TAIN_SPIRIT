@@ -19,6 +19,9 @@
  */
 package tain.kr.runjar.v03;
 
+import java.net.URLStreamHandler;
+import java.net.URLStreamHandlerFactory;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +38,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class RsrcURLStreamHandlerFactory {
+public class RsrcURLStreamHandlerFactory implements URLStreamHandlerFactory {
 
 	private static boolean flag = true;
 
@@ -43,18 +46,48 @@ public class RsrcURLStreamHandlerFactory {
 			.getLogger(RsrcURLStreamHandlerFactory.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private ClassLoader classLoader = null;
+	private URLStreamHandlerFactory factory = null;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public RsrcURLStreamHandlerFactory() {
+	public RsrcURLStreamHandlerFactory(ClassLoader classLoader) {
+		
+		this.classLoader = classLoader;
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void setURLStreamHandlerFactory(URLStreamHandlerFactory factory) {
+		this.factory = factory;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	/* (non-Javadoc)
+	 * @see java.net.URLStreamHandlerFactory#createURLStreamHandler(java.lang.String)
+	 */
+	@Override
+	public URLStreamHandler createURLStreamHandler(String protocol) {
+		
+		if (flag) log.debug(String.format(">>>>> protocol = %s\n", protocol));
+		
+		if (JIJConstants.INTERNAL_URL_PROTOCOL.equals(protocol))
+			return new RsrcURLStreamHandler(classLoader);
+		
+		if (factory != null)
+			return factory.createURLStreamHandler(protocol);
+		
+		return null;
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,9 +103,6 @@ public class RsrcURLStreamHandlerFactory {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new RsrcURLStreamHandlerFactory();
 
 		if (flag) {
 

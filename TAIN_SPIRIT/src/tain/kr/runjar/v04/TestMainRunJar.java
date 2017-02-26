@@ -64,7 +64,7 @@ public class TestMainRunJar {
 			/*
 			 * ResourceBundle
 			 */
-			if (flag) System.out.printf("\nResourceBundle\n");
+			if (flag) System.out.printf("\n########## ResourceBundle\n");
 
 			ResourceBundle rb = ResourceBundle.getBundle(this.getClass().getName().replace('.', '/'));
 			

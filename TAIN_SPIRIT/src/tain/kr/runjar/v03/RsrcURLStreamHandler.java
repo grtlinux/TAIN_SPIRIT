@@ -68,7 +68,7 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 	
 	protected void parseURL(URL url, String spec, int start, int limit) {
 		
-		if (flag) log.debug(String.format(">>>>> [%s, %s, %d, %d]\n", url, spec, start, limit));
+		if (flag) log.debug(String.format(">>>>> [%s, %s, %d, %d]", url, spec, start, limit));
 		
 		String file;
 		
@@ -81,7 +81,7 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 		else
 			file = spec;
 		
-		if (flag) log.debug(String.format(">>>>> file = [%s]\n", file));
+		if (flag) log.debug(String.format(">>>>> file = [%s]", file));
 		
 		setURL(url, JIJConstants.INTERNAL_URL_PROTOCOL, "", -1, null, null, file, null, null); // "rsrc"
 	}

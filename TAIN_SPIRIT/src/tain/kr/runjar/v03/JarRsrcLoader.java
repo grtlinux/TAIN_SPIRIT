@@ -121,11 +121,11 @@ public class JarRsrcLoader {
 				}
 				
 				ManifestInfo manifestInfo = new ManifestInfo();
-				manifestInfo.rsrcMainClass = attributes.getValue(JIJConstants.REDIRECTED_MAIN_CLASS_MANIFEST_NAME); // Rsrc-Main-Class
+				manifestInfo.rsrcMainClass = attributes.getValue(JIJConstants.REDIRECTED_MAIN_CLASS_MANIFEST_NAME); // "Rsrc-Main-Class"
 				
-				String rsrcClassPath = attributes.getValue(JIJConstants.REDIRECTED_CLASS_PATH_MANIFEST_NAME);  // Rsrc-Class-Path
+				String rsrcClassPath = attributes.getValue(JIJConstants.REDIRECTED_CLASS_PATH_MANIFEST_NAME);  // "Rsrc-Class-Path"
 				if (rsrcClassPath == null)
-					rsrcClassPath = JIJConstants.DEFAULT_REDIRECTED_CLASSPATH;   // ""
+					rsrcClassPath = JIJConstants.DEFAULT_REDIRECTED_CLASSPATH;                      // ""
 				manifestInfo.rsrcClassPath = splitSpaces(rsrcClassPath);
 				
 				if (flag && (manifestInfo.rsrcMainClass != null) && !manifestInfo.rsrcMainClass.trim().equals(""))
@@ -136,8 +136,8 @@ public class JarRsrcLoader {
 		}
 		
 		if (flag) System.err.printf("Missing attributes for JarRsrcLoader in Manifest (%s, %s)\n"
-				, JIJConstants.REDIRECTED_MAIN_CLASS_MANIFEST_NAME
-				, JIJConstants.REDIRECTED_CLASS_PATH_MANIFEST_NAME);
+				, JIJConstants.REDIRECTED_MAIN_CLASS_MANIFEST_NAME        // "Rsrc-Main-Class"
+				, JIJConstants.REDIRECTED_CLASS_PATH_MANIFEST_NAME);      // "Rsrc-Class-Path"
 		
 		return null;
 	}

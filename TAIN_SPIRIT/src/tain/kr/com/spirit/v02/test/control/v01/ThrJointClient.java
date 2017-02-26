@@ -46,7 +46,10 @@ public final class ThrJointClient extends AbsJoint {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private static final String TARGET_HOST = "192.168.0.11";
+	//private static final String TARGET_HOST = "192.168.0.11";
+	//private static final String TARGET_PORT = "3389";
+
+	private static final String TARGET_HOST = "192.168.0.15";
 	private static final String TARGET_PORT = "3389";
 	
 	private static final String CONTROL_HOST = "192.168.0.11";

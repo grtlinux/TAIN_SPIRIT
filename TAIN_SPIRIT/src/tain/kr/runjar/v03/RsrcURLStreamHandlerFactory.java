@@ -79,7 +79,7 @@ public class RsrcURLStreamHandlerFactory implements URLStreamHandlerFactory {
 		
 		if (flag) log.debug(String.format(">>>>> protocol = %s\n", protocol));
 		
-		if (JIJConstants.INTERNAL_URL_PROTOCOL.equals(protocol))
+		if (JIJConstants.INTERNAL_URL_PROTOCOL.equals(protocol))    // "rsrc"
 			return new RsrcURLStreamHandler(classLoader);
 		
 		if (factory != null)

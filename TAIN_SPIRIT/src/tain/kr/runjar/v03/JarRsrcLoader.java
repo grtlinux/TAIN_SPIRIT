@@ -132,7 +132,7 @@ public class JarRsrcLoader {
 					return manifestInfo;
 			}
 			
-			if (!flag) break;
+			if (flag) break;
 		}
 		
 		if (flag) System.err.printf("Missing attributes for JarRsrcLoader in Manifest (%s, %s)\n"

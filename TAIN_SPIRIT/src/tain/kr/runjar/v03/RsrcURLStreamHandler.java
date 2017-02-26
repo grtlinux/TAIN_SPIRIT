@@ -72,18 +72,18 @@ public class RsrcURLStreamHandler extends URLStreamHandler {
 		
 		String file;
 		
-		if (spec.startsWith(JIJConstants.INTERNAL_URL_PROTOCOL_WITH_COLON))   // rsrc:
+		if (spec.startsWith(JIJConstants.INTERNAL_URL_PROTOCOL_WITH_COLON))   // "rsrc:"
 			file = spec.substring(5);
-		else if (url.getFile().equals(JIJConstants.CURRENT_DIR))             // ./
+		else if (url.getFile().equals(JIJConstants.CURRENT_DIR))             // "./"
 			file = spec;
-		else if (url.getFile().endsWith(JIJConstants.PATH_SEPARATOR))        //  /
+		else if (url.getFile().endsWith(JIJConstants.PATH_SEPARATOR))        // "/"
 			file = url.getFile() + spec;
 		else
 			file = spec;
 		
 		if (flag) log.debug(String.format(">>>>> file = [%s]\n", file));
 		
-		setURL(url, JIJConstants.INTERNAL_URL_PROTOCOL, "", -1, null, null, file, null, null);
+		setURL(url, JIJConstants.INTERNAL_URL_PROTOCOL, "", -1, null, null, file, null, null); // "rsrc"
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

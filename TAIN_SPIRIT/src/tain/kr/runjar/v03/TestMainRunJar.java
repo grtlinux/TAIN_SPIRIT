@@ -19,7 +19,9 @@
  */
 package tain.kr.runjar.v03;
 
+import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -48,8 +50,8 @@ public class TestMainRunJar {
 	private static final String KEY_SPIRIT_VERSION = "tain.kr.com.spirit.version";
 	private static final String KEY_SPIRIT_DESC = "tain.kr.com.spirit.desc";
 
-	private final String version;
-	private final String desc;
+	private String version;
+	private String desc;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,13 +60,20 @@ public class TestMainRunJar {
 	 */
 	public TestMainRunJar() {
 		
-		ResourceBundle rb = ResourceBundle.getBundle(this.getClass().getName().replace('.', '/'));
-		
-		this.version = rb.getString(KEY_SPIRIT_VERSION);
-		this.desc = rb.getString(KEY_SPIRIT_DESC);
-		
-		if (flag) log.debug(String.format("[version=%s] [desc=%s]", this.version, this.desc));
-		
+		if (flag) {
+			/*
+			 * ResourceBundle
+			 */
+			if (flag) System.out.printf("\nResourceBundle\n");
+
+			ResourceBundle rb = ResourceBundle.getBundle(this.getClass().getName().replace('.', '/'));
+			
+			this.version = rb.getString(KEY_SPIRIT_VERSION);
+			this.desc = rb.getString(KEY_SPIRIT_DESC);
+			
+			if (flag) log.debug(String.format("ResourceBundle => [version=%s] [desc=%s]", this.version, this.desc));
+		}
+
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
@@ -89,8 +98,47 @@ public class TestMainRunJar {
 
 		if (flag)
 			new TestMainRunJar();
+		
+		if (flag) {
+			
+			if (!flag) {
+				/*
+				 * System.getProperties
+				 */
+				if (flag) System.out.printf("\nSystem.getProperties()\n");
+				
+				Properties prop = System.getProperties();
+				
+				Set<String> setKeys = prop.stringPropertyNames();
+				String[] strKeys = setKeys.toArray(new String[setKeys.size()]);
+				
+				for (String strKey : strKeys) {
+					String strVal = prop.getProperty(strKey);
+					
+					if (flag) System.out.printf("[%s] -> [%s]\n", strKey, strVal);
+				}
+			}
+			
+			if (flag) {
+				/*
+				 * some elements of System.getProperties()
+				 */
+				if (flag) System.out.printf("\nsome elements of System.getProperties()\n");
+				
+				Properties prop = System.getProperties();
+				
+				String strVal = prop.getProperty("tain.kr.com.ip", "192.168.0.11");
+				
+				if (flag) System.out.printf("IP = [%s]\n", strVal);
+			}
+		}
 
 		if (flag) {
+			/*
+			 * 
+			 */
+			if (flag) System.out.printf("\nRunning arguments\n");
+
 			for (int i=0; i < args.length; i++) {
 				if (flag) System.out.println(String.format("(%d) [%s]", i, args[i]));
 			}

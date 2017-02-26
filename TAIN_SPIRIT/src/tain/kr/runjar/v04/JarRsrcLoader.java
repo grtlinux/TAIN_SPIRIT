@@ -92,25 +92,25 @@ public final class JarRsrcLoader {
 	
 	private static ManifestInfo getManifestInfo() throws Exception {
 		
-		if (flag) System.out.printf("\t 1) JarFile.MANIFEST_NAME = %s\n\n", JarFile.MANIFEST_NAME);
+		if (!flag) System.out.printf("\t 1) JarFile.MANIFEST_NAME = %s\n\n", JarFile.MANIFEST_NAME);
 		
 		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
 		while (urls.hasMoreElements()) {
 			URL url = (URL) urls.nextElement();
-			if (flag) System.out.printf("\t 2) %s\n", url);
+			if (!flag) System.out.printf("\t 2) %s\n", url);
 			
 			InputStream is = url.openStream();
 			if (is != null) {
 				Manifest manifest = new Manifest(is);
 				Attributes attributes = manifest.getMainAttributes();
 				
-				if (flag) {
+				if (!flag) {
 					for (Map.Entry<Object, Object> entry : attributes.entrySet()) {
 						String key = String.valueOf(entry.getKey());
 						String val = String.valueOf(entry.getValue());
-						if (flag) System.out.printf("\t\t 3) [%s] = [%s]\n", key, val);
+						if (!flag) System.out.printf("\t\t 3) [%s] = [%s]\n", key, val);
 					}
-					if (flag) System.out.println();
+					if (!flag) System.out.println();
 				}
 				
 				ManifestInfo manifestInfo = new ManifestInfo();
@@ -158,7 +158,7 @@ public final class JarRsrcLoader {
 			 * begin
 			 */
 			ManifestInfo manifestInfo = getManifestInfo();
-			if (flag) System.out.printf("\t 4) [%s] = %s\n", manifestInfo.rsrcMainClass, new ArrayList<String>(Arrays.asList(manifestInfo.rsrcClassPath)));
+			if (!flag) System.out.printf("\t 4) [%s] = %s\n", manifestInfo.rsrcMainClass, new ArrayList<String>(Arrays.asList(manifestInfo.rsrcClassPath)));
 			
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			URL.setURLStreamHandlerFactory(new RsrcURLStreamHandlerFactory(classLoader));

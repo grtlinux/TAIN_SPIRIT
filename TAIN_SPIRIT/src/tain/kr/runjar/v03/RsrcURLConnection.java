@@ -71,7 +71,7 @@ public class RsrcURLConnection extends URLConnection {
 	
 	public InputStream getInputStream() throws IOException {
 	
-		String file = URLDecoder.decode(url.getFile(), JIJConstants.UTF8_ENCODING);   // UTF-8
+		String file = URLDecoder.decode(url.getFile(), JIJConstants.UTF8_ENCODING);   // "UTF-8"
 		if (flag) log.debug(String.format("URL: %s", file));
 		
 		InputStream is = classLoader.getResourceAsStream(file);

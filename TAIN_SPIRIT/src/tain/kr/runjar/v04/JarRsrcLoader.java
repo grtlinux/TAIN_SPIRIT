@@ -32,8 +32,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.apache.log4j.Logger;
-
 /**
  * Code Templates > Comments > Types
  *
@@ -48,11 +46,9 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class JarRsrcLoader {
+public final class JarRsrcLoader {
 
 	private static boolean flag = true;
-
-	private static final Logger log = Logger.getLogger(JarRsrcLoader.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,10 +56,7 @@ public class JarRsrcLoader {
 	/*
 	 * constructor
 	 */
-	public JarRsrcLoader() {
-		if (flag)
-			log.debug(">>>>> in class " + this.getClass().getSimpleName());
-	}
+	public JarRsrcLoader() {}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -195,11 +188,6 @@ public class JarRsrcLoader {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		if (flag)
-			log.debug(">>>>> " + new Object() {
-			}.getClass().getEnclosingClass().getName());
-
-		if (flag)
-			test01(args);
+		if (flag) test01(args);
 	}
 }

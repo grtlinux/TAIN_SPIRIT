@@ -143,7 +143,7 @@ public final class ThrRecvSend extends Thread {
 					
 					this.joint.flagStopThread = true;
 					
-					if (flag) System.out.printf("[%s] END ...\n", Thread.currentThread().getName());
+					if (flag) System.out.printf("%s [END] ...\n", Thread.currentThread().getName());
 				}
 			}
 		}

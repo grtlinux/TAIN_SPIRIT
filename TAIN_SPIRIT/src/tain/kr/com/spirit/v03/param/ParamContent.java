@@ -122,6 +122,10 @@ public final class ParamContent extends AbsParam {
 			System.out.printf("[%s] = [%s]\n", strKeyDesc,  ParamContent.getInstance().getString(strKeyDesc));
 			System.out.printf("[%s] = [%s]\n", strKeyIp,  ParamContent.getInstance().getString(strKeyIp, "192.168.0.11"));
 		}
+		
+		if (flag) {
+			ParamContent.getInstance().printInformation();
+		}
 	}
 
 	/*

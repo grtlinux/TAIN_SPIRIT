@@ -120,7 +120,10 @@ public final class ThrServer extends Thread {
 						 * recv
 						 */
 						
-						recv();
+						if (!recv()) {
+							LoopSleep.sleep(1000);
+							continue;
+						}
 						
 						this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
 						
@@ -163,16 +166,18 @@ public final class ThrServer extends Thread {
 		}
 	}
 	
-	private void send() throws Exception {
+	private boolean send() throws Exception {
 		
 		try {
 			this.dos.write(this.bytSend, 0, this.nSend);
 		} catch (IOException e) {
 			throw e;
 		}
+		
+		return true;
 	}
 	
-	private void recv() throws Exception {
+	private boolean recv() throws Exception {
 		
 		try {
 			this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
@@ -184,10 +189,14 @@ public final class ThrServer extends Thread {
 				throw new Exception("read data of EOF. end of stream...");
 			}
 		} catch (SocketTimeoutException e) {
-			throw e;
+			e.printStackTrace();
+			// throw e;
+			return false;
 		} catch (Exception e) {
 			throw e;
 		}
+		
+		return true;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

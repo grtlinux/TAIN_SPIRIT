@@ -181,6 +181,8 @@ public final class MainControlServer {
 	 */
 	private static void test01(String[] args) throws Exception {
 
+		if (flag) ParamContent.getInstance().printInformation();
+
 		if (flag)
 			new MainControlServer().execute();
 	}

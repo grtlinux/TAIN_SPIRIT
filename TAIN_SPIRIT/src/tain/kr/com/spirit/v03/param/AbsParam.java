@@ -77,7 +77,34 @@ public abstract class AbsParam {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String KEY_INFORMATION = "tain.kr.com.spirit.information";
+	private static final String KEY_PROJECT = "tain.kr.com.spirit.project";
+	private static final String KEY_COMPANY = "tain.kr.com.spirit.company";
+	private static final String KEY_AUTHOR = "tain.kr.com.spirit.author";
+	private static final String KEY_VERSION = "tain.kr.com.spirit.version";
+	private static final String KEY_SITE = "tain.kr.com.spirit.site";
+	private static final String KEY_DESC = "tain.kr.com.spirit.desc";
+	private static final String KEY_COPYRIGHT = "tain.kr.com.spirit.copyright";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void printInformation() {
+		
+		if (flag) {
+			if (flag) System.out.printf("\t----------------------------------------------------\n");
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_INFORMATION, this.resourceBundle.getString(KEY_INFORMATION));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_PROJECT, this.resourceBundle.getString(KEY_PROJECT));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_COMPANY, this.resourceBundle.getString(KEY_COMPANY));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_AUTHOR, this.resourceBundle.getString(KEY_AUTHOR));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_VERSION, this.resourceBundle.getString(KEY_VERSION));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_SITE, this.resourceBundle.getString(KEY_SITE));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_DESC, this.resourceBundle.getString(KEY_DESC));
+			if (flag) System.out.printf("\t[%s] = [%s]\n", KEY_COPYRIGHT, this.resourceBundle.getString(KEY_COPYRIGHT));
+			if (flag) System.out.printf("\t----------------------------------------------------\n");
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////

@@ -140,10 +140,8 @@ public final class Utils {
 	public static void main(String[] args) throws Exception {
 
 		if (flag)
-			log.debug(">>>>> " + new Object() {
-			}.getClass().getEnclosingClass().getName());
+			log.debug(">>>>> " + new Object(){}.getClass().getEnclosingClass().getName());
 
-		if (flag)
-			test01(args);
+		if (flag) test01(args);
 	}
 }

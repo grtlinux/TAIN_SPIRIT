@@ -78,7 +78,7 @@ public final class ThrRecvSend extends Thread {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	protected static final int SIZ_DEF_BYTDATA = 4096;
+	protected static final int SIZ_RECV = 4096;
 
 	private LoopSleep loopSleep;
 	
@@ -96,7 +96,7 @@ public final class ThrRecvSend extends Thread {
 			 */
 			this.loopSleep = new LoopSleep();
 			
-			this.bytRecv = new byte[SIZ_DEF_BYTDATA];
+			this.bytRecv = new byte[SIZ_RECV];
 			this.nRecv = 0;
 		}
 		
@@ -152,7 +152,7 @@ public final class ThrRecvSend extends Thread {
 	private boolean recv() throws Exception {
 		
 		try {
-			this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_DEF_BYTDATA);
+			this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
 			if (this.nRecv < 0) {
 				/*
 				 * EOF -> finish

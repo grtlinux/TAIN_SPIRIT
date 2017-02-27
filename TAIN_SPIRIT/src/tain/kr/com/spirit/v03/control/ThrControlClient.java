@@ -19,7 +19,17 @@
  */
 package tain.kr.com.spirit.v03.control;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.nio.charset.Charset;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v03.joint.ThrJointClient;
+import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v03.param.ParamContent;
 
 /**
  * Code Templates > Comments > Types
@@ -35,26 +45,131 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrControlClient {
+public final class ThrControlClient extends Thread {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(ThrControlClient.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private static final String THREAD_NAME = "CONTROL_CLIENT";
+	
+	private static final String KEY_CONTROL_HOST = "tain.kr.com.spirit.control.host";
+	private static final String KEY_CONTROL_PORT = "tain.kr.com.spirit.control.port";
+	
+	private final String controlHost;
+	private final String controlPort;
+
+	private final Socket socket;
+	private final DataInputStream dis;
+	private final DataOutputStream dos;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrControlClient() {
+	public ThrControlClient() throws Exception {
+
+		super(THREAD_NAME);
+		
+		this.controlHost = ParamContent.getInstance().getString(KEY_CONTROL_HOST, "192.168.0.11");
+		this.controlPort = ParamContent.getInstance().getString(KEY_CONTROL_PORT, "20025");
+		
+		this.socket = new Socket(this.controlHost, Integer.parseInt(this.controlPort));
+		if (this.socket == null) {
+			throw new IOException("ERROR: socket is null pointers..");
+		}
+		this.dis = new DataInputStream(this.socket.getInputStream());
+		this.dos = new DataOutputStream(this.socket.getOutputStream());
+
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String TYP_CHARSET = "euc-kr";
+
+	private static final int SIZ_RECV = 4096;
+
+	private String strRecv;
+	private byte[] bytRecv;
+	private int nRecv;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		
+		if (flag) {
+			/*
+			 * start thread process : client
+			 * recv
+			 */
+			try {
+				while (true) {
+					
+					if (flag) {
+						/*
+						 * recv
+						 */
+						this.bytRecv = new byte[SIZ_RECV];
+						
+						try {
+							this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
+
+							if (this.nRecv < 0) {
+								/*
+								 * EOF
+								 */
+								if (flag) System.out.printf("%s [STATUS] read data of EOF...\n", Thread.currentThread().getName());
+								throw new Exception("read data of EOF, end of stream");
+							}
+						} catch (Exception e) {
+							/*
+							 * Exception
+							 */
+							throw e;
+						}
+						
+						this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
+						
+						if (flag) System.out.printf("%s [STATUS] RECV [%d:%s]\n"
+								, Thread.currentThread().getName(), this.nRecv, this.strRecv);
+					} // end of recv
+					
+					if (flag) {
+						/*
+						 * run thread process
+						 */
+						new ThrJointClient().start();
+					}
+					
+					if (flag) {
+						/*
+						 * sleep
+						 */
+						LoopSleep.sleep(1 * 1000);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (flag) {
+					/*
+					 * close
+					 */
+					if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
+					if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
+					if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
+				}
+			}
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////

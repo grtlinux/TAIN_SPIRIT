@@ -19,6 +19,7 @@
  */
 package tain.kr.com.spirit.v03.param;
 
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -73,7 +74,14 @@ public abstract class AbsParam {
 	}
 	
 	protected String getStringFromResourceBundle(String key) {
-		return this.resourceBundle.getString(key);
+		
+		String strValue = null;
+		
+		try {
+			strValue = this.resourceBundle.getString(key);
+		} catch (MissingResourceException e) {}
+		
+		return strValue;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////

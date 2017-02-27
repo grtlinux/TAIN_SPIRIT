@@ -21,7 +21,7 @@ package tain.kr.com.spirit.v03.test.client;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v01.loop.LoopSleep;
+import tain.kr.com.spirit.v03.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types

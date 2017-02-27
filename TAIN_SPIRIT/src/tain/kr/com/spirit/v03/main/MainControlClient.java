@@ -22,6 +22,7 @@ package tain.kr.com.spirit.v03.main;
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v03.param.ParamContent;
 import tain.kr.com.spirit.v03.control.ThrControlClient;
 
 /**
@@ -75,6 +76,8 @@ public final class MainControlClient {
 
 		if (flag)
 			new MainControlClient();
+
+		if (flag) ParamContent.getInstance().printInformation();
 
 		if (flag) {
 			/*

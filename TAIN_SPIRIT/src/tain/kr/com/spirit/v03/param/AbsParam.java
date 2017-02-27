@@ -19,6 +19,9 @@
  */
 package tain.kr.com.spirit.v03.param;
 
+import java.util.Properties;
+import java.util.ResourceBundle;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,25 +38,44 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class AbsParam {
+public abstract class AbsParam {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(AbsParam.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected static final String FILE_NAME_RESOURCES = "resources/resources";
+
+	protected final Properties prop;
+	protected final ResourceBundle resourceBundle;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public AbsParam() {
-		if (flag)
+	protected AbsParam() {
+		
+		this.prop = System.getProperties();
+		this.resourceBundle = ResourceBundle.getBundle(FILE_NAME_RESOURCES);
+		
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected String getStringFromSystem(String key) {
+		return this.prop.getProperty(key);
+	}
+	
+	protected String getStringFromResourceBundle(String key) {
+		return this.resourceBundle.getString(key);
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +91,6 @@ public class AbsParam {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new AbsParam();
 
 		if (flag) {
 

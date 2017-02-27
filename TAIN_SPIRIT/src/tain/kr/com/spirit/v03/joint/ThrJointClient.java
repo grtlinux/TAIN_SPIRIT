@@ -51,11 +51,11 @@ public final class ThrJointClient extends AbsJoint {
 	
 	private static final String THREAD_NAME = "JOINT_CLIENT";
 	
-	private static final String KEY_TARGET_HOST = "tain.kr.com.spirit.control.host";
-	private static final String KEY_TARGET_PORT = "tain.kr.com.spirit.control.port";
+	private static final String KEY_TARGET_HOST = "tain.kr.com.spirit.target.host";
+	private static final String KEY_TARGET_PORT = "tain.kr.com.spirit.target.port";
 
-	private static final String KEY_JOINT_HOST = "tain.kr.com.spirit.control.host";
-	private static final String KEY_JOINT_PORT = "tain.kr.com.spirit.control.port";
+	private static final String KEY_JOINT_HOST = "tain.kr.com.spirit.joint.host";
+	private static final String KEY_JOINT_PORT = "tain.kr.com.spirit.joint.port";
 	
 	private final String targetHost;
 	private final String targetPort;
@@ -133,11 +133,11 @@ public final class ThrJointClient extends AbsJoint {
 			 * create thread
 			 */
 			try {
-				this.thread1 = new ThrRecvSend(String.format("CONTROL_CLIENT_RECVSEND_01"), this
-						, this.socket1.getInputStream(), this.socket2.getOutputStream());
-
-				this.thread2 = new ThrRecvSend(String.format("CONTROL_CLIENT_RECVSEND_02"), this
+				this.thread1 = new ThrRecvSend(String.format("JOINT_CLIENT_RECVSEND_01"), this
 						, this.socket2.getInputStream(), this.socket1.getOutputStream());
+
+				this.thread2 = new ThrRecvSend(String.format("JOINT_CLIENT_RECVSEND_02"), this
+						, this.socket1.getInputStream(), this.socket2.getOutputStream());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;

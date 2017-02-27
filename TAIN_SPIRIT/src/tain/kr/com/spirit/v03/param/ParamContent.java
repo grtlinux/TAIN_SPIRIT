@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ParamContent {
+public final class ParamContent extends AbsParam {
 
 	private static boolean flag = true;
 
@@ -47,13 +47,41 @@ public class ParamContent {
 	/*
 	 * constructor
 	 */
-	public ParamContent() {
-		if (flag)
+	private ParamContent() {
+		
+		super();
+		
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public synchronized String getString(String key) {
+		
+		String value;
+		
+		value = getStringFromSystem(key);
+		if (value != null)
+			return value;
+		
+		value = getStringFromResourceBundle(key);
+		if (value != null)
+			return value;
+		
+		return null;
+	}
+	
+	public String getString(String key, String defaultValue) {
+		
+		String value = getString(key);
+		if (value == null)
+			return defaultValue;
+		
+		return value;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +90,18 @@ public class ParamContent {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static ParamContent instance = null;
+	
+	public static final synchronized ParamContent getInstance() {
+		
+		if (instance == null) {
+			instance = new ParamContent();
+		}
+		
+		return instance;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -70,11 +110,17 @@ public class ParamContent {
 	 */
 	private static void test01(String[] args) throws Exception {
 
-		if (flag)
-			new ParamContent();
-
 		if (flag) {
-
+			/*
+			 * test begin
+			 */
+			String strKeyVersion = "tain.kr.com.spirit.version";
+			String strKeyDesc = "tain.kr.com.spirit.desc";
+			String strKeyIp = "tain.kr.com.spirit.ip";
+			
+			System.out.printf("[%s] = [%s]\n", strKeyVersion, ParamContent.getInstance().getString(strKeyVersion));
+			System.out.printf("[%s] = [%s]\n", strKeyDesc,  ParamContent.getInstance().getString(strKeyDesc));
+			System.out.printf("[%s] = [%s]\n", strKeyIp,  ParamContent.getInstance().getString(strKeyIp, "192.168.0.11"));
 		}
 	}
 

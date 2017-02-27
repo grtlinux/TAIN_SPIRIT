@@ -81,6 +81,8 @@ public final class MainServer {
 		if (flag)
 			new MainServer();
 
+		if (flag) ParamContent.getInstance().printInformation();
+		
 		if (flag) {
 			/*
 			 * begin server

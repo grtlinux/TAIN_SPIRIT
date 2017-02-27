@@ -19,7 +19,12 @@
  */
 package tain.kr.com.spirit.v03.test.server;
 
+import java.net.ServerSocket;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v03.param.ParamContent;
 
 /**
  * Code Templates > Comments > Types
@@ -35,7 +40,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainServer {
+public final class MainServer {
 
 	private static boolean flag = true;
 
@@ -63,6 +68,9 @@ public class MainServer {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String KEY_LISTEN_PORT = "tain.kr.com.spirit.test.server.port";
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -74,7 +82,31 @@ public class MainServer {
 			new MainServer();
 
 		if (flag) {
-
+			/*
+			 * begin server
+			 */
+			String listenPort = ParamContent.getInstance().getString(KEY_LISTEN_PORT, "13389");
+			
+			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(listenPort));
+			if (flag) System.out.printf(">>> listening port = %s\n", listenPort);
+			
+			while (true) {
+				if (flag) {
+					/*
+					 * server thread
+					 */
+					Thread thread = new ThrServer(serverSocket);
+					thread.start();
+					if (flag) thread.join();
+				}
+				
+				if (flag) {
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(1 * 500);
+				}
+			}
 		}
 	}
 

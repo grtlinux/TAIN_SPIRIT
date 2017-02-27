@@ -19,7 +19,14 @@
  */
 package tain.kr.com.spirit.v03.joint;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.Logger;
+
+import tain.kr.com.spirit.v03.main.MainControlServer;
+import tain.kr.com.spirit.v03.recvsend.ThrRecvSend;
 
 /**
  * Code Templates > Comments > Types
@@ -35,26 +42,134 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class ThrJointServer {
+public final class ThrJointServer extends AbsJoint {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(ThrJointServer.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private static final String THREAD_NAME = "JOINT_SERVER";
+	
+	private static final String STR_MSG = "SIGN";
+	
+	private final MainControlServer mainControlServer;
+	private final ServerSocket jointServerSocket;
+	
+	private Socket socket1;
+	private Socket socket2;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public ThrJointServer() {
+	public ThrJointServer(MainControlServer mainControlServer, ServerSocket jointServerSocket) throws Exception {
+		
+		super(THREAD_NAME);
+		
+		this.mainControlServer = mainControlServer;
+		this.jointServerSocket = jointServerSocket;
+		
+		if (flag) {
+			/*
+			 * make socket to connect
+			 */
+			this.socket1 = this.jointServerSocket.accept();  // MainClient connection
+			
+			/*
+			 * send signal
+			 */
+			this.mainControlServer.getQueue().put(STR_MSG);  // send signal
+			
+			this.socket2 = this.jointServerSocket.accept();  // ThrJointClient connection
+		}
+		
+		if (flag) {
+			/*
+			 * validate
+			 */
+			if (this.socket1 == null) {
+				throw new Exception("the value of socket1 is null pointer...");
+			}
+			
+			if (this.socket2 == null) {
+				throw new Exception("the value of socket2 is null pointer...");
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * set options
+			 */
+			this.socket1.setSoTimeout(10 * 1000);
+			this.socket2.setSoTimeout(10 * 1000);
+		}
+		
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private ThrRecvSend thread1;
+	private ThrRecvSend thread2;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void run() {
+		
+		this.thread1 = null;
+		this.thread2 = null;
+		
+		if (flag) {
+			/*
+			 * create thread
+			 */
+			try {
+				this.thread1 = new ThrRecvSend(String.format("JOINT_SERVER_RECVSEND_01"), this
+						, this.socket1.getInputStream(), this.socket2.getOutputStream());
+
+				this.thread2 = new ThrRecvSend(String.format("JOINT_SERVER_RECVSEND_02"), this
+						, this.socket2.getInputStream(), this.socket1.getOutputStream());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * start thread
+			 */
+			this.thread1.start();
+			this.thread2.start();
+		}
+		
+		if (flag) {
+			/*
+			 * join thread
+			 */
+			try {
+				this.thread1.join();
+				this.thread2.join();
+			} catch (InterruptedException e) {}
+		}
+		
+		if (flag) {
+			/*
+			 * close
+			 */
+			if (this.socket1 != null) try { this.socket1.close(); } catch (IOException e) {}
+			if (this.socket2 != null) try { this.socket2.close(); } catch (IOException e) {}
+			
+			if (flag) System.out.printf("[%s] END ...\n", Thread.currentThread().getName());
+		}
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +184,6 @@ public class ThrJointServer {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrJointServer();
 
 		if (flag) {
 

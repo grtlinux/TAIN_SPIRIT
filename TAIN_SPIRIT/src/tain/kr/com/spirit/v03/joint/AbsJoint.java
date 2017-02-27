@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class AbsJoint {
+public abstract class AbsJoint extends Thread {
 
 	private static boolean flag = true;
 
@@ -47,12 +47,18 @@ public class AbsJoint {
 	/*
 	 * constructor
 	 */
-	public AbsJoint() {
-		if (flag)
+	public AbsJoint(String thrName) {
+		
+		super(thrName);
+		
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public boolean flagStopThread = false;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +75,6 @@ public class AbsJoint {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new AbsJoint();
 
 		if (flag) {
 

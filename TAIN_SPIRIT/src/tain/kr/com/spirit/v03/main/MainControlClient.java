@@ -21,6 +21,9 @@ package tain.kr.com.spirit.v03.main;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v03.control.ThrControlClient;
+
 /**
  * Code Templates > Comments > Types
  *
@@ -35,7 +38,7 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class MainControlClient {
+public final class MainControlClient {
 
 	private static boolean flag = true;
 
@@ -74,7 +77,26 @@ public class MainControlClient {
 			new MainControlClient();
 
 		if (flag) {
-
+			/*
+			 * begin loop of client thread
+			 */
+			for (int i=0; i < 10000; i++) {
+				if (flag) {
+					/*
+					 * client thread
+					 */
+					Thread thread = new ThrControlClient();
+					thread.start();
+					thread.join();
+				}
+				
+				if (flag) {
+					/*
+					 * sleep
+					 */
+					LoopSleep.sleep(30 * 1000);
+				}
+			}
 		}
 	}
 

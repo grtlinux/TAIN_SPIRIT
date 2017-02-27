@@ -22,6 +22,7 @@ package tain.kr.com.spirit.v03.test.client;
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v03.param.ParamContent;
 
 /**
  * Code Templates > Comments > Types
@@ -75,7 +76,9 @@ public final class MainClient {
 		if (flag)
 			new MainClient();
 
-		if (flag) {
+		if (flag) ParamContent.getInstance().printInformation();
+
+		if (!flag) {
 			/*
 			 * single thread job
 			 */
@@ -84,7 +87,7 @@ public final class MainClient {
 			thread.join();
 		}
 		
-		if (!flag) {
+		if (flag) {
 			/*
 			 * sequence thread job
 			 */
@@ -102,7 +105,7 @@ public final class MainClient {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(2 * 1000);
+					LoopSleep.sleep(5 * 1000);
 				}
 			}
 		}
@@ -119,5 +122,7 @@ public final class MainClient {
 
 		if (flag)
 			test01(args);
+		
+		System.exit(0);
 	}
 }

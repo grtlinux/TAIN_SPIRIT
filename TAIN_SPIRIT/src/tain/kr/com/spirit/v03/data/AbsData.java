@@ -19,6 +19,10 @@
  */
 package tain.kr.com.spirit.v03.data;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,27 +39,58 @@ import org.apache.log4j.Logger;
  * @author taincokr
  *
  */
-public class AbsData {
+public abstract class AbsData implements Cloneable {
 
 	private static boolean flag = true;
 
 	private static final Logger log = Logger.getLogger(AbsData.class);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	protected static final int SIZ_DEF_BYTDATA = 4096;
+	
+	protected final byte[] bytData;
+	protected int size = 0;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
 	 * constructor
 	 */
-	public AbsData() {
-		if (flag)
+	public AbsData(int size) {
+		
+		this.bytData = new byte[size];
+		
+		if (!flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
+	public AbsData() {
+		this(SIZ_DEF_BYTDATA);
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public byte[] getBytData() {
+		return this.bytData;
+	}
+	
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	public int getSize() {
+		return this.size;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public abstract int readFromInputStream(InputStream is) throws IOException;
+	public abstract void writeToOutputStream(OutputStream os) throws IOException;
+	public abstract DataContent createClone();
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +104,6 @@ public class AbsData {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new AbsData();
 
 		if (flag) {
 

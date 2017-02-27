@@ -62,7 +62,7 @@ public class ExpRuntimeException extends RuntimeException {
 	}
 
 	public ExpRuntimeException() {
-		this("NO MESSAGE(tain.co.kr)");
+		this("NO MESSAGE (tain.co.kr)");
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////

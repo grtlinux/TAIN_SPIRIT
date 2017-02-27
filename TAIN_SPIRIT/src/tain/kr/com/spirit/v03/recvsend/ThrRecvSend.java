@@ -111,8 +111,10 @@ public final class ThrRecvSend extends Thread {
 						/*
 						 * recv
 						 */
-						if (!recv())
+						if (!recv()) {
+							loopSleep.sleep();
 							continue;
+						}
 					}
 					
 					if (flag) {

@@ -144,7 +144,7 @@ public final class ThrServer extends Thread {
 						if (flag) System.out.printf("%s [SEND] [%d:%s]\n", Thread.currentThread().getName(), this.nSend, this.strSend);
 					}
 					
-					if (flag) {
+					if (!flag) {
 						/*
 						 * sleep
 						 */

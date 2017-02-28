@@ -38,5 +38,6 @@ public interface ImpLoop {
 
 	public abstract void reset();
 	public abstract void sleep();
+	public abstract void sleep(int times);
 	public abstract long getMSec();
 }

@@ -91,9 +91,12 @@ public final class MainControlClient {
 
 		if (flag) {
 			/*
-			 * begin loop of client thread
+			 * begin thread
 			 */
-			for (int i=0; ; i = ++i % 1000) {
+			while (true) {
+				/*
+				 * loop of joint client thread
+				 */
 				if (flag) {
 					/*
 					 * client thread

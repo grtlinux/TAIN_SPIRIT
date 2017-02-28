@@ -82,7 +82,16 @@ public final class LoopSleep implements ImpLoop {
 	@Override
 	public void sleep() {
 		
-		long msec = (this.index / 10 + 1) * 100;
+		sleep(1);
+	}
+
+	/* (non-Javadoc)
+	 * @see tain.kr.com.spirit.v04.loop.ImpLoop#sleep()
+	 */
+	@Override
+	public void sleep(int times) {
+		
+		long msec = (this.index / 10 + 1) * 100 * times;
 		
 		try {
 			Thread.sleep(msec);
@@ -109,7 +118,7 @@ public final class LoopSleep implements ImpLoop {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public final static void sleep(long msec) {
+	public final static void threadSleep(long msec) {
 		
 		try {
 			Thread.sleep(msec);

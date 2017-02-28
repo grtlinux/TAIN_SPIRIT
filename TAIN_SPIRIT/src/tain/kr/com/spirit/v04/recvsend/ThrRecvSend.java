@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v04.joint.AbsJoint;
 import tain.kr.com.spirit.v04.loop.LoopSleep;
+import tain.kr.com.spirit.v04.util.Utils;
 
 
 /**
@@ -106,7 +107,7 @@ public final class ThrRecvSend extends Thread {
 				/*
 				 * start loop
 				 */
-				while (!this.joint.flagStopThread) {
+				while (!this.joint.getFlagStopThread()) {
 					if (flag) {
 						/*
 						 * recv
@@ -132,7 +133,8 @@ public final class ThrRecvSend extends Thread {
 					}
 				}
 			} catch (Exception e) {
-				if (!flag) e.printStackTrace();
+				if (flag) System.out.println(e + " - " + Utils.getInstance().getDateTime());
+				// e.printStackTrace();
 			} finally {
 				if (flag) {
 					/*
@@ -141,7 +143,7 @@ public final class ThrRecvSend extends Thread {
 					if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
 					if (this.dos != null) try { this.dos.close(); } catch (IOException e) {}
 					
-					this.joint.flagStopThread = true;
+					this.joint.setFlagStopThread(true);
 					
 					if (flag) System.out.printf("%s [END] ...\n", Thread.currentThread().getName());
 				}
@@ -149,16 +151,18 @@ public final class ThrRecvSend extends Thread {
 		}
 	}
 	
-	private boolean recv() throws Exception {
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private final boolean recv() throws Exception {
 		
 		try {
 			this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
 			if (this.nRecv < 0) {
 				/*
 				 * EOF -> finish
+				 * socket rejection
 				 */
-				if (flag) System.out.printf("%s [EOF] read data of EOF...\n", Thread.currentThread().getName());
-				throw new Exception("read data of EOF. end of stream...");
+				throw new Exception(String.format("%s [EOF] return value of read is -1..", Thread.currentThread().getName()));
 			}
 		} catch (SocketTimeoutException e) {
 			// throw e;
@@ -170,7 +174,7 @@ public final class ThrRecvSend extends Thread {
 		return true;
 	}
 
-	private boolean send() throws Exception {
+	private final boolean send() throws Exception {
 		
 		try {
 			this.dos.write(this.bytRecv, 0, this.nRecv);

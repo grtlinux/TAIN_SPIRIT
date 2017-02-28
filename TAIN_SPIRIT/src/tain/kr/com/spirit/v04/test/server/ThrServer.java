@@ -167,17 +167,6 @@ public final class ThrServer extends Thread {
 		}
 	}
 	
-	private boolean send() throws Exception {
-		
-		try {
-			this.dos.write(this.bytSend, 0, this.nSend);
-		} catch (IOException e) {
-			throw e;
-		}
-		
-		return true;
-	}
-	
 	private boolean recv() throws Exception {
 		
 		try {
@@ -195,6 +184,17 @@ public final class ThrServer extends Thread {
 			// throw e;
 			return false;
 		} catch (Exception e) {
+			throw e;
+		}
+		
+		return true;
+	}
+	
+	private boolean send() throws Exception {
+		
+		try {
+			this.dos.write(this.bytSend, 0, this.nSend);
+		} catch (IOException e) {
 			throw e;
 		}
 		

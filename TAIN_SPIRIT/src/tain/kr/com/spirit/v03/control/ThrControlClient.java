@@ -137,7 +137,7 @@ public final class ThrControlClient extends Thread {
 						
 						this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
 						
-						if (flag) System.out.printf("%s [STATUS] RECV [%d:%s]\n"
+						if (flag) System.out.printf("%s [RECV] [%d:%s]\n"
 								, Thread.currentThread().getName(), this.nRecv, this.strRecv);
 					} // end of recv
 					

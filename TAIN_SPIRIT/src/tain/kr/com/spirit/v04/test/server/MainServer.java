@@ -23,8 +23,8 @@ import java.net.ServerSocket;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v03.loop.LoopSleep;
-import tain.kr.com.spirit.v03.param.ParamContent;
+import tain.kr.com.spirit.v04.loop.LoopSleep;
+import tain.kr.com.spirit.v04.param.ParamContent;
 
 /**
  * Code Templates > Comments > Types

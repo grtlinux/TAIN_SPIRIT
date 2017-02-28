@@ -79,6 +79,11 @@ public final class ThrJointServer extends AbsJoint {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
+	private DataInputStream dis;
+	private DataOutputStream dos;
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
 	private final boolean listenJoint() throws Exception {
 		
 		if (flag) {
@@ -89,6 +94,9 @@ public final class ThrJointServer extends AbsJoint {
 			if (this.socketJoint == null) {
 				throw new Exception("the value of socketJoint is null pointer...");
 			}
+			
+			this.dis = new DataInputStream(this.socketJoint.getInputStream());
+			this.dos = new DataOutputStream(this.socketJoint.getOutputStream());
 		}
 		
 		if (flag) {
@@ -105,9 +113,8 @@ public final class ThrJointServer extends AbsJoint {
 			try {
 				recv();
 			} catch (Exception e) {
+				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
 				throw e;
-			} finally {
-				try { this.socketJoint.close(); } catch (IOException e) {}
 			}
 		}
 		
@@ -122,7 +129,7 @@ public final class ThrJointServer extends AbsJoint {
 			 */
 			this.socketClient = this.jointServerSocket.accept();
 			if (this.socketClient == null) {
-				try { this.socketJoint.close(); } catch (IOException e) {}
+				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 				throw new Exception("the value of socketClient is null pointer...");
 			}
 		}
@@ -141,10 +148,9 @@ public final class ThrJointServer extends AbsJoint {
 			try {
 				send("RES");
 			} catch (Exception e) {
+				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
+				if (this.socketClient != null) try { this.socketClient.close(); } catch (IOException e1) {}
 				throw e;
-			} finally {
-				try { this.socketJoint.close(); } catch (IOException e) {}
-				try { this.socketClient.close(); } catch (IOException e) {}
 			}
 		}
 		
@@ -155,12 +161,11 @@ public final class ThrJointServer extends AbsJoint {
 
 	private final boolean recv() throws Exception {
 		
-		DataInputStream dis = new DataInputStream(this.socketJoint.getInputStream());
 		byte[] bytRecv = new byte[10];
 		int nRecv;
 		
 		try {
-			nRecv = dis.read(bytRecv, 0, 10);
+			nRecv = this.dis.read(bytRecv, 0, 10);
 			if (nRecv < 0) {
 				/*
 				 * EOF -> finish
@@ -185,8 +190,6 @@ public final class ThrJointServer extends AbsJoint {
 			throw e;   // -> finish
 		} catch (Exception e) {
 			throw e;   // -> finish
-		} finally {
-			if (dis != null) try { dis.close(); } catch (IOException e) {}
 		}
 
 		return true;
@@ -194,15 +197,12 @@ public final class ThrJointServer extends AbsJoint {
 	
 	private final boolean send(final String res) throws Exception {
 		
-		DataOutputStream dos = new DataOutputStream(this.socketJoint.getOutputStream());
 		byte[] bytSend = res.getBytes();
 		
 		try {
-			dos.write(bytSend, 0, bytSend.length);
+			this.dos.write(bytSend, 0, bytSend.length);
 		} catch (IOException e) {
 			throw e;    // -> finish
-		} finally {
-			if (dos != null) try { dos.close(); } catch (IOException e) {}
 		}
 		
 		return true;

@@ -102,7 +102,7 @@ public final class MainControlClient {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(10 * 1000);
+					LoopSleep.sleep(5 * 60 * 1000);
 				}
 			}
 		}

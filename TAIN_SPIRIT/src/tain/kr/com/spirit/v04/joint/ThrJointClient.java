@@ -139,7 +139,7 @@ public final class ThrJointClient extends AbsJoint {
 		return true;
 	}
 	
-	private boolean connectTarget() throws Exception {
+	private final boolean connectTarget() throws Exception {
 		
 		if (flag) {
 			/*
@@ -157,7 +157,7 @@ public final class ThrJointClient extends AbsJoint {
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private boolean send(final String req) throws Exception {
+	private final boolean send(final String req) throws Exception {
 		
 		DataOutputStream dos = new DataOutputStream(this.socketJoint.getOutputStream());
 		byte[] bytSend = req.getBytes();
@@ -173,7 +173,7 @@ public final class ThrJointClient extends AbsJoint {
 		return true;
 	}
 	
-	private boolean recv() throws Exception {
+	private final boolean recv() throws Exception {
 		
 		DataInputStream dis = new DataInputStream(this.socketJoint.getInputStream());
 		byte[] bytRecv = new byte[10];

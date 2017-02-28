@@ -170,6 +170,8 @@ public final class ThrJointClient extends AbsJoint {
 			throw e;    // -> finish
 		}
 		
+		if (flag) log.debug(String.format("[SEND] '%s'.", req));
+		
 		return true;
 	}
 	
@@ -199,6 +201,8 @@ public final class ThrJointClient extends AbsJoint {
 					 */
 					throw new Exception(String.format("%s [EOF] there is no signal 'RES'..", Thread.currentThread().getName()));
 				}
+
+				if (flag) log.debug(String.format("[RECV] '%s'.", str));
 			}
 		} catch (SocketTimeoutException e) {
 			throw e;   // -> finish

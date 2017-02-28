@@ -15,7 +15,7 @@ set JAR_NAME=tain-spirit-1.0.jar
 
 set OPTION= -Dclass=TestClient
 set OPTION=%OPTION% -Dtain.kr.com.spirit.test.client.host=localhost
-set OPTION=%OPTION% -Dtain.kr.com.spirit.test.client.port=13389
+set OPTION=%OPTION% -Dtain.kr.com.spirit.test.client.port=20026
 
 ::-----------------------------------------------------------------------------------------
 :RUN_JAR

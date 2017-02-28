@@ -133,7 +133,7 @@ public final class ThrRecvSend extends Thread {
 					}
 				}
 			} catch (Exception e) {
-				if (flag) System.out.println(e + " - " + Utils.getInstance().getDateTime());
+				if (flag) System.out.printf("\t%s - %s\n", e, Utils.getInstance().getDateTime());
 				// e.printStackTrace();
 			} finally {
 				if (flag) {
@@ -145,7 +145,7 @@ public final class ThrRecvSend extends Thread {
 					
 					this.joint.setFlagStopThread(true);
 					
-					if (flag) System.out.printf("%s [END] ...\n", Thread.currentThread().getName());
+					if (flag) System.out.printf("\t%s [END] ...\n", Thread.currentThread().getName());
 				}
 			}
 		}

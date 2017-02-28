@@ -121,7 +121,7 @@ public final class ThrServer extends Thread {
 						 */
 						
 						if (!recv()) {
-							LoopSleep.sleep(1000);
+							LoopSleep.threadSleep(1000);
 							continue;
 						}
 						
@@ -147,7 +147,7 @@ public final class ThrServer extends Thread {
 						/*
 						 * sleep
 						 */
-						LoopSleep.sleep(2 * 1000);
+						LoopSleep.threadSleep(2 * 1000);
 					}
 				}  // for
 				

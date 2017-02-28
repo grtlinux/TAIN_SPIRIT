@@ -271,7 +271,7 @@ public final class ThrJointServer extends AbsJoint {
 			if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 			if (this.socketClient != null) try { this.socketClient.close(); } catch (IOException e) {}
 			
-			if (flag) System.out.printf("%s [END] ...\n", Thread.currentThread().getName());
+			if (flag) System.out.printf("\t%s [END] ...\n", Thread.currentThread().getName());
 		}
 	}
 	

@@ -100,7 +100,7 @@ public final class MainControlServer {
 						thread.join();
 					} catch (Exception e) {
 						if (flag) System.out.println(e + " - " + Utils.getInstance().getDateTime());
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
 				}
 				

@@ -28,8 +28,8 @@ import java.net.SocketTimeoutException;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v03.joint.AbsJoint;
-import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v04.joint.AbsJoint;
+import tain.kr.com.spirit.v04.loop.LoopSleep;
 
 
 /**

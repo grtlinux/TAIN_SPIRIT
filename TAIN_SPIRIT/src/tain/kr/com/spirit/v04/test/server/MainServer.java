@@ -90,7 +90,7 @@ public final class MainServer {
 			String listenPort = ParamContent.getInstance().getString(KEY_LISTEN_PORT, "13389");
 			
 			ServerSocket serverSocket = new ServerSocket(Integer.parseInt(listenPort));
-			if (flag) System.out.printf(">>> listening port = %s\n", listenPort);
+			if (flag) log.debug(String.format(">>> listening port = %s", listenPort));
 			
 			while (true) {
 				if (flag) {

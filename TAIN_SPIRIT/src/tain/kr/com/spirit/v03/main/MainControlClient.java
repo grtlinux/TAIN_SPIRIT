@@ -19,11 +19,13 @@
  */
 package tain.kr.com.spirit.v03.main;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v03.control.ThrControlClient;
 import tain.kr.com.spirit.v03.loop.LoopSleep;
 import tain.kr.com.spirit.v03.param.ParamContent;
-import tain.kr.com.spirit.v03.control.ThrControlClient;
 
 /**
  * Code Templates > Comments > Types
@@ -67,6 +69,10 @@ public final class MainControlClient {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private static final String KEY_RETRY = "tain.kr.com.spirit.control.retry";
+	private static int minRetry;
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/*
@@ -78,6 +84,11 @@ public final class MainControlClient {
 			new MainControlClient();
 
 		if (flag) ParamContent.getInstance().printInformation();
+		
+		if (flag) {
+			String strRetry = ParamContent.getInstance().getString(KEY_RETRY, "30");
+			minRetry = Integer.parseInt(strRetry);
+		}
 
 		if (flag) {
 			/*
@@ -94,7 +105,7 @@ public final class MainControlClient {
 						thread.join();
 					} catch (Exception e) {
 						// e.printStackTrace();
-						if (flag) System.out.println(e);
+						if (flag) System.out.println(e + new Date().toString());
 					}
 				}
 				
@@ -102,7 +113,7 @@ public final class MainControlClient {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(5 * 60 * 1000);
+					LoopSleep.sleep(minRetry * 60 * 1000);
 				}
 			}
 		}

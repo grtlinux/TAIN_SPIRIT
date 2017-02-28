@@ -57,7 +57,7 @@ public abstract class AbsJoint extends Thread {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public volatile boolean flagStopThread = false;
+	private volatile boolean flagStopThread = false;
 	
 	public final boolean getFlagStopThread() {
 		return this.flagStopThread;

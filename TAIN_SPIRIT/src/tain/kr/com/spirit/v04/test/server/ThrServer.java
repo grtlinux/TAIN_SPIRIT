@@ -85,7 +85,7 @@ public final class ThrServer extends Thread {
 
 	private void printInfo() {
 		
-		if (flag) System.out.printf("\t ParamContent [THREAD_NAME] = [%s]\n", THREAD_NAME);
+		if (flag) System.out.printf("\tParamContent [THREAD_NAME] = [%s]\n", THREAD_NAME);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ public final class ThrServer extends Thread {
 						
 						this.strRecv = new String(this.bytRecv, 0, this.nRecv, Charset.forName(TYP_CHARSET));
 						
-						if (flag) System.out.printf("%s [RECV] [%d:%s]\n", Thread.currentThread().getName(), this.nRecv, this.strRecv);
+						if (flag) System.out.printf("\t%s [RECV] [%d:%s]\n", Thread.currentThread().getName(), this.nRecv, this.strRecv);
 					}
 					
 					if (flag) {
@@ -141,7 +141,7 @@ public final class ThrServer extends Thread {
 						
 						send();
 						
-						if (flag) System.out.printf("%s [SEND] [%d:%s]\n", Thread.currentThread().getName(), this.nSend, this.strSend);
+						if (flag) System.out.printf("\t%s [SEND] [%d:%s]\n", Thread.currentThread().getName(), this.nSend, this.strSend);
 					}
 					
 					if (!flag) {
@@ -154,7 +154,7 @@ public final class ThrServer extends Thread {
 				
 			} catch (Exception e) {
 				// e.printStackTrace();
-				if (flag) System.out.printf("%s - %s\n", e, Utils.getInstance().getDateTime());
+				if (flag) System.out.printf("\t%s - %s\n", e, Utils.getInstance().getDateTime());
 			} finally {
 				if (flag) {
 					/*
@@ -165,7 +165,7 @@ public final class ThrServer extends Thread {
 					if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
 				}
 				
-				if (flag) System.out.printf("%s [END]\n", Thread.currentThread().getName());
+				if (flag) System.out.printf("\t%s [END]\n", Thread.currentThread().getName());
 			}
 		}
 	}

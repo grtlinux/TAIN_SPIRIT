@@ -70,7 +70,9 @@ public final class MainControlClient {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final String KEY_RETRY = "tain.kr.com.spirit.joint.retry";
-	private static int secRetry;
+	private static int timesRetry;
+	
+	private static LoopSleep loopSleep;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,7 +88,8 @@ public final class MainControlClient {
 		
 		if (flag) {
 			String strRetry = ParamContent.getInstance().getString(KEY_RETRY, "30");
-			secRetry = Integer.parseInt(strRetry);
+			timesRetry = Integer.parseInt(strRetry);
+			loopSleep = new LoopSleep();
 		}
 
 		if (flag) {
@@ -105,6 +108,7 @@ public final class MainControlClient {
 						Thread thread = new ThrJointClient();
 						thread.start();
 						thread.join();
+						loopSleep.reset();
 					} catch (Exception e) {
 						if (flag) System.out.println(e + " - " + Utils.getInstance().getDateTime());
 						// e.printStackTrace();
@@ -115,7 +119,7 @@ public final class MainControlClient {
 					/*
 					 * sleep, unit is minute
 					 */
-					LoopSleep.sleep(secRetry * 500);
+					loopSleep.sleep(timesRetry);
 				}
 			}
 		}

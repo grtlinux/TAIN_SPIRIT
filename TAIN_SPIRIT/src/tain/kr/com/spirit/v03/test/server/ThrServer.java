@@ -152,7 +152,8 @@ public final class ThrServer extends Thread {
 				}  // for
 				
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
+				if (flag) System.out.println(e);
 			} finally {
 				if (flag) {
 					/*
@@ -189,7 +190,8 @@ public final class ThrServer extends Thread {
 				throw new Exception("read data of EOF. end of stream...");
 			}
 		} catch (SocketTimeoutException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			if (flag) System.out.println(e);
 			// throw e;
 			return false;
 		} catch (Exception e) {

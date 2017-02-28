@@ -144,7 +144,7 @@ public final class TestMainRunJar {
 	private void runSpirit(String strClass) throws Exception {
 		
 		if (flag) {
-			if (flag) System.out.printf("class=[%s]\n", strClass);
+			if (flag) System.out.printf("\tclass=[%s]\n", strClass);
 			
 			Class<?> cls = Class.forName(strClass);
 			

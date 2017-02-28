@@ -156,7 +156,8 @@ public final class ThrControlClient extends Thread {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
+				if (flag) System.out.println(e);
 			} finally {
 				if (flag) {
 					/*

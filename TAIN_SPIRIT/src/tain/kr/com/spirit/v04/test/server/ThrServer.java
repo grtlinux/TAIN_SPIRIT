@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v03.loop.LoopSleep;
+import tain.kr.com.spirit.v04.loop.LoopSleep;
 
 /**
  * Code Templates > Comments > Types

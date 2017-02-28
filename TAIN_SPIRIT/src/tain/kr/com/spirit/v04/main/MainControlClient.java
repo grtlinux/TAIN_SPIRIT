@@ -19,13 +19,12 @@
  */
 package tain.kr.com.spirit.v04.main;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v03.control.ThrControlClient;
-import tain.kr.com.spirit.v03.loop.LoopSleep;
-import tain.kr.com.spirit.v03.param.ParamContent;
+import tain.kr.com.spirit.v04.joint.ThrJointClient;
+import tain.kr.com.spirit.v04.loop.LoopSleep;
+import tain.kr.com.spirit.v04.param.ParamContent;
+import tain.kr.com.spirit.v04.util.Utils;
 
 /**
  * Code Templates > Comments > Types
@@ -100,18 +99,18 @@ public final class MainControlClient {
 					 * client thread
 					 */
 					try {
-						Thread thread = new ThrControlClient();
+						Thread thread = new ThrJointClient();
 						thread.start();
 						thread.join();
 					} catch (Exception e) {
+						if (flag) System.out.println(e + " - " + Utils.getInstance().getDateTime());
 						// e.printStackTrace();
-						if (flag) System.out.println(e + " - " + new Date().toString());
 					}
 				}
 				
 				if (flag) {
 					/*
-					 * sleep
+					 * sleep, unit is minute
 					 */
 					LoopSleep.sleep(minRetry * 60 * 1000);
 				}

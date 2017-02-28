@@ -15,7 +15,7 @@ set JAR_NAME=tain-spirit-1.0.jar
 
 set OPTION= -Dclass=SpiritServer
 set OPTION=%OPTION% -Dtain.kr.com.spirit.control.listen.port=20025
-set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.listen.port=13389
+set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.listen.port=20026
 
 ::-----------------------------------------------------------------------------------------
 :RUN_JAR

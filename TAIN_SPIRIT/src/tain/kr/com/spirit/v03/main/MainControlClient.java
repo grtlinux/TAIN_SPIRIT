@@ -105,7 +105,7 @@ public final class MainControlClient {
 						thread.join();
 					} catch (Exception e) {
 						// e.printStackTrace();
-						if (flag) System.out.println(e + new Date().toString());
+						if (flag) System.out.println(e + " - " + new Date().toString());
 					}
 				}
 				

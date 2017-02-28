@@ -12,9 +12,13 @@ set JAR_NAME=tain-spirit-1.0.jar
 ::-----------------------------------------------------------------------------------------
 :OPTION
 
-set OPTION= -Dclass=TestClient
-set OPTION=%OPTION% -Dtain.kr.com.spirit.test.client.host=192.168.0.11
-set OPTION=%OPTION% -Dtain.kr.com.spirit.test.client.port=13389
+set OPTION= -Dclass=SpiritClient
+set OPTION=%OPTION% -Dtain.kr.com.spirit.control.host=192.168.0.11
+set OPTION=%OPTION% -Dtain.kr.com.spirit.control.port=20025
+set OPTION=%OPTION% -Dtain.kr.com.spirit.target.host=192.168.0.11
+set OPTION=%OPTION% -Dtain.kr.com.spirit.target.port=3389
+set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.host=192.168.0.11
+set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.port=13389
 
 ::-----------------------------------------------------------------------------------------
 :RUN_JAR

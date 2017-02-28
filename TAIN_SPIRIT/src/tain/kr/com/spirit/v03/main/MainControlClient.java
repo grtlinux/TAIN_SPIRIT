@@ -83,21 +83,26 @@ public final class MainControlClient {
 			/*
 			 * begin loop of client thread
 			 */
-			for (int i=0; i < 10000; i++) {
+			for (int i=0; ; i = ++i % 1000) {
 				if (flag) {
 					/*
 					 * client thread
 					 */
-					Thread thread = new ThrControlClient();
-					thread.start();
-					thread.join();
+					try {
+						Thread thread = new ThrControlClient();
+						thread.start();
+						thread.join();
+					} catch (Exception e) {
+						// e.printStackTrace();
+						System.out.println(e);
+					}
 				}
 				
 				if (flag) {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(30 * 1000);
+					LoopSleep.sleep(10 * 1000);
 				}
 			}
 		}

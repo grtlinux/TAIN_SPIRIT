@@ -25,7 +25,7 @@ package tain.kr.com.spirit.v04.loop;
  *
  * <PRE>
  *   -. FileName   : ImplLoop.java
- *   -. Package    : tain.kr.com.spirit.v02.loop
+ *   -. Package    : tain.kr.com.spirit.v04.loop
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 25. {time}

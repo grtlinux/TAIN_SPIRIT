@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : TestMainRunJar.java
- *   -. Package    : tain.kr.runjar.v03
+ *   -. Package    : tain.kr.runjar.v04
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

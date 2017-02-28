@@ -27,7 +27,7 @@ import java.net.URLStreamHandlerFactory;
  *
  * <PRE>
  *   -. FileName   : RsrcURLStreamHandlerFactory.java
- *   -. Package    : tain.kr.com.test.runJar.v02
+ *   -. Package    : tain.kr.com.test.runJar.v03
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2016. 4. 15. {time}

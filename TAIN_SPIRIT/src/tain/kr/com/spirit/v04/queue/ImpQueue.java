@@ -25,7 +25,7 @@ package tain.kr.com.spirit.v04.queue;
  *
  * <PRE>
  *   -. FileName   : ImpQueue.java
- *   -. Package    : tain.kr.com.spirit.v03.queue
+ *   -. Package    : tain.kr.com.spirit.v04.queue
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

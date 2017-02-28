@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : ExpRuntimeException.java
- *   -. Package    : tain.kr.com.spirit.v03.exception
+ *   -. Package    : tain.kr.com.spirit.v04.exception
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

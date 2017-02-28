@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : AbsParam.java
- *   -. Package    : tain.kr.com.spirit.v03.param
+ *   -. Package    : tain.kr.com.spirit.v04.param
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

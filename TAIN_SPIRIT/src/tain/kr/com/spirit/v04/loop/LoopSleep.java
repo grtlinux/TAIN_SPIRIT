@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : LoopSleep.java
- *   -. Package    : tain.kr.com.spirit.v03.loop
+ *   -. Package    : tain.kr.com.spirit.v04.loop
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}
@@ -69,7 +69,7 @@ public final class LoopSleep implements ImpLoop {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.loop.ImpLoop#reset()
+	 * @see tain.kr.com.spirit.v04.loop.ImpLoop#reset()
 	 */
 	@Override
 	public void reset() {
@@ -77,7 +77,7 @@ public final class LoopSleep implements ImpLoop {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.loop.ImpLoop#sleep()
+	 * @see tain.kr.com.spirit.v04.loop.ImpLoop#sleep()
 	 */
 	@Override
 	public void sleep() {
@@ -93,7 +93,7 @@ public final class LoopSleep implements ImpLoop {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.loop.ImpLoop#getMSec()
+	 * @see tain.kr.com.spirit.v04.loop.ImpLoop#getMSec()
 	 */
 	@Override
 	public long getMSec() {

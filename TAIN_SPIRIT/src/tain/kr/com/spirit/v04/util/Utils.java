@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : Utils.java
- *   -. Package    : tain.kr.com.spirit.v03.util
+ *   -. Package    : tain.kr.com.spirit.v04.util
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

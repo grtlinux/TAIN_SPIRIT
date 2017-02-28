@@ -69,7 +69,7 @@ public final class LoopSleep implements ImpLoop {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.loop.ImpLoop#reset()
+	 * @see tain.kr.com.spirit.v03.loop.ImpLoop#reset()
 	 */
 	@Override
 	public void reset() {
@@ -77,7 +77,7 @@ public final class LoopSleep implements ImpLoop {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.loop.ImpLoop#sleep()
+	 * @see tain.kr.com.spirit.v03.loop.ImpLoop#sleep()
 	 */
 	@Override
 	public void sleep() {
@@ -93,7 +93,7 @@ public final class LoopSleep implements ImpLoop {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.loop.ImpLoop#getMSec()
+	 * @see tain.kr.com.spirit.v03.loop.ImpLoop#getMSec()
 	 */
 	@Override
 	public long getMSec() {

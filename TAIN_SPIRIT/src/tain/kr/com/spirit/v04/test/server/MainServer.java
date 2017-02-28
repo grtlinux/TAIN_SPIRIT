@@ -31,7 +31,7 @@ import tain.kr.com.spirit.v04.param.ParamContent;
  *
  * <PRE>
  *   -. FileName   : MainServer.java
- *   -. Package    : tain.kr.com.spirit.v03.test.server
+ *   -. Package    : tain.kr.com.spirit.v04.test.server
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

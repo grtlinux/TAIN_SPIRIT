@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : AbsData.java
- *   -. Package    : tain.kr.com.spirit.v03.data
+ *   -. Package    : tain.kr.com.spirit.v04.data
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

@@ -29,7 +29,7 @@ import java.net.URLStreamHandler;
  *
  * <PRE>
  *   -. FileName   : RsrcURLStreamHandler.java
- *   -. Package    : tain.kr.runjar.v03
+ *   -. Package    : tain.kr.runjar.v04
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 26. {time}

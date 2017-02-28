@@ -37,7 +37,7 @@ import java.util.jar.Manifest;
  *
  * <PRE>
  *   -. FileName   : JarRsrcLoader.java
- *   -. Package    : tain.kr.runjar.v03
+ *   -. Package    : tain.kr.runjar.v04
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 26. {time}

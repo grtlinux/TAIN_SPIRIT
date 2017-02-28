@@ -29,7 +29,7 @@ import tain.kr.com.spirit.v04.param.ParamContent;
  *
  * <PRE>
  *   -. FileName   : MainClient.java
- *   -. Package    : tain.kr.com.spirit.v03.test.client
+ *   -. Package    : tain.kr.com.spirit.v04.test.client
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}

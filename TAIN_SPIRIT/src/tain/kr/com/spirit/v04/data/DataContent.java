@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  *
  * <PRE>
  *   -. FileName   : DataContent.java
- *   -. Package    : tain.kr.com.spirit.v03.data
+ *   -. Package    : tain.kr.com.spirit.v04.data
  *   -. Comment    :
  *   -. Author     : taincokr
  *   -. First Date : 2017. 2. 27. {time}
@@ -104,7 +104,7 @@ public final class DataContent extends AbsData {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.data.AbsData#readFromInputStream(java.io.InputStream)
+	 * @see tain.kr.com.spirit.v04.data.AbsData#readFromInputStream(java.io.InputStream)
 	 */
 	@Override
 	public int readFromInputStream(InputStream is) throws IOException {
@@ -121,7 +121,7 @@ public final class DataContent extends AbsData {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.data.AbsData#writeToOutputStream(java.io.OutputStream)
+	 * @see tain.kr.com.spirit.v04.data.AbsData#writeToOutputStream(java.io.OutputStream)
 	 */
 	@Override
 	public void writeToOutputStream(OutputStream os) throws IOException {
@@ -131,7 +131,7 @@ public final class DataContent extends AbsData {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.data.AbsData#createClone()
+	 * @see tain.kr.com.spirit.v04.data.AbsData#createClone()
 	 */
 	@Override
 	public DataContent createClone() {

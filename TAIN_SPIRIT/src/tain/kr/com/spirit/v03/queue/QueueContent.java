@@ -66,7 +66,7 @@ public final class QueueContent implements ImpQueue {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#put(java.lang.Object)
+	 * @see tain.kr.com.spirit.v03.queue.ImpQueue#put(java.lang.Object)
 	 */
 	@Override
 	public synchronized int put(Object object) throws Exception {
@@ -84,7 +84,7 @@ public final class QueueContent implements ImpQueue {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#get()
+	 * @see tain.kr.com.spirit.v03.queue.ImpQueue#get()
 	 */
 	@Override
 	public synchronized Object get() throws Exception {
@@ -105,7 +105,7 @@ public final class QueueContent implements ImpQueue {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#get(long)
+	 * @see tain.kr.com.spirit.v03.queue.ImpQueue#get(long)
 	 */
 	@Override
 	public synchronized Object get(long timeout) throws Exception {
@@ -127,7 +127,7 @@ public final class QueueContent implements ImpQueue {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#clear()
+	 * @see tain.kr.com.spirit.v03.queue.ImpQueue#clear()
 	 */
 	@Override
 	public synchronized void clear() {
@@ -137,7 +137,7 @@ public final class QueueContent implements ImpQueue {
 	}
 
 	/* (non-Javadoc)
-	 * @see tain.kr.com.spirit.v02.queue.ImpQueue#getSize()
+	 * @see tain.kr.com.spirit.v03.queue.ImpQueue#getSize()
 	 */
 	@Override
 	public int getSize() {

@@ -94,7 +94,7 @@ public final class MainControlClient {
 						thread.join();
 					} catch (Exception e) {
 						// e.printStackTrace();
-						System.out.println(e);
+						if (flag) System.out.println(e);
 					}
 				}
 				

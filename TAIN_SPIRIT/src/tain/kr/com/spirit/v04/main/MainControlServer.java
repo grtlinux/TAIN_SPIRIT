@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import tain.kr.com.spirit.v04.joint.ThrJointServer;
 import tain.kr.com.spirit.v04.loop.LoopSleep;
 import tain.kr.com.spirit.v04.param.ParamContent;
+import tain.kr.com.spirit.v04.util.Utils;
 
 /**
  * Code Templates > Comments > Types
@@ -98,6 +99,7 @@ public final class MainControlServer {
 						thread.start();
 						thread.join();
 					} catch (Exception e) {
+						if (flag) System.out.println(e + " - " + Utils.getInstance().getDateTime());
 						e.printStackTrace();
 					}
 				}

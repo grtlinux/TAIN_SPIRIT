@@ -105,7 +105,7 @@ public final class MainClient {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(5 * 1000);
+					LoopSleep.threadSleep(5 * 1000);
 				}
 			}
 		}

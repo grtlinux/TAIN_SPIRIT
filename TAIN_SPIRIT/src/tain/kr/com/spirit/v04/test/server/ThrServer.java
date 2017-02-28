@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import org.apache.log4j.Logger;
 
 import tain.kr.com.spirit.v04.loop.LoopSleep;
+import tain.kr.com.spirit.v04.util.Utils;
 
 /**
  * Code Templates > Comments > Types
@@ -153,7 +154,7 @@ public final class ThrServer extends Thread {
 				
 			} catch (Exception e) {
 				// e.printStackTrace();
-				if (flag) System.out.println(e);
+				if (flag) System.out.printf("%s - %s\n", e, Utils.getInstance().getDateTime());
 			} finally {
 				if (flag) {
 					/*
@@ -163,13 +164,15 @@ public final class ThrServer extends Thread {
 					if (this.dis != null) try { this.dis.close(); } catch (IOException e) {}
 					if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
 				}
+				
+				if (flag) System.out.printf("%s [END]\n", Thread.currentThread().getName());
 			}
-			
-			if (flag) System.out.printf("%s [END]\n", Thread.currentThread().getName());
 		}
 	}
 	
-	private boolean recv() throws Exception {
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private final boolean recv() throws Exception {
 		
 		try {
 			this.nRecv = this.dis.read(this.bytRecv, 0, SIZ_RECV);
@@ -177,13 +180,13 @@ public final class ThrServer extends Thread {
 				/*
 				 * EOF
 				 */
-				if (flag) System.out.printf("%s [EOF] read data of EOF...\n", Thread.currentThread().getName());
-				throw new Exception("read data of EOF. end of stream...");
+				//if (flag) System.out.printf("%s [EOF] read data of EOF...\n", Thread.currentThread().getName());
+				throw new Exception(String.format("%s [EOF] read data of EOF...", Thread.currentThread().getName()));
 			}
 		} catch (SocketTimeoutException e) {
 			// e.printStackTrace();
-			if (flag) System.out.println(e);
 			// throw e;
+			if (flag) System.out.printf("%s - %s\n", e, Utils.getInstance().getDateTime());
 			return false;
 		} catch (Exception e) {
 			throw e;
@@ -192,7 +195,7 @@ public final class ThrServer extends Thread {
 		return true;
 	}
 	
-	private boolean send() throws Exception {
+	private final boolean send() throws Exception {
 		
 		try {
 			this.dos.write(this.bytSend, 0, this.nSend);

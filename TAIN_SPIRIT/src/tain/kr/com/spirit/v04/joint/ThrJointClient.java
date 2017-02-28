@@ -19,13 +19,16 @@
  */
 package tain.kr.com.spirit.v04.joint;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 import org.apache.log4j.Logger;
 
-import tain.kr.com.spirit.v03.param.ParamContent;
-import tain.kr.com.spirit.v03.recvsend.ThrRecvSend;
+import tain.kr.com.spirit.v04.param.ParamContent;
+import tain.kr.com.spirit.v04.recvsend.ThrRecvSend;
 
 /**
  * Code Templates > Comments > Types
@@ -51,20 +54,18 @@ public final class ThrJointClient extends AbsJoint {
 	
 	private static final String THREAD_NAME = "JOINT_CLIENT";
 	
+	private static final String KEY_JOINT_HOST = "tain.kr.com.spirit.joint.host";
+	private static final String KEY_JOINT_PORT = "tain.kr.com.spirit.joint.port";
 	private static final String KEY_TARGET_HOST = "tain.kr.com.spirit.target.host";
 	private static final String KEY_TARGET_PORT = "tain.kr.com.spirit.target.port";
 
-	private static final String KEY_JOINT_HOST = "tain.kr.com.spirit.joint.host";
-	private static final String KEY_JOINT_PORT = "tain.kr.com.spirit.joint.port";
-	
+	private final String jointHost;
+	private final String jointPort;
 	private final String targetHost;
 	private final String targetPort;
 
-	private final String jointHost;
-	private final String jointPort;
-	
-	private Socket socket1;
-	private Socket socket2;
+	private Socket socketJoint;
+	private Socket socketTarget;
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -75,45 +76,146 @@ public final class ThrJointClient extends AbsJoint {
 		
 		super(THREAD_NAME);
 		
-		this.targetHost = ParamContent.getInstance().getString(KEY_TARGET_HOST, "192.168.0.11");
-		this.targetPort = ParamContent.getInstance().getString(KEY_TARGET_PORT, "3389");
-		
 		this.jointHost = ParamContent.getInstance().getString(KEY_JOINT_HOST, "192.168.0.11");
-		this.jointPort = ParamContent.getInstance().getString(KEY_JOINT_PORT, "13389");
+		this.jointPort = ParamContent.getInstance().getString(KEY_JOINT_PORT, "20025");
 		
-		if (flag) {
-			/*
-			 * socket
-			 */
-			this.socket1 = new Socket(this.targetHost, Integer.parseInt(this.targetPort));
-			this.socket2 = new Socket(this.jointHost, Integer.parseInt(this.jointPort));
-		}
+		this.targetHost = ParamContent.getInstance().getString(KEY_TARGET_HOST, "192.168.0.11");
+		this.targetPort = ParamContent.getInstance().getString(KEY_TARGET_PORT, "13389");
 		
-		if (flag) {
-			/*
-			 * validate
-			 */
-			if (this.socket1 == null) {
-				throw new Exception("the value of socket1 is null pointer...");
-			}
-
-			if (this.socket2 == null) {
-				throw new Exception("the value of socket2 is null pointer...");
-			}
-		}
-		
-		if (flag) {
-			/*
-			 * set options
-			 */
-			this.socket1.setSoTimeout(10 * 1000);
-			this.socket2.setSoTimeout(10 * 1000);
-		}
+		connectJoint();
+		connectTarget();
 
 		if (flag)
 			log.debug(">>>>> in class " + this.getClass().getSimpleName());
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	private final boolean connectJoint() throws Exception {
+	
+		if (flag) {
+			/*
+			 * socket of joint
+			 */
+			this.socketJoint = new Socket(this.jointHost, Integer.parseInt(this.jointPort));
+			if (this.socketJoint == null) {
+				throw new Exception("the value of socketJoint is null pointer...");
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * send data "REQ" to joint client
+			 */
+			try {
+				send("REQ");
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				try { this.socketJoint.close(); } catch (IOException e) {}
+			}
+		}
+
+		if (flag) {
+			/*
+			 * recv data "RES" from joint client, waiting for this signal
+			 */
+			try {
+				recv();
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				try { this.socketJoint.close(); } catch (IOException e) {}
+			}
+		}
+
+		if (flag) {
+			/*
+			 * option
+			 */
+			this.socketJoint.setSoTimeout(5 * 1000);
+		}
+		
+		return true;
+	}
+	
+	private boolean connectTarget() throws Exception {
+		
+		if (flag) {
+			/*
+			 * socket of joint
+			 */
+			this.socketTarget = new Socket(this.targetHost, Integer.parseInt(this.targetPort));
+			if (this.socketTarget == null) {
+				try { this.socketJoint.close(); } catch (IOException e) {}
+				throw new Exception("the value of socketTarget is null pointer...");
+			}
+		}
+
+		return true;
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private boolean send(final String req) throws Exception {
+		
+		DataOutputStream dos = new DataOutputStream(this.socketJoint.getOutputStream());
+		byte[] bytSend = req.getBytes();
+		
+		try {
+			dos.write(bytSend, 0, bytSend.length);
+		} catch (IOException e) {
+			throw e;    // -> finish
+		} finally {
+			if (dos != null) try { dos.close(); } catch (IOException e) {}
+		}
+		
+		return true;
+	}
+	
+	private boolean recv() throws Exception {
+		
+		DataInputStream dis = new DataInputStream(this.socketJoint.getInputStream());
+		byte[] bytRecv = new byte[10];
+		int nRecv;
+		
+		try {
+			nRecv = dis.read(bytRecv, 0, 10);
+			if (nRecv < 0) {
+				/*
+				 * EOF -> finish
+				 * socket rejection
+				 */
+				throw new Exception(String.format("%s [EOF] return value of read is -1..", Thread.currentThread().getName()));
+			}
+			
+			if (flag) {
+				/*
+				 * check RES
+				 */
+				String str = new String(bytRecv, 0, nRecv);
+				if (!"RES".equalsIgnoreCase(str)) {
+					/*
+					 * not match
+					 */
+					throw new Exception(String.format("%s [EOF] there is no signal 'RES'..", Thread.currentThread().getName()));
+				}
+			}
+		} catch (SocketTimeoutException e) {
+			throw e;   // -> finish
+		} catch (Exception e) {
+			throw e;   // -> finish
+		} finally {
+			if (dis != null) try { dis.close(); } catch (IOException e) {}
+		}
+
+		return true;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -134,10 +236,10 @@ public final class ThrJointClient extends AbsJoint {
 			 */
 			try {
 				this.thread1 = new ThrRecvSend(String.format("JOINT_CLIENT_RECVSEND_01"), this
-						, this.socket2.getInputStream(), this.socket1.getOutputStream());
+						, this.socketJoint.getInputStream(), this.socketTarget.getOutputStream());
 
 				this.thread2 = new ThrRecvSend(String.format("JOINT_CLIENT_RECVSEND_02"), this
-						, this.socket1.getInputStream(), this.socket2.getOutputStream());
+						, this.socketTarget.getInputStream(), this.socketJoint.getOutputStream());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
@@ -166,8 +268,8 @@ public final class ThrJointClient extends AbsJoint {
 			/*
 			 * close
 			 */
-			if (this.socket1 != null) try { this.socket1.close(); } catch (IOException e) {}
-			if (this.socket2 != null) try { this.socket2.close(); } catch (IOException e) {}
+			if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
+			if (this.socketTarget != null) try { this.socketTarget.close(); } catch (IOException e) {}
 			
 			if (flag) System.out.printf("%s [END] ...\n", Thread.currentThread().getName());
 		}
@@ -187,9 +289,6 @@ public final class ThrJointClient extends AbsJoint {
 	 * static test method
 	 */
 	private static void test01(String[] args) throws Exception {
-
-		if (flag)
-			new ThrJointClient();
 
 		if (flag) {
 

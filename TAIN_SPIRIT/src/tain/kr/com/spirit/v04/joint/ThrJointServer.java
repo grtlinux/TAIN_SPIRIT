@@ -185,6 +185,8 @@ public final class ThrJointServer extends AbsJoint {
 					 */
 					throw new Exception(String.format("%s [EOF] there is no signal 'REQ'..", Thread.currentThread().getName()));
 				}
+				
+				if (flag) log.debug(String.format("[RECV] '%s'.", str));
 			}
 		} catch (SocketTimeoutException e) {
 			throw e;   // -> finish
@@ -204,6 +206,8 @@ public final class ThrJointServer extends AbsJoint {
 		} catch (IOException e) {
 			throw e;    // -> finish
 		}
+		
+		if (flag) log.debug(String.format("[SEND] '%s'.", res));
 		
 		return true;
 	}

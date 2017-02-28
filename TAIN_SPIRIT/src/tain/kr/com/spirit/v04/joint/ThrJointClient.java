@@ -152,6 +152,13 @@ public final class ThrJointClient extends AbsJoint {
 			}
 		}
 
+		if (flag) {
+			/*
+			 * option
+			 */
+			this.socketTarget.setSoTimeout(5 * 1000);
+		}
+
 		return true;
 	}
 	

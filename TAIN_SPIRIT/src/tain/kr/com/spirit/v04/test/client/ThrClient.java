@@ -155,7 +155,7 @@ public final class ThrClient extends Thread {
 						/*
 						 * sleep
 						 */
-						LoopSleep.sleep(2 * 1000);
+						LoopSleep.threadSleep(2 * 1000);
 					}
 				}  // for
 				

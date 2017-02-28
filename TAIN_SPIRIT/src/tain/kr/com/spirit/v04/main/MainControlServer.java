@@ -108,7 +108,7 @@ public final class MainControlServer {
 					/*
 					 * sleep
 					 */
-					LoopSleep.sleep(1 * 500);
+					LoopSleep.threadSleep(1 * 500);
 				}
 			}
 		}

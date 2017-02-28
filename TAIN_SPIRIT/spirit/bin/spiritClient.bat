@@ -18,11 +18,11 @@ set OPTION=%OPTION% -Dtain.kr.com.spirit.control.host=localhost
 set OPTION=%OPTION% -Dtain.kr.com.spirit.control.port=20025
 set OPTION=%OPTION% -Dtain.kr.com.spirit.control.retry=1
 
+set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.host=localhost
+set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.port=20026
+
 set OPTION=%OPTION% -Dtain.kr.com.spirit.target.host=localhost
 set OPTION=%OPTION% -Dtain.kr.com.spirit.target.port=13389
-
-set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.host=localhost
-set OPTION=%OPTION% -Dtain.kr.com.spirit.joint.port=13389
 
 ::-----------------------------------------------------------------------------------------
 :RUN_JAR

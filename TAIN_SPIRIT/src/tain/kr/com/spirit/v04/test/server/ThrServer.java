@@ -164,6 +164,8 @@ public final class ThrServer extends Thread {
 					if (this.socket != null) try { this.socket.close(); } catch (IOException e) {}
 				}
 			}
+			
+			if (flag) System.out.printf("%s [END]\n", Thread.currentThread().getName());
 		}
 	}
 	

@@ -19,9 +19,12 @@
  */
 package tain.kr.com.spirit.v04.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
@@ -67,6 +70,17 @@ public final class Utils {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public final String getDateTime() {
+		return new Date().toString();
+	}
+	
+	public final String getDateTime(final String format) {   // format = "yyyy/MM/dd HH24:mm:ss"
+		//return new SimpleDateFormat(format).format(new Date());    // default Locale
+		return new SimpleDateFormat(format, Locale.ENGLISH).format(new Date());
+		//return new SimpleDateFormat(format, Locale.KOREA).format(new Date());
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,6 +145,14 @@ public final class Utils {
 				}
 				System.out.println();
 			}
+		}
+		
+		if (flag) {
+			/*
+			 * date time
+			 */
+			System.out.printf("[%s]\n", Utils.getInstance().getDateTime());
+			System.out.printf("[%s]\n", Utils.getInstance().getDateTime("yy/MM/dd HH(hh aa):mm:ss"));
 		}
 	}
 

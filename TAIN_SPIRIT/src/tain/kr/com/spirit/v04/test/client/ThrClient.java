@@ -152,7 +152,7 @@ public final class ThrClient extends Thread {
 						if (flag) System.out.printf("%s [RECV] [%d:%s]\n", Thread.currentThread().getName(), this.nRecv, this.strRecv);
 					}
 					
-					if (flag) {
+					if (!flag) {
 						/*
 						 * sleep
 						 */

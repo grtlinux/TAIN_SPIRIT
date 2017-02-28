@@ -99,7 +99,7 @@ public final class MainServer {
 					 */
 					Thread thread = new ThrServer(serverSocket);
 					thread.start();
-					if (flag) thread.join();
+					thread.join();
 				}
 				
 				if (flag) {

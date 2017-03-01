@@ -10,25 +10,25 @@
 3. java 서비스 생성
 
    1) nssm 서비스 생성 ( 옵션은 하단 참조 )
-   
+
        D:\nssm-2.24\win32>nssm.exe install test_daemon
        Service "test_daemon" installed successfully!
-       
+
    2) 서비스 시작
-   
+
        D:\nssm-2.24\win32>nssm.exe start test_daemon
        test_daemon: START: 작업을 완료했습니다.
-       
+
    3) 서비스 종료
-   
+
        D:\nssm-2.24\win32>nssm.exe stop test_daemon
        test_ecms_daemon: STOP: 작업을 완료했습니다.
-       
+
    4) 서비스 삭제
-   
+
        D:\nssm-2.24\win32>nssm.exe remove test_daemon
        Service "test_daemon" removed successfully!
-       
+
 
 * NSSM 옵션 ( Application Tab이외에는 그냥 default 사용했음.. 필요에 따라 수정하면 됨 )
 
@@ -53,9 +53,434 @@
 
 
 ------------------------------------------------------------------------------
+nssm java service site
+
+	http://dante2k.tistory.com/497
+	http://nssm.cc/usage
+
 other java service site
 
 	http://forge.ow2.org/projects/javaservice/
+
+
+------------------------------------------------------------------------------
+관련사이트 : http://nssm.cc/usage
+
+
+
+1. nssm.exe 를 실행한다.
+
+	D:\IMSI\SPIRIT_20170301\spirit\bin\nssm-2.24\win64>  nssm install Spirit_Joint_Client_ver1.0
+
+
+
+2. 다이얼로그에 대한 내용은 다음과 같다.
+
+	Service name : [ Spirit_Joint_Client_ver1.0 ]
+
+	----------------------------------------------------------------------------
+	[ Application ]
+*		Path              : D:\IMSI\SPIRIT_20170301\jdk1.7.0_79\bin\java.exe
+*		Startup directory : D:\IMSI\SPIRIT_20170301\spirit\bin
+*		Arguments         : -jar tain-spirit-1.0.jar
+
+		nssm set UT2003 Application C:\games\ut2003\System\UCC.exe
+		nssm set UT2003 AppDirectory C:\games\ut2003\System
+		nssm set UT2003 AppParameters server
+
+	----------------------------------------------------------------------------
+	[ Details ]
+*		Display name : Spirit Joint Client
+*		Description  : Spirit Joint Client is to make a connection from server to client
+*		Startup type : Automatic
+
+		nssm set UT2003 DisplayName UT2k3
+		nssm set UT2003 Description Unreal Tournament 2003
+		nssm set UT2003 Start SERVICE_AUTO_START
+
+	----------------------------------------------------------------------------
+	[ Log on as ]
+*		(o) Local System account  [ ] Allow service to interact with desktop
+		( ) This account :
+		Password :
+		Confirm  :
+
+		nssm set UT2003 ObjectName LocalSystem
+		nssm set UT2003 Type SERVICE_WIN32_OWN_PROCESS
+
+	----------------------------------------------------------------------------
+	[ Dependencies ]
+		This service depends on the following system components :
+
+		nssm set UT2003 DependOnService MpsSvc
+
+	----------------------------------------------------------------------------
+	[ Process ]
+*		Priority : Normal
+*		[v] Console window
+*		Affinity [v] All processors
+		CPUs :
+
+		nssm set UT2003 AppPriority NORMAL_PRIORITY_CLASS
+		nssm set UT2003 AppNoConsole 0
+		nssm set UT2003 AppAffinity All
+
+	----------------------------------------------------------------------------
+	[ Shutdown ]
+*		[v] Generate Control-C        Timeout: 1500 ms
+*		[v] Send WM_CLOSE to windows  Timeout: 1500 ms
+*		[v] Post WM_QUIT to threads   Timeout: 1500 ms
+*		[v] Terminate process
+
+		nssm set UT2003 AppStopMethodSkip 0
+		nssm set UT2003 AppStopMethodConsole 1500
+		nssm set UT2003 AppStopMethodWindow 1500
+		nssm set UT2003 AppStopMethodThreads 1500
+
+	----------------------------------------------------------------------------
+	[ Exit actions ]
+		Throttling
+*			Delay restart if application runs for less than : 1500 ms
+
+		Restart
+			Action to take when application exits other than in response to
+*			a controlled service shutdown : [Restart application]
+*			Delay restart by : 0 ms
+
+		nssm set UT2003 AppThrottle 1500
+		nssm set UT2003 AppExit Default Restart
+		nssm set UT2003 AppRestartDelay 0
+
+	----------------------------------------------------------------------------
+	[ I/O ]
+*		Input  (stdin)  :
+*		Output (stdout) : D:\IMSI\SPIRIT_20170301\spirit\log\spirit_out.log
+*		Error  (stderr) : D:\IMSI\SPIRIT_20170301\spirit\log\spirit_out.log
+
+		nssm set UT2003 AppStdout C:\games\ut2003\service.log
+		nssm set UT2003 AppStderr C:\games\ut2003\service.log
+
+	----------------------------------------------------------------------------
+	[ File rotation ]
+		[ ] Replace esiting Output and/or Error files
+		[ ] Rotate files [ ] Rotate while service is running
+		Restrict rotation to files older than [     ] seconds
+		Restrict rotation to files bigger than [      ] bytes
+
+		nssm set UT2003 AppStdoutCreationDisposition 4
+		nssm set UT2003 AppStderrCreationDisposition 4
+		nssm set UT2003 AppRotateFiles 1
+		nssm set UT2003 AppRotateOnline 0
+		nssm set UT2003 AppRotateSeconds 86400
+		nssm set UT2003 AppRotateBytes 1048576
+
+	----------------------------------------------------------------------------
+	[ Environment variables ]
+		: JAVA_HOME=D:\IMSI\SPIRIT_20170301\jdk1.7.0_79
+		[ ] Replace default environment (srvany compatible)
+
+		nssm set UT2003 AppEnvironmentExtra JAVA_HOME=C:\java
+
+	----------------------------------------------------------------------------
+
+
+
+
+3. 위 내용을 확인하고 입력하여 [Install service] 버튼을 클릭한면
+	[ Service "Spirit_Joint_Client_ver1.0" installed successfully! ]
+	다이얼로그 창이 뜨고 [확인]을 클릭하여 마친다.
+
+	D:\IMSI\SPIRIT_20170301\spirit\bin\nssm-2.24\win64>  nssm install Spirit_Joint_Client_ver1.0
+	Service "Spirit_Joint_Client_ver1.0" installed successfully!
+
+
+
+4. 서비스를 실행한다.
+
+	D:\IMSI\SPIRIT_20170301\spirit\bin\nssm-2.24\win64>  nssm start Spirit_Joint_Client_ver1.0
+	Spirit_Joint_Client_ver1.0: START: 작업을 완료했습니다.
+
+
+
+5. 서비스를 종료한다.
+
+	D:\IMSI\SPIRIT_20170301\spirit\bin\nssm-2.24\win64>  nssm stop Spirit_Joint_Client_ver1.0
+	Spirit_Joint_Client_ver1.0: STOP: 작업을 완료했습니다.
+
+
+
+6. 서비스를 삭제한다.
+
+	D:\IMSI\SPIRIT_20170301\spirit\bin\nssm-2.24\win64>  nssm remove Spirit_Joint_Client_ver1.0 confirm
+	Service "Spirit_Joint_Client_ver1.0" removed successfully!
+
+
+================================================================================
+
+7. 간단한 command 라인 실행방법 (?? 좀더 고민)
+
+	D:\IMSI\SPIRIT_20170301\spirit\bin\nssm-2.24\win64>  nssm install Spirit_Joint_Client_ver1.0 "D:\IMSI\SPIRIT_20170301\jdk1.7.0_79\bin\java.exe" -jar "\"D:\IMSI\SPIRIT_20170301\spirit\bin\tain-spirit-1.0.jar"\"
+
+
+
+
+nssm install solr "%JavaExe%"
+	-Dsolr.solr.home="\"%CD%\solr"\"
+	-Djetty.home="\"%CD%"\"
+	-Djetty.logs="\"%CD%\logs"\"
+	-cp "\"%CD%\lib\*.jar"\";"\"%CD%\start.jar"\"
+	-jar "\"%CD%\start.jar"\"
+
+
+================================================================================
+
+nssm install Spirit_Joint_Client_ver1.0                        "D:\IMSI\SPIRIT_20170301\jdk1.7.0_79\bin\java.exe"
+
+nssm set     Spirit_Joint_Client_ver1.0   Application          D:\IMSI\SPIRIT_20170301\jdk1.7.0_79\bin\java.exe
+nssm set     Spirit_Joint_Client_ver1.0   AppDirectory         D:\IMSI\SPIRIT_20170301\spirit\bin
+nssm set     Spirit_Joint_Client_ver1.0   AppParameters        -jar tain-spirit-1.0.jar
+
+nssm set     Spirit_Joint_Client_ver1.0   DisplayName          Spirit Joint Client
+nssm set     Spirit_Joint_Client_ver1.0   Description          Spirit Joint Client is to make a connection from server to client
+nssm set     Spirit_Joint_Client_ver1.0   Start                SERVICE_AUTO_START
+
+nssm set     Spirit_Joint_Client_ver1.0   AppStdout            D:\IMSI\SPIRIT_20170301\spirit\log\spirit_out.log
+nssm set     Spirit_Joint_Client_ver1.0   AppStderr            D:\IMSI\SPIRIT_20170301\spirit\log\spirit_out.log
+
+================================================================================
+
+@echo off
+
+::------------------------------------------------------
+:: env
+set KANG_HOME=D:\IMSI\SPIRIT_20170301
+
+set JAVA_HOME=%KANG_HOME%\jdk1.7.0_79
+set JAVA_BIN=%JAVA_HOME%\bin
+set JAVA_EXE=%JAVA_BIN%\java.exe
+
+set SPIRIT_HOME=%KANG_HOME%\spirit
+set SPIRIT_BIN=%SPIRIT_HOME%\bin
+set SPIRIT_LOG=%SPIRIT_HOME%\log
+set SPIRIT_LOG_FILE=%SPIRIT_LOG%\spirit_out.log
+
+set NSSM_BIN=%SPIRIT_BIN%\nssm-2.24\win64
+set NSSM_EXE=%NSSM_BIN%\nssm.exe
+
+set SERVICE_NAME=Spirit_Joint_Client_ver1.0
+
+echo KANG_HOME = %KANG_HOME%
+echo.
+echo JAVA_HOME = %JAVA_HOME%
+echo JAVA_BIN = %JAVA_BIN%
+echo JAVA_EXE = %JAVA_EXE%
+echo.
+echo SPIRIT_HOME = %SPIRIT_HOME%
+echo SPIRIT_BIN = %SPIRIT_BIN%
+echo SPIRIT_LOG = %SPIRIT_LOG%
+echo SPIRIT_LOG_FILE = %SPIRIT_LOG_FILE%
+echo.
+echo NSSM_BIN = %NSSM_BIN%
+echo NSSM_EXE = %NSSM_EXE%
+echo.
+echo Service Name = %SERVICE_NAME%
+echo.
+echo ------------------ Service Install(create) ----------------------
+echo.
+
+::goto END
+
+::------------------------------------------------------
+:: create service
+
+%NSSM_EXE% install %SERVICE_NAME%                        "%JAVA_EXE%"
+
+%NSSM_EXE% set     %SERVICE_NAME%   Application          %JAVA_EXE%
+%NSSM_EXE% set     %SERVICE_NAME%   AppDirectory         %SPIRIT_BIN%
+%NSSM_EXE% set     %SERVICE_NAME%   AppParameters        -jar tain-spirit-1.0.jar
+
+%NSSM_EXE% set     %SERVICE_NAME%   DisplayName          Spirit Joint Client
+%NSSM_EXE% set     %SERVICE_NAME%   Description          Spirit Joint Client is to make a connection from server to client
+%NSSM_EXE% set     %SERVICE_NAME%   Start                SERVICE_AUTO_START
+
+%NSSM_EXE% set     %SERVICE_NAME%   AppStdout            %SPIRIT_LOG_FILE%
+%NSSM_EXE% set     %SERVICE_NAME%   AppStderr            %SPIRIT_LOG_FILE%
+
+
+::------------------------------------------------------
+:END
+timeout 3
+
+
+
+
+================================================================================
+
+@echo off
+
+::------------------------------------------------------
+:: env
+set KANG_HOME=D:\IMSI\SPIRIT_20170301
+
+set JAVA_HOME=%KANG_HOME%\jdk1.7.0_79
+set JAVA_BIN=%JAVA_HOME%\bin
+set JAVA_EXE=%JAVA_BIN%\java.exe
+
+set SPIRIT_HOME=%KANG_HOME%\spirit
+set SPIRIT_BIN=%SPIRIT_HOME%\bin
+set SPIRIT_LOG=%SPIRIT_HOME%\log
+set SPIRIT_LOG_FILE=%SPIRIT_LOG%\spirit_out.log
+
+set NSSM_BIN=%SPIRIT_BIN%\nssm-2.24\win64
+set NSSM_EXE=%NSSM_BIN%\nssm.exe
+
+set SERVICE_NAME=Spirit_Joint_Client_ver1.0
+
+echo KANG_HOME = %KANG_HOME%
+echo.
+echo JAVA_HOME = %JAVA_HOME%
+echo JAVA_BIN = %JAVA_BIN%
+echo JAVA_EXE = %JAVA_EXE%
+echo.
+echo SPIRIT_HOME = %SPIRIT_HOME%
+echo SPIRIT_BIN = %SPIRIT_BIN%
+echo SPIRIT_LOG = %SPIRIT_LOG%
+echo SPIRIT_LOG_FILE = %SPIRIT_LOG_FILE%
+echo.
+echo NSSM_BIN = %NSSM_BIN%
+echo NSSM_EXE = %NSSM_EXE%
+echo.
+echo Service Name = %SERVICE_NAME%
+echo.
+echo ------------------ Service Remove ----------------------
+echo.
+
+::goto END
+
+::------------------------------------------------------
+:: remove service
+
+%NSSM_EXE% remove %SERVICE_NAME% confirm
+
+
+::------------------------------------------------------
+:END
+timeout 3
+
+
+
+================================================================================
+
+@echo off
+
+::------------------------------------------------------
+:: env
+set KANG_HOME=D:\IMSI\SPIRIT_20170301
+
+set JAVA_HOME=%KANG_HOME%\jdk1.7.0_79
+set JAVA_BIN=%JAVA_HOME%\bin
+set JAVA_EXE=%JAVA_BIN%\java.exe
+
+set SPIRIT_HOME=%KANG_HOME%\spirit
+set SPIRIT_BIN=%SPIRIT_HOME%\bin
+set SPIRIT_LOG=%SPIRIT_HOME%\log
+set SPIRIT_LOG_FILE=%SPIRIT_LOG%\spirit_out.log
+
+set NSSM_BIN=%SPIRIT_BIN%\nssm-2.24\win64
+set NSSM_EXE=%NSSM_BIN%\nssm.exe
+
+set SERVICE_NAME=Spirit_Joint_Client_ver1.0
+
+echo KANG_HOME = %KANG_HOME%
+echo.
+echo JAVA_HOME = %JAVA_HOME%
+echo JAVA_BIN = %JAVA_BIN%
+echo JAVA_EXE = %JAVA_EXE%
+echo.
+echo SPIRIT_HOME = %SPIRIT_HOME%
+echo SPIRIT_BIN = %SPIRIT_BIN%
+echo SPIRIT_LOG = %SPIRIT_LOG%
+echo SPIRIT_LOG_FILE = %SPIRIT_LOG_FILE%
+echo.
+echo NSSM_BIN = %NSSM_BIN%
+echo NSSM_EXE = %NSSM_EXE%
+echo.
+echo Service Name = %SERVICE_NAME%
+echo.
+echo ------------------ Service Start ----------------------
+echo.
+
+::goto END
+
+::------------------------------------------------------
+:: start service
+
+%NSSM_EXE% start %SERVICE_NAME% confirm
+
+
+::------------------------------------------------------
+:END
+timeout 3
+
+
+
+================================================================================
+
+@echo off
+
+::------------------------------------------------------
+:: env
+set KANG_HOME=D:\IMSI\SPIRIT_20170301
+
+set JAVA_HOME=%KANG_HOME%\jdk1.7.0_79
+set JAVA_BIN=%JAVA_HOME%\bin
+set JAVA_EXE=%JAVA_BIN%\java.exe
+
+set SPIRIT_HOME=%KANG_HOME%\spirit
+set SPIRIT_BIN=%SPIRIT_HOME%\bin
+set SPIRIT_LOG=%SPIRIT_HOME%\log
+set SPIRIT_LOG_FILE=%SPIRIT_LOG%\spirit_out.log
+
+set NSSM_BIN=%SPIRIT_BIN%\nssm-2.24\win64
+set NSSM_EXE=%NSSM_BIN%\nssm.exe
+
+set SERVICE_NAME=Spirit_Joint_Client_ver1.0
+
+echo KANG_HOME = %KANG_HOME%
+echo.
+echo JAVA_HOME = %JAVA_HOME%
+echo JAVA_BIN = %JAVA_BIN%
+echo JAVA_EXE = %JAVA_EXE%
+echo.
+echo SPIRIT_HOME = %SPIRIT_HOME%
+echo SPIRIT_BIN = %SPIRIT_BIN%
+echo SPIRIT_LOG = %SPIRIT_LOG%
+echo SPIRIT_LOG_FILE = %SPIRIT_LOG_FILE%
+echo.
+echo NSSM_BIN = %NSSM_BIN%
+echo NSSM_EXE = %NSSM_EXE%
+echo.
+echo Service Name = %SERVICE_NAME%
+echo.
+echo ------------------ Service Stop ----------------------
+echo.
+
+::goto END
+
+::------------------------------------------------------
+:: stop service
+
+%NSSM_EXE% stop %SERVICE_NAME% confirm
+
+
+::------------------------------------------------------
+:END
+timeout 3
+
+
+================================================================================
+
+
 
 
 

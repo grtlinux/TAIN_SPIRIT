@@ -20,7 +20,7 @@ cd %SPIRIT_HOME%\bin
 ::----------------------------------------------
 :: START
 
-tain -f ..\log\spirit_out.log
+tail -f ..\log\spirit_out.log
 
 
 

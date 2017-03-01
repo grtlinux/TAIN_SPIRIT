@@ -109,6 +109,8 @@ public final class ThrJointClient extends AbsJoint {
 			
 			this.dis = new DataInputStream(this.socketJoint.getInputStream());
 			this.dos = new DataOutputStream(this.socketJoint.getOutputStream());
+			
+			if (flag) log.debug(String.format("connected to the joint server named '%s'.", this.socketJoint));
 		}
 		
 		if (flag) {
@@ -118,7 +120,10 @@ public final class ThrJointClient extends AbsJoint {
 			 */
 			try {
 				send("REQ");
+				if (flag) log.debug(String.format("send a data 'REQ' to the joint server and wait for a data 'RES' from the joint server."));
+				
 				recv();
+				if (flag) log.debug(String.format("recv a data 'RES' from the joint server."));
 			} catch (Exception e) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
 				throw e;
@@ -129,7 +134,11 @@ public final class ThrJointClient extends AbsJoint {
 			/*
 			 * option
 			 */
-			this.socketJoint.setSoTimeout(5 * 1000);
+			int timeout = 5 * 1000;
+			
+			this.socketJoint.setSoTimeout(timeout);
+			
+			if (flag) log.debug(String.format("set the option of SO_TIMEOUT '%d ms' in the joint socket.", timeout));
 		}
 		
 		return true;
@@ -146,13 +155,19 @@ public final class ThrJointClient extends AbsJoint {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 				throw new Exception("the value of socketTarget is null pointer...");
 			}
+			
+			if (flag) log.debug(String.format("connected to the target server named '%s'.", this.socketTarget));
 		}
 
 		if (flag) {
 			/*
 			 * option
 			 */
-			this.socketTarget.setSoTimeout(5 * 1000);
+			int timeout = 5 * 1000;
+
+			this.socketTarget.setSoTimeout(timeout);
+			
+			if (flag) log.debug(String.format("set the option of SO_TIMEOUT '%d ms' in the target socket.", timeout));
 		}
 
 		return true;

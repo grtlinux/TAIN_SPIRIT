@@ -94,6 +94,7 @@ public final class ThrClient extends Thread {
 
 	private void printInfo() {
 		
+		if (flag) System.out.printf("\tCONNECTION : %s\n", this.socket.toString());
 		if (flag) System.out.printf("\tParamContent [THREAD_NAME] = [%s]\n", THREAD_NAME);
 		if (flag) System.out.printf("\tParamContent [%s] = [%s]\n", KEY_CONNECT_HOST, this.connectHost);
 		if (flag) System.out.printf("\tParamContent [%s] = [%s]\n", KEY_CONNECT_PORT, this.connectPort);
@@ -162,7 +163,7 @@ public final class ThrClient extends Thread {
 				
 			} catch (Exception e) {
 				// e.printStackTrace();
-				if (flag) System.out.printf("\t%s - %s\n", e, Utils.getInstance().getDateTime());
+				if (flag) System.out.printf("\t%s %s - %s\n", Thread.currentThread().getName(), e, Utils.getInstance().getDateTime());
 			} finally {
 				if (flag) {
 					/*
@@ -200,7 +201,7 @@ public final class ThrClient extends Thread {
 				 * EOF
 				 */
 				//if (flag) System.out.printf("%s [EOF] read data of EOF...\n", Thread.currentThread().getName());
-				throw new Exception(String.format("%s [EOF] read data of EOF...", Thread.currentThread().getName()));
+				throw new Exception(String.format("[EOF] read data of EOF..."));
 			}
 		} catch (SocketTimeoutException e) {
 			// e.printStackTrace();

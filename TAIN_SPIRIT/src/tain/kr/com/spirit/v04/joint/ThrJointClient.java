@@ -138,12 +138,19 @@ public final class ThrJointClient extends AbsJoint {
 		if (flag) {
 			/*
 			 * option
+			 *    SO_TIMEOUT
+			 *    SO_LINGER
 			 */
 			int timeout = 5 * 1000;
 			
 			this.socketJoint.setSoTimeout(timeout);
 			
 			if (flag) log.debug(String.format("set the option of SO_TIMEOUT '%d ms' in the joint socket.", timeout));
+			
+			if (flag && this.socketJoint.getSoLinger() == -1) {  // SO_LINGER
+				this.socketJoint.setSoLinger(true, 0);
+				if (flag) log.debug(String.format("set the option of SO_LINGER '%d' in the joint socket.", this.socketJoint.getSoLinger()));
+			}
 		}
 		
 		return true;
@@ -173,12 +180,19 @@ public final class ThrJointClient extends AbsJoint {
 		if (flag) {
 			/*
 			 * option
+			 *    SO_TIMEOUT
+			 *    SO_LINGER
 			 */
 			int timeout = 5 * 1000;
 
 			this.socketTarget.setSoTimeout(timeout);
 			
 			if (flag) log.debug(String.format("set the option of SO_TIMEOUT '%d ms' in the target socket.", timeout));
+
+			if (flag && this.socketTarget.getSoLinger() == -1) {  // SO_LINGER
+				this.socketTarget.setSoLinger(true, 0);
+				if (flag) log.debug(String.format("set the option of SO_LINGER '%d' in the target socket.", this.socketTarget.getSoLinger()));
+			}
 		}
 
 		return true;

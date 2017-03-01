@@ -102,7 +102,12 @@ public final class ThrJointClient extends AbsJoint {
 			/*
 			 * socket of joint
 			 */
-			this.socketJoint = new Socket(this.jointHost, Integer.parseInt(this.jointPort));
+			try {
+				this.socketJoint = new Socket(this.jointHost, Integer.parseInt(this.jointPort));
+			} catch (Exception e) {
+				throw e;
+			}
+			
 			if (this.socketJoint == null) {
 				throw new Exception("the value of socketJoint is null pointer...");
 			}
@@ -150,7 +155,13 @@ public final class ThrJointClient extends AbsJoint {
 			/*
 			 * socket of joint
 			 */
-			this.socketTarget = new Socket(this.targetHost, Integer.parseInt(this.targetPort));
+			try {
+				this.socketTarget = new Socket(this.targetHost, Integer.parseInt(this.targetPort));
+			} catch (Exception e) {
+				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
+				throw e;
+			}
+			
 			if (this.socketTarget == null) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 				throw new Exception("the value of socketTarget is null pointer...");
@@ -289,7 +300,7 @@ public final class ThrJointClient extends AbsJoint {
 			if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 			if (this.socketTarget != null) try { this.socketTarget.close(); } catch (IOException e) {}
 			
-			if (flag) System.out.printf("\t%s [END] ...\n", Thread.currentThread().getName());
+			if (flag) System.out.printf("\t%s [END THREAD] ...\n", Thread.currentThread().getName());
 		}
 	}
 	

@@ -97,13 +97,19 @@ public final class ThrJointServer extends AbsJoint {
 			
 			this.dis = new DataInputStream(this.socketJoint.getInputStream());
 			this.dos = new DataOutputStream(this.socketJoint.getOutputStream());
+			
+			if (flag) log.debug(String.format("accepted a connection from the joint client named '%s'.", this.socketJoint));
 		}
 		
 		if (flag) {
 			/*
 			 * option
 			 */
-			this.socketJoint.setSoTimeout(5 * 1000);
+			int timeout = 5 * 1000;
+			
+			this.socketJoint.setSoTimeout(timeout);
+			
+			if (flag) log.debug(String.format("set the option of SO_TIMEOUT '%d ms' in the joint socket.", timeout));
 		}
 		
 		if (flag) {
@@ -111,7 +117,9 @@ public final class ThrJointServer extends AbsJoint {
 			 * recv data "REQ" from joint client
 			 */
 			try {
+				if (flag) log.debug(String.format("wait for a data 'REQ' from the joint client."));
 				recv();
+				if (flag) log.debug(String.format("recv a data 'REQ' from the joint client."));
 			} catch (Exception e) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
 				throw e;
@@ -132,13 +140,19 @@ public final class ThrJointServer extends AbsJoint {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 				throw new Exception("the value of socketClient is null pointer...");
 			}
+			
+			if (flag) log.debug(String.format("accepted a connection from the client named '%s'.", this.socketJoint));
 		}
 		
 		if (flag) {
 			/*
 			 * option
 			 */
-			this.socketClient.setSoTimeout(5 * 1000);
+			int timeout = 5 * 1000;
+			
+			this.socketClient.setSoTimeout(timeout);
+			
+			if (flag) log.debug(String.format("set the option of SO_TIMEOUT '%d ms' in the client socket.", timeout));
 		}
 		
 		if (flag) {
@@ -147,6 +161,7 @@ public final class ThrJointServer extends AbsJoint {
 			 */
 			try {
 				send("RES");
+				if (flag) log.debug(String.format("send a data 'RES' to the joint server"));
 			} catch (Exception e) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
 				if (this.socketClient != null) try { this.socketClient.close(); } catch (IOException e1) {}

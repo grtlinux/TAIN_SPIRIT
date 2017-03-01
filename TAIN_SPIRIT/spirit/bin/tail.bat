@@ -1,6 +1,5 @@
 @echo on
-
-setlocal
+@setlocal
 
 ::----------------------------------------------
 :: ENV
@@ -24,5 +23,5 @@ tail -f ..\log\spirit_out.log
 
 
 
-::endlocal
+@endlocal
 

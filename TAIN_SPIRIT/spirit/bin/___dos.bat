@@ -18,7 +18,7 @@ cd %SPIRIT_HOME%\bin
 
 ::----------------------------------------------
 :: administrator
-net user administrator /active:yes
+::net user administrator /active:yes
 
 ::----------------------------------------------
 :: START

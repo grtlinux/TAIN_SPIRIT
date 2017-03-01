@@ -16,3 +16,5 @@ echo %JAVA_HOME%
 :END
 pause
 
+@endlocal
+

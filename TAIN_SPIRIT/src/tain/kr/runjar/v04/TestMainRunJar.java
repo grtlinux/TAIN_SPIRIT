@@ -27,6 +27,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
+import tain.kr.com.spirit.v04.util.Utils;
+
 /**
  * Code Templates > Comments > Types
  *
@@ -129,7 +131,9 @@ public final class TestMainRunJar {
 		
 		this.strType = getString(KEY_CLASS);
 		if (this.strType == null) {
-			throw new Exception("ERROR: there's no class name.. -Dclass=[SpiritServer/SpiritClient/TestServer/TestClient].");
+			// throw new Exception("ERROR: there's no class name.. -Dclass=[SpiritServer/SpiritClient/TestServer/TestClient]."); // TODO 2017.03.01 : add other method
+			executeDefault();
+			return;
 		}
 		
 		this.strClass = getString(this.strType);
@@ -141,6 +145,24 @@ public final class TestMainRunJar {
 		runSpirit(this.strClass);
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private void executeDefault() throws Exception {
+		
+		if (flag) {
+			/*
+			 * this code is checking for windows service
+			 */
+			for (int i=0; i < 1000; i++) {
+				System.out.printf("Message [%04d] - %s\n", i, Utils.getInstance().getDateTime());
+				
+				try { Thread.sleep(10 * 1000); } catch (InterruptedException e) {}
+			}
+		}
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
 	private void runSpirit(String strClass) throws Exception {
 		
 		if (flag) {

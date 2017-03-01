@@ -141,7 +141,7 @@ public final class ThrJointServer extends AbsJoint {
 				throw new Exception("the value of socketClient is null pointer...");
 			}
 			
-			if (flag) log.debug(String.format("accepted a connection from the client named '%s'.", this.socketJoint));
+			if (flag) log.debug(String.format("accepted a connection from the client named '%s'.", this.socketClient));
 		}
 		
 		if (flag) {
@@ -245,6 +245,8 @@ public final class ThrJointServer extends AbsJoint {
 		this.thread1 = null;
 		this.thread2 = null;
 		
+		if (flag) log.debug(String.format("[START] data transformation between the joint client and the client."));
+
 		if (flag) {
 			/*
 			 * create thread

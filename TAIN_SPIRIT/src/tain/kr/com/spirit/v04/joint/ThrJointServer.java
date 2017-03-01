@@ -90,7 +90,12 @@ public final class ThrJointServer extends AbsJoint {
 			/*
 			 * socket of joint
 			 */
-			this.socketJoint = this.jointServerSocket.accept();
+			try {
+				this.socketJoint = this.jointServerSocket.accept();
+			} catch (Exception e) {
+				throw e;
+			}
+			
 			if (this.socketJoint == null) {
 				throw new Exception("the value of socketJoint is null pointer...");
 			}
@@ -119,7 +124,7 @@ public final class ThrJointServer extends AbsJoint {
 			try {
 				if (flag) log.debug(String.format("wait for a data 'REQ' from the joint client."));
 				recv();
-				if (flag) log.debug(String.format("recv a data 'REQ' from the joint client."));
+				if (flag) log.debug(String.format("recv a data 'REQ' from the joint client, and wait for a connection of client."));
 			} catch (Exception e) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
 				throw e;
@@ -135,7 +140,13 @@ public final class ThrJointServer extends AbsJoint {
 			/*
 			 * socket of joint
 			 */
-			this.socketClient = this.jointServerSocket.accept();
+			try {
+				this.socketClient = this.jointServerSocket.accept();
+			} catch (Exception e) {
+				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
+				throw e;
+			}
+			
 			if (this.socketClient == null) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 				throw new Exception("the value of socketClient is null pointer...");
@@ -161,10 +172,11 @@ public final class ThrJointServer extends AbsJoint {
 			 */
 			try {
 				send("RES");
-				if (flag) log.debug(String.format("send a data 'RES' to the joint server"));
+				if (flag) log.debug(String.format("send a data 'RES' to the joint client"));
 			} catch (Exception e) {
 				if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e1) {}
 				if (this.socketClient != null) try { this.socketClient.close(); } catch (IOException e1) {}
+				// e.printStackTrace();
 				throw e;
 			}
 		}
@@ -288,7 +300,7 @@ public final class ThrJointServer extends AbsJoint {
 			if (this.socketJoint != null) try { this.socketJoint.close(); } catch (IOException e) {}
 			if (this.socketClient != null) try { this.socketClient.close(); } catch (IOException e) {}
 			
-			if (flag) System.out.printf("\t%s [END] ...\n", Thread.currentThread().getName());
+			if (flag) System.out.printf("\t%s [END THREAD] ...\n", Thread.currentThread().getName());
 		}
 	}
 	

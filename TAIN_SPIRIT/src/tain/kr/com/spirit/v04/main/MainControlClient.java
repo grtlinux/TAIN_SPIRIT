@@ -110,7 +110,7 @@ public final class MainControlClient {
 						thread.join();
 						loopSleep.reset();
 					} catch (Exception e) {
-						if (flag) System.out.printf("\t%s - %s\n", e, Utils.getInstance().getDateTime());
+						if (flag) System.out.printf("\tMainControlClient %s - %s\n", e, Utils.getInstance().getDateTime());
 						// e.printStackTrace();
 					}
 				}

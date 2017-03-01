@@ -1,6 +1,5 @@
 @echo on
-
-setlocal
+@setlocal
 
 ::----------------------------------------------
 :: ENV
@@ -28,5 +27,5 @@ start
 
 
 
-::endlocal
+@endlocal
 

@@ -131,9 +131,7 @@ public final class TestMainRunJar {
 		
 		this.strType = getString(KEY_CLASS);
 		if (this.strType == null) {
-			// throw new Exception("ERROR: there's no class name.. -Dclass=[SpiritServer/SpiritClient/TestServer/TestClient]."); // TODO 2017.03.01 : add other method
 			executeDefault();
-			return;
 		}
 		
 		this.strClass = getString(this.strType);
@@ -149,7 +147,7 @@ public final class TestMainRunJar {
 	
 	private void executeDefault() throws Exception {
 		
-		if (flag) {
+		if (!flag) {
 			/*
 			 * this code is checking for windows service
 			 */
@@ -157,6 +155,16 @@ public final class TestMainRunJar {
 				System.out.printf("Message [%04d] - %s\n", i, Utils.getInstance().getDateTime());
 				
 				try { Thread.sleep(10 * 1000); } catch (InterruptedException e) {}
+			}
+		}
+		
+		if (flag) {
+			/*
+			 * default spirit service
+			 */
+			this.strType = getString("DefaultSpirit");
+			if (this.strType == null) {
+				throw new Exception("ERROR: there's no class name.. -Dclass=[SpiritServer/SpiritClient/TestServer/TestClient]."); // TODO 2017.03.01 : add other method
 			}
 		}
 	}

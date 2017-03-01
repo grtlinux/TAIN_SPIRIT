@@ -133,7 +133,7 @@ public final class ThrRecvSend extends Thread {
 					}
 				}
 			} catch (Exception e) {
-				if (flag) System.out.printf("\t%s - %s\n", e, Utils.getInstance().getDateTime());
+				if (flag) System.out.printf("\t%s %s - %s\n", Thread.currentThread().getName(), e, Utils.getInstance().getDateTime());
 				// e.printStackTrace();
 			} finally {
 				if (flag) {
@@ -162,7 +162,7 @@ public final class ThrRecvSend extends Thread {
 				 * EOF -> finish
 				 * socket rejection
 				 */
-				throw new Exception(String.format("%s [EOF] return value of read is -1..", Thread.currentThread().getName()));
+				throw new Exception(String.format("[EOF] return value of read is -1.."));
 			}
 		} catch (SocketTimeoutException e) {
 			// throw e;

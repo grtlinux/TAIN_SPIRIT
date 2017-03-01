@@ -35,3 +35,5 @@ java %OPTION% -jar %JAR_NAME%
 pause
 ::timeout 1
 
+@endlocal
+

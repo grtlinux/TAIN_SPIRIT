@@ -1,5 +1,5 @@
 @echo off
-
+@setlocal
 ::------------------------------------------------------
 :: env
 set KANG_HOME=D:\IMSI\SPIRIT_20170301
@@ -49,4 +49,5 @@ echo.
 :END
 timeout 3
 
+@endlocal
 

@@ -1,0 +1,62 @@
+1. jar 생성
+
+   cmd > java -jar xxx.jar
+   - 실행되는지 확인
+
+2. nssm 다운로드 및 압축해제
+
+   - 잘 풀고.. 32 / 64 bit인지 폴더 확인
+
+3. java 서비스 생성
+
+   1) nssm 서비스 생성 ( 옵션은 하단 참조 )
+   
+       D:\nssm-2.24\win32>nssm.exe install test_daemon
+       Service "test_daemon" installed successfully!
+       
+   2) 서비스 시작
+   
+       D:\nssm-2.24\win32>nssm.exe start test_daemon
+       test_daemon: START: 작업을 완료했습니다.
+       
+   3) 서비스 종료
+   
+       D:\nssm-2.24\win32>nssm.exe stop test_daemon
+       test_ecms_daemon: STOP: 작업을 완료했습니다.
+       
+   4) 서비스 삭제
+   
+       D:\nssm-2.24\win32>nssm.exe remove test_daemon
+       Service "test_daemon" removed successfully!
+       
+
+* NSSM 옵션 ( Application Tab이외에는 그냥 default 사용했음.. 필요에 따라 수정하면 됨 )
+
+   [Application]
+      - Path : Java.exe
+      - Startup directory : jar파일 위치한 directory
+      - Arguments : -jar xxxx.jar 를 포함한 사용자 정의 프로그램 인자를 기록함
+      - Service name : [제어판] - [서비스] 에서 보여지는 서비스이름
+
+   [Details]
+      - Display name : 서비스에서 보여지는 표시이름
+      - Description : 서비스 설명
+
+
+      참고 홈페이지 : http://nssm.cc/
+
+[출처] java 서비스 등록 ( nssm 사용 )|작성자 감자
+
+
+
+
+
+
+------------------------------------------------------------------------------
+other java service site
+
+	http://forge.ow2.org/projects/javaservice/
+
+
+
+

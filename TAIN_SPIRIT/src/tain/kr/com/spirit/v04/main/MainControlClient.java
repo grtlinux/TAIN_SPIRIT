@@ -87,7 +87,7 @@ public final class MainControlClient {
 		if (flag) ParamContent.getInstance().printInformation();
 		
 		if (flag) {
-			String strRetry = ParamContent.getInstance().getString(KEY_RETRY, "30");
+			String strRetry = ParamContent.getInstance().getString(KEY_RETRY, "10");
 			timesRetry = Integer.parseInt(strRetry);
 			loopSleep = new LoopSleep();
 		}

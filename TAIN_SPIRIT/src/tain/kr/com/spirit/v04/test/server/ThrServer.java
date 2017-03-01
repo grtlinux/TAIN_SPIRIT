@@ -154,7 +154,7 @@ public final class ThrServer extends Thread {
 				
 			} catch (Exception e) {
 				// e.printStackTrace();
-				if (flag) System.out.printf("\t%s - %s\n", e, Utils.getInstance().getDateTime());
+				if (flag) System.out.printf("\t%s %s - %s\n", Thread.currentThread().getName(), e, Utils.getInstance().getDateTime());
 			} finally {
 				if (flag) {
 					/*
@@ -181,7 +181,7 @@ public final class ThrServer extends Thread {
 				 * EOF
 				 */
 				//if (flag) System.out.printf("%s [EOF] read data of EOF...\n", Thread.currentThread().getName());
-				throw new Exception(String.format("%s [EOF] read data of EOF...", Thread.currentThread().getName()));
+				throw new Exception(String.format("[EOF] read data of EOF..."));
 			}
 		} catch (SocketTimeoutException e) {
 			// e.printStackTrace();

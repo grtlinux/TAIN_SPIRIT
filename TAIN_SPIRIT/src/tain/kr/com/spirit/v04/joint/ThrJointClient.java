@@ -246,6 +246,8 @@ public final class ThrJointClient extends AbsJoint {
 		this.thread1 = null;
 		this.thread2 = null;
 		
+		if (flag) log.debug(String.format("start data transformation between the joint server and the target server."));
+		
 		if (flag) {
 			/*
 			 * create thread

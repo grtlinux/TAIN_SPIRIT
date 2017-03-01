@@ -101,6 +101,8 @@ public final class ThrRecvSend extends Thread {
 			this.nRecv = 0;
 		}
 		
+		if (flag) System.out.printf("\t%s [START THREAD] ...\n", Thread.currentThread().getName());
+		
 		if (flag) {
 			
 			try {
@@ -145,7 +147,7 @@ public final class ThrRecvSend extends Thread {
 					
 					this.joint.setFlagStopThread(true);
 					
-					if (flag) System.out.printf("\t%s [END] ...\n", Thread.currentThread().getName());
+					if (flag) System.out.printf("\t%s [END THREAD] ...\n", Thread.currentThread().getName());
 				}
 			}
 		}

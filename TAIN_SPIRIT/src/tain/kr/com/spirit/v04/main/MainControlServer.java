@@ -99,7 +99,7 @@ public final class MainControlServer {
 						thread.start();
 						thread.join();
 					} catch (Exception e) {
-						if (flag) System.out.printf("\tMainControlServer %s - %s\n", e, Utils.getInstance().getDateTime());
+						if (flag) System.out.printf("\t##### %s - %s\n", e, Utils.getInstance().getDateTime());
 						//e.printStackTrace();
 					}
 				}

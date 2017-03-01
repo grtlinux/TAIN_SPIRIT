@@ -91,7 +91,7 @@ public final class MainClient {
 			/*
 			 * sequence thread job
 			 */
-			for (int i=0; i < 10; i++) {
+			for (int i=0; i < 100; i++) {
 				if (flag) {
 					/*
 					 * client thread

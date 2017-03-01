@@ -287,7 +287,7 @@ public final class ThrControler extends Thread implements ImpControler {
 		this.socket = socket;
 		
 		/*
-		 * TODO 2017.02.23 very important
+		 * TODO 2017.02.23 : very important
 		 * Enable/disable SO_TIMEOUT with the specified timeout in milliseconds.
 		 */
 		if (flag) this.socket.setSoTimeout(30 * 1000);  // socket timeout 30 secs
